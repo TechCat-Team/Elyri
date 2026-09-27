@@ -1,0 +1,43 @@
+.elyri-fade-in {
+  --elyri-fade-in-distance: 24px;
+  --elyri-fade-in-duration: var(--elyri-duration-base);
+  --elyri-fade-in-delay: 0ms;
+
+  opacity: 0;
+  transition:
+    opacity var(--elyri-fade-in-duration) var(--elyri-ease-out) var(--elyri-fade-in-delay),
+    transform var(--elyri-fade-in-duration) var(--elyri-ease-out) var(--elyri-fade-in-delay);
+}
+
+.elyri-fade-in--up {
+  transform: translate3d(0, var(--elyri-fade-in-distance), 0);
+}
+
+.elyri-fade-in--down {
+  transform: translate3d(0, calc(var(--elyri-fade-in-distance) * -1), 0);
+}
+
+.elyri-fade-in--left {
+  transform: translate3d(var(--elyri-fade-in-distance), 0, 0);
+}
+
+.elyri-fade-in--right {
+  transform: translate3d(calc(var(--elyri-fade-in-distance) * -1), 0, 0);
+}
+
+.elyri-fade-in--none {
+  transform: none;
+}
+
+.elyri-fade-in--visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-fade-in {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

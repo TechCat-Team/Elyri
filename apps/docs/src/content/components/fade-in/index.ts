@@ -1,0 +1,1 @@
+export { fadeInDoc } from './doc';

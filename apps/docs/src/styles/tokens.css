@@ -1,0 +1,56 @@
+/* 主题变量：深色（默认）与浅色两套 */
+
+:root,
+:root[data-theme='dark'] {
+  --docs-bg: #0e1014;
+  --docs-surface: #16191f;
+  --docs-border: #272c34;
+  --docs-text: #eef0f4;
+  --docs-muted: #9ba1ad;
+  --docs-accent: #b49bff;
+  --docs-accent-soft: rgba(180, 155, 255, 0.16);
+  --docs-on-accent: #14101f;
+  --docs-topbar: rgba(14, 16, 20, 0.94);
+  --docs-preview: #12151b;
+  --docs-dot: rgba(232, 236, 244, 0.08);
+  --docs-code-bg: #16191f;
+  --docs-overlay: rgba(0, 0, 0, 0.68);
+  --docs-shadow: 0 24px 60px rgba(0, 0, 0, 0.42);
+  --docs-hover: rgba(255, 255, 255, 0.05);
+  --docs-rule: #3f454f;
+
+  --tok-comment: #8b929d;
+  --tok-string: #e0a37a;
+  --tok-tag: #8fbce6;
+  --tok-keyword: #cba6f7;
+  --tok-number: #e5c07b;
+  --tok-attr: #d8b38a;
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --docs-bg: #f6f7f9;
+  --docs-surface: #ffffff;
+  --docs-border: #e3e5ea;
+  --docs-text: #1a1d23;
+  --docs-muted: #646b78;
+  --docs-accent: #6d3bd1;
+  --docs-accent-soft: rgba(109, 59, 209, 0.09);
+  --docs-on-accent: #ffffff;
+  --docs-topbar: rgba(255, 255, 255, 0.9);
+  --docs-preview: #ffffff;
+  --docs-dot: rgba(26, 29, 35, 0.1);
+  --docs-code-bg: #ffffff;
+  --docs-overlay: rgba(20, 25, 38, 0.26);
+  --docs-shadow: 0 24px 60px rgba(20, 25, 38, 0.12);
+  --docs-hover: rgba(26, 29, 35, 0.04);
+  --docs-rule: #ccd1d9;
+
+  --tok-comment: #767d89;
+  --tok-string: #b1541f;
+  --tok-tag: #2a6fb0;
+  --tok-keyword: #8b34c9;
+  --tok-number: #9a6700;
+  --tok-attr: #8a5a1a;
+  color-scheme: light;
+}

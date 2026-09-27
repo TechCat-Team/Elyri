@@ -1,0 +1,7 @@
+:root {
+  --elyri-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --elyri-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --elyri-duration-fast: 200ms;
+  --elyri-duration-base: 400ms;
+  --elyri-duration-slow: 800ms;
+}

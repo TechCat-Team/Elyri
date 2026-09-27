@@ -1,0 +1,63 @@
+# Elyri
+
+[![npm version](https://img.shields.io/npm/v/elyri.svg)](https://www.npmjs.com/package/elyri)
+[![license](https://img.shields.io/npm/l/elyri.svg)](./LICENSE)
+
+A set of animation components for React. Each component is lightweight, fully typed, and themed through CSS variables, so it integrates into an existing design system without introducing a runtime style engine.
+
+[docs](https://www.elyri.dev) · [npm](https://www.npmjs.com/package/elyri) · [GitHub](https://github.com/TechCat-Team/Elyri)
+
+## Features
+
+- Theming through CSS variables, with no runtime style engine
+- Honors the `prefers-reduced-motion` user preference by default
+- TypeScript definitions included
+- Supports React 18 and 19
+
+## Installation
+
+```bash
+pnpm add elyri
+```
+
+Import the stylesheet once at your application entry point:
+
+```ts
+import 'elyri/styles.css';
+```
+
+## Usage
+
+```tsx
+import { FadeIn, GradientText } from 'elyri';
+
+export function Hero() {
+  return (
+    <FadeIn direction="up" delay={100}>
+      <GradientText colors={['#a78bfa', '#7c3aed']} animated>
+        Hello from Elyri
+      </GradientText>
+    </FadeIn>
+  );
+}
+```
+
+## Components
+
+| Component      | Category   | Description                                             |
+| -------------- | ---------- | ------------------------------------------------------- |
+| `FadeIn`       | Animations | Fades and slides content in when it enters the viewport |
+| `GradientText` | Text       | Applies an animated gradient to text                    |
+
+## Requirements
+
+- React 18 or 19 (`react` and `react-dom` are peer dependencies)
+- A bundler that supports CSS imports (Vite, webpack, Next.js, and others)
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for the repository layout, development commands, and instructions for adding a component.
+
+## License
+
+MIT © 轻爪科技. See [LICENSE](./LICENSE).

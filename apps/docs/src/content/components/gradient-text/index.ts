@@ -1,0 +1,1 @@
+export { gradientTextDoc } from './doc';

@@ -1,0 +1,65 @@
+# Elyri
+
+[![npm version](https://img.shields.io/npm/v/elyri.svg)](https://www.npmjs.com/package/elyri)
+[![license](https://img.shields.io/npm/l/elyri.svg)](./LICENSE)
+
+[English](./README.md) · 简体中文
+
+面向 React 的动效组件集合。组件保持轻量、自带 TypeScript 类型，并通过 CSS 变量实现主题化，可接入现有设计体系，且不引入运行时样式引擎。
+
+[文档](https://www.elyri.dev) · [npm](https://www.npmjs.com/package/elyri) · [GitHub](https://github.com/TechCat-Team/Elyri)
+
+## 特性
+
+- 基于 CSS 变量实现主题化，无运行时样式引擎
+- 默认遵循系统的 `prefers-reduced-motion` 偏好
+- 内置 TypeScript 类型定义
+- 同时支持 React 18 与 19
+
+## 安装
+
+```bash
+pnpm add elyri
+```
+
+在应用入口处引入一次样式：
+
+```ts
+import 'elyri/styles.css';
+```
+
+## 使用
+
+```tsx
+import { FadeIn, GradientText } from 'elyri';
+
+export function Hero() {
+  return (
+    <FadeIn direction="up" delay={100}>
+      <GradientText colors={['#a78bfa', '#7c3aed']} animated>
+        Hello from Elyri
+      </GradientText>
+    </FadeIn>
+  );
+}
+```
+
+## 组件
+
+| 组件           | 分类       | 说明                     |
+| -------------- | ---------- | ------------------------ |
+| `FadeIn`       | Animations | 元素进入视口时淡入并位移 |
+| `GradientText` | Text       | 为文字应用动态渐变       |
+
+## 环境要求
+
+- React 18 或 19（`react`、`react-dom` 为 peer 依赖）
+- 支持 CSS 引入的打包器（Vite、webpack、Next.js 等）
+
+## 贡献
+
+仓库结构、开发命令以及新增组件的流程，详见 [CONTRIBUTING.zh-CN.md](./CONTRIBUTING.zh-CN.md)。
+
+## 许可证
+
+MIT © 轻爪科技，详见 [LICENSE](./LICENSE)。

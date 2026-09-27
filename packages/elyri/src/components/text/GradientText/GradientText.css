@@ -1,0 +1,30 @@
+.elyri-gradient-text {
+  --elyri-gradient-colors: #6d5cff, #22d3ee, #f472b6;
+
+  background-image: linear-gradient(90deg, var(--elyri-gradient-colors));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.elyri-gradient-text--animated {
+  background-size: 200% 100%;
+  animation: elyri-gradient-text-flow var(--elyri-duration-slow) var(--elyri-ease-in-out) infinite alternate;
+}
+
+@keyframes elyri-gradient-text-flow {
+  from {
+    background-position: 0% 50%;
+  }
+
+  to {
+    background-position: 100% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-gradient-text--animated {
+    animation: none;
+  }
+}
