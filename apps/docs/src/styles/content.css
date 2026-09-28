@@ -142,12 +142,19 @@
   margin-top: 16px;
 }
 
-/* 标签页 */
+/* 标签页：左侧切换、右侧预览工具栏，共用同一条底线 */
+.tabs-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--docs-border);
+}
 .tabs {
   display: flex;
   gap: 25px;
   margin: 0;
-  border-bottom: 1px solid var(--docs-border);
 }
 .tab {
   position: relative;

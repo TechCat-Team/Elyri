@@ -27,7 +27,7 @@ export function Header({ theme, onToggleTheme, onOpenSearch, onToggleMenu }: Hea
           </svg>
         </button>
         <a href="#/" className="logo">
-          <span className="logo-mark" />
+          <img className="logo-mark" src={`${import.meta.env.BASE_URL}logo.svg`} alt="" width="28" height="28" />
           {site.name}
         </a>
         <span className="version-badge">v{site.version}</span>

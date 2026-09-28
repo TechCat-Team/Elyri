@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1280" viewBox="190 215 900 900" fill="none">
+  <title>Elyri logo</title>
+  <defs>
+    <linearGradient id="upper-fold" x1="576" y1="475" x2="369" y2="822" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2529CF"/>
+      <stop offset="0.5" stop-color="#343BF3"/>
+      <stop offset="1" stop-color="#687EFF"/>
+    </linearGradient>
+    <linearGradient id="upper-face" x1="433" y1="535" x2="958" y2="307" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#393CFF"/>
+      <stop offset="0.47" stop-color="#8980FC"/>
+      <stop offset="1" stop-color="#E3C1FA"/>
+    </linearGradient>
+    <linearGradient id="lower-fold" x1="544" y1="885" x2="927" y2="654" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#151780"/>
+      <stop offset="0.42" stop-color="#3539B8"/>
+      <stop offset="0.76" stop-color="#8076EE"/>
+      <stop offset="1" stop-color="#CFB1FB"/>
+    </linearGradient>
+    <linearGradient id="lower-face" x1="391" y1="827" x2="573" y2="1104" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3C40FF"/>
+      <stop offset="0.55" stop-color="#8589FF"/>
+      <stop offset="1" stop-color="#BCB5FF"/>
+    </linearGradient>
+    <linearGradient id="lower-glow" x1="422" y1="1029" x2="787" y2="891" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#BC9AFF" stop-opacity="0"/>
+      <stop offset="1" stop-color="#D4A7FA"/>
+    </linearGradient>
+    <path id="upper-outline" d="M 310 860 L 310 625 C 310 557 333 503.7 383 478 L 809 259 C 839 243.58 865 242 888 249 C 937 263.91 969 305 969 354 L 969 414 C 969 474 940 516.75 893 535.57 L 415 727 C 362 748.23 327 797 310 860 Z"/>
+    <path id="lower-outline" d="M 398 831 L 817 653 C 849 639.41 875 639.07 899 648 C 942 664 969 704 969 748 L 969 813 C 969 874 933 921.6 874 942 L 501 1071 C 444 1090.71 393 1076 358 1037 C 331 1006.91 319 973 325 935 C 332.1 890 355 849.27 398 831 Z"/>
+    <clipPath id="upper-clip"><use href="#upper-outline"/></clipPath>
+    <clipPath id="lower-clip"><use href="#lower-outline"/></clipPath>
+    <path id="lower-front" d="M 300 886 L 398 831 C 442 812.31 476 812.74 520 831 L 773 936 C 809 950.94 839 954.1 874 942 L 1000 960 L 1000 1120 L 300 1120 Z"/>
+  </defs>
+  <use href="#upper-outline" fill="url(#upper-fold)"/>
+  <path clip-path="url(#upper-clip)" fill="url(#upper-face)" d="M 280 200 L 1000 200 L 1000 520 L 827 562 C 791 576.42 755 568.68 708 552 L 491 475 C 449 460.1 415 461.55 383 478 L 280 530 Z"/>
+  <use href="#lower-outline" fill="url(#lower-fold)"/>
+  <g clip-path="url(#lower-clip)">
+    <use href="#lower-front" fill="url(#lower-face)"/>
+    <use href="#lower-front" fill="url(#lower-glow)"/>
+  </g>
+</svg>
