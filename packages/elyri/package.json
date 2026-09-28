@@ -1,8 +1,13 @@
 {
   "name": "elyri",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "React animation component library with CSS variables theming.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TechCat-Team/Elyri.git",
+    "directory": "packages/elyri"
+  },
   "type": "module",
   "files": [
     "dist",
@@ -10,7 +15,7 @@
     "src/components"
   ],
   "bin": {
-    "elyri": "./bin/elyri.mjs"
+    "elyri": "bin/elyri.mjs"
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
