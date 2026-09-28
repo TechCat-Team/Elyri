@@ -6,6 +6,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const components = {
+  'ascii-image': { folder: 'media/AsciiImage', name: 'AsciiImage' },
   aurora: { folder: 'backgrounds/Aurora', name: 'Aurora' },
   caustics: { folder: 'backgrounds/Caustics', name: 'Caustics' },
   'count-up': { folder: 'animations/CountUp', name: 'CountUp' },

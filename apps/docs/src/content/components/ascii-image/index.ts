@@ -1,0 +1,1 @@
+export { asciiImageDoc } from './doc';

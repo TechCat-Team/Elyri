@@ -122,7 +122,7 @@ export function MorphGrid({
   warp = 0,
   spread = 0.4,
   accent = 0.03,
-  speed = 1,
+  speed = 3,
   interactive = true,
 }: MorphGridProps) {
   const canvasRef = useShaderCanvas({

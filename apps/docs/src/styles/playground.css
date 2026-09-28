@@ -524,6 +524,11 @@
   max-width: 760px;
   text-align: center;
 }
+/* ASCII 字符画演示 */
+.demo-ascii {
+  width: 100%;
+  max-width: 460px;
+}
 /* 滚动跑马灯演示 */
 .demo-marquee {
   font-size: clamp(30px, 5vw, 56px);

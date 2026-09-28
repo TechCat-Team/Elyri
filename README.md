@@ -61,6 +61,7 @@ export function Hero() {
 | `ScrambleText`  | Text        | Decodes text from glowing scrambled glyphs              |
 | `ParticleText`  | Text        | Text made of particles that scatter from the pointer    |
 | `ScrollMarquee` | Text        | Slides text horizontally as the page scrolls vertically |
+| `AsciiImage`    | Media       | Turns an image into ASCII art with a decoding reveal    |
 
 ## Requirements
 

@@ -1,0 +1,16 @@
+.elyri-ascii-image {
+  display: block;
+  width: 100%;
+  font-family: var(--elyri-ascii-font, ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace);
+  font-weight: 600;
+}
+
+.elyri-ascii-image__canvas,
+.elyri-ascii-image__fallback {
+  display: block;
+  width: 100%;
+}
+
+.elyri-ascii-image__fallback {
+  height: auto;
+}

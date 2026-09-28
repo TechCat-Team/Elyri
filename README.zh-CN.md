@@ -63,6 +63,7 @@ export function Hero() {
 | `ScrambleText`  | Text        | 文字从发光乱码逐字解码定格                 |
 | `ParticleText`  | Text        | 粒子聚合成字，指针靠近时推散回弹           |
 | `ScrollMarquee` | Text        | 页面滚动时文字横向滚动，多行反向           |
+| `AsciiImage`    | Media       | 图片转换为 ASCII 字符画，解码式显现        |
 
 ## 环境要求
 

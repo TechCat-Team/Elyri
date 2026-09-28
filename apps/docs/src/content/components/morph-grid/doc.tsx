@@ -14,7 +14,7 @@ const DEFAULTS = {
   warp: 0,
   spread: 0.4,
   accent: 0.03,
-  speed: 1,
+  speed: 3,
 };
 
 const copy = {

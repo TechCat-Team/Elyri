@@ -20,6 +20,7 @@ test('add copies editable components and never overwrites them', async () => {
       'silk-waves': 'SilkWaves',
       caustics: 'Caustics',
       'morph-grid': 'MorphGrid',
+      'ascii-image': 'AsciiImage',
       'count-up': 'CountUp',
       'scale-in': 'ScaleIn',
       'particle-text': 'ParticleText',

@@ -1,6 +1,7 @@
 import type { ComponentDoc, Lang } from '../lib/types';
 
 import { auroraDoc } from './components/aurora';
+import { asciiImageDoc } from './components/ascii-image';
 import { causticsDoc } from './components/caustics';
 import { countUpDoc } from './components/count-up';
 import { dragonScalesDoc } from './components/dragon-scales';
@@ -38,6 +39,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => [
   causticsDoc(lang),
   pixelVortexDoc(lang),
   morphGridDoc(lang),
+  asciiImageDoc(lang),
 ];
 
 export const getCategories = (docs: ComponentDoc[]) => [...new Set(docs.map((doc) => doc.category))];
