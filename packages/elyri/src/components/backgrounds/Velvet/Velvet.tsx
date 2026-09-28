@@ -14,6 +14,10 @@ export interface VelvetProps {
   sheenColor?: string;
   /** 褶皱密度倍率 */
   folds?: number;
+  /** 绒毛质感强度，0 为光洁、1 为明显的毛绒颗粒 */
+  fuzz?: number;
+  /** 四周暗角强度，0 为无暗角 */
+  vignette?: number;
   /** 动画速度倍率 */
   speed?: number;
   /** 光源是否跟随指针，指针划过是否留下渐消的压痕 */
@@ -27,7 +31,7 @@ const TRAIL_FADE_S = 1.6;
 const trailData = new Float32Array(TRAIL * 3);
 
 // 丝绒：圆背窄谷的斜向垂坠褶皱缓慢摆动。用 Charlie 绒面分布着色——正对视线处吸光发暗，
-// 褶皱侧面因绒毛掠射散射而泛起柔光；叠加碎绒明暗与像素级绒毛颗粒。
+// 褶皱侧面因绒毛掠射散射而泛起柔光；绒光上叠加可调强度的像素级纤维亮点与碎绒明暗。
 // 指针轨迹以线段形式传入，被压倒的绒毛光晕消失、略显光亮，随时间回弹。
 const FRAGMENT_SHADER = `
 precision highp float;
@@ -41,6 +45,8 @@ uniform vec2 uPointer;
 uniform vec3 uBase;
 uniform vec3 uSheen;
 uniform float uFolds;
+uniform float uFuzz;
+uniform float uVignette;
 uniform vec3 uTrail[TRAIL];
 
 float hash(vec2 p) {
@@ -120,10 +126,11 @@ void main() {
   float NdotV = max(n.z, 1e-3);
 
   float pressed = pressAt(frag, minRes);
-  // 绒毛朝向不一造成的大块明暗（碎绒感）+ 约 1.6 像素的细密绒毛颗粒
-  float nap = 0.7 + 0.6 * noise(p * 0.9 + 3.1);
-  vec2 fp = rot * frag / 1.6;
-  float pile = 0.6 * noise(fp) + 0.4 * noise(fp * 0.43 + 17.0);
+  // 绒毛：像素级的纤维亮点，沿垂坠方向略拉长；大块碎绒明暗与之同步受 uFuzz 控制
+  vec2 fp = rot * frag;
+  float fiber = 0.55 * hash(floor(fp)) + 0.45 * hash(floor(vec2(fp.x * 0.5, fp.y * 0.2)) + 31.0);
+  float nap = 1.0 + (noise(p * 0.9 + 3.1) - 0.5) * 0.7 * uFuzz;
+  float fuzz = mix(1.0, 0.45 + 1.1 * fiber, uFuzz);
   float ao = mix(0.4, 1.0, smoothstep(0.1, 0.8, h));
 
   // 主光：左上方固定柔光，保证形体稳定可读；辅光：跟随指针的点光
@@ -148,15 +155,14 @@ void main() {
     float D = (2.0 + INV_A) * pow(sin2, INV_A * 0.5) / (2.0 * PI);
     float vis = 1.0 / (4.0 * (NdotL + NdotV - NdotL * NdotV) + 1e-3);
     vec3 diffuse = uBase * (0.08 + 0.55 * NdotL) * ao;
-    vec3 sheen = uSheen * D * vis * NdotL * nap * (0.75 + 0.5 * pile) * (1.0 - 0.85 * pressed);
+    vec3 sheen = uSheen * D * vis * NdotL * nap * mix(fuzz, 1.0, pressed) * (1.0 - 0.85 * pressed);
     // 压倒的绒毛：顺毛方向出现一点缎面般的光泽
     vec3 gloss = mix(uBase, uSheen, 0.6) * pow(NdotH, 40.0) * 0.35 * pressed;
     color += (diffuse * (1.0 - 0.3 * pressed) + sheen + gloss) * power[i];
   }
-  color *= mix(0.88 + 0.24 * pile, 1.0, pressed * 0.7);
 
   vec2 vc = frag / uResolution - 0.5;
-  color *= 1.0 - dot(vc, vc) * 0.6;
+  color *= max(1.0 - dot(vc, vc) * 1.2 * uVignette, 0.0);
   color = pow(aces(color * 1.2), vec3(1.0 / 2.2));
   color += (hash(frag + fract(t)) - 0.5) / 255.0;
 
@@ -176,6 +182,8 @@ export function Velvet({
   color = '#6a1230',
   sheenColor = '#ffb3c8',
   folds = 1,
+  fuzz = 0.4,
+  vignette = 0.5,
   speed = 1,
   interactive = true,
 }: VelvetProps) {
@@ -197,6 +205,8 @@ export function Velvet({
       gl.uniform3fv(uniform('uBase'), hexToLinearRgb(color));
       gl.uniform3fv(uniform('uSheen'), hexToLinearRgb(sheenColor));
       gl.uniform1f(uniform('uFolds'), Math.max(0.2, folds));
+      gl.uniform1f(uniform('uFuzz'), Math.min(1, Math.max(0, fuzz)));
+      gl.uniform1f(uniform('uVignette'), Math.min(1, Math.max(0, vignette)));
       gl.uniform3fv(uniform('uTrail'), trailData);
     },
   });
