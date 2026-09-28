@@ -58,6 +58,7 @@ export function Hero() {
 | `SplitReveal`   | Text        | Reveals text character by character as it enters view   |
 | `Typewriter`    | Text        | Types text out with a blinking cursor                   |
 | `ScrambleText`  | Text        | Decodes text from glowing scrambled glyphs              |
+| `ParticleText`  | Text        | Text made of particles that scatter from the pointer    |
 | `ScrollMarquee` | Text        | Slides text horizontally as the page scrolls vertically |
 
 ## Requirements

@@ -21,6 +21,7 @@ test('add copies editable components and never overwrites them', async () => {
       caustics: 'Caustics',
       'count-up': 'CountUp',
       'scale-in': 'ScaleIn',
+      'particle-text': 'ParticleText',
       'scramble-text': 'ScrambleText',
       'scroll-marquee': 'ScrollMarquee',
       'split-reveal': 'SplitReveal',

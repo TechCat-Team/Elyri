@@ -1,0 +1,16 @@
+.elyri-particle-text {
+  position: relative;
+  display: inline-block;
+  /* 按原文排版，仅在 \n 处换行，保证画布采样与占位尺寸一致 */
+  white-space: pre;
+}
+
+/* 粒子就绪后原文只占位不显示，仍可被读屏软件读取 */
+.elyri-particle-text--ready .elyri-particle-text__label {
+  color: transparent;
+}
+
+.elyri-particle-text__canvas {
+  position: absolute;
+  pointer-events: none;
+}
