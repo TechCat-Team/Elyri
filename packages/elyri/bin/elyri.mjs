@@ -14,6 +14,7 @@ const components = {
   'gradient-text': { folder: 'text/GradientText', name: 'GradientText' },
   'pixel-vortex': { folder: 'backgrounds/PixelVortex', name: 'PixelVortex' },
   'scale-in': { folder: 'animations/ScaleIn', name: 'ScaleIn' },
+  'scramble-text': { folder: 'text/ScrambleText', name: 'ScrambleText' },
   'scroll-marquee': { folder: 'text/ScrollMarquee', name: 'ScrollMarquee' },
   'silk-waves': { folder: 'backgrounds/SilkWaves', name: 'SilkWaves' },
   'split-reveal': { folder: 'text/SplitReveal', name: 'SplitReveal' },

@@ -1,0 +1,48 @@
+.elyri-scramble-text {
+  --elyri-scramble-accent: #22d3ee;
+  --elyri-scramble-glow: 1;
+
+  position: relative;
+  display: inline;
+  /* 保留原始空白，同时允许在空白处换行 */
+  white-space: pre-wrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 供读屏软件读取的完整文本，视觉上隐藏 */
+.elyri-scramble-text__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* 保持 inline，避免单词内部出现额外的断行机会 */
+.elyri-scramble-text__char {
+  position: relative;
+}
+
+/* 未定格时原字符只占位不显示 */
+.elyri-scramble-text__char--scrambled {
+  color: transparent;
+}
+
+/* 乱码字符：叠在原字符的位置上居中，脱离文档流，不影响行宽 */
+.elyri-scramble-text__glyph {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: pre;
+  pointer-events: none;
+  user-select: none;
+  color: var(--elyri-scramble-accent);
+  opacity: 0.85;
+  /* 辉光半径随强度倍率缩放，倍率为 0 时阴影与字形重合，等同关闭 */
+  text-shadow:
+    0 0 calc(0.35em * var(--elyri-scramble-glow)) color-mix(in srgb, var(--elyri-scramble-accent) 70%, transparent),
+    0 0 calc(1em * var(--elyri-scramble-glow)) color-mix(in srgb, var(--elyri-scramble-accent) 35%, transparent);
+}

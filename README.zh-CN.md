@@ -59,6 +59,7 @@ export function Hero() {
 | `GradientText`  | Text        | 为文字应用动态渐变               |
 | `SplitReveal`   | Text        | 文本进入视口时逐字或逐词错峰浮现 |
 | `Typewriter`    | Text        | 打字机效果逐字输出，带闪烁光标   |
+| `ScrambleText`  | Text        | 文字从发光乱码逐字解码定格       |
 | `ScrollMarquee` | Text        | 页面滚动时文字横向滚动，多行反向 |
 
 ## 环境要求

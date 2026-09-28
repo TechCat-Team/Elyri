@@ -57,6 +57,7 @@ export function Hero() {
 | `GradientText`  | Text        | Applies an animated gradient to text                    |
 | `SplitReveal`   | Text        | Reveals text character by character as it enters view   |
 | `Typewriter`    | Text        | Types text out with a blinking cursor                   |
+| `ScrambleText`  | Text        | Decodes text from glowing scrambled glyphs              |
 | `ScrollMarquee` | Text        | Slides text horizontally as the page scrolls vertically |
 
 ## Requirements
