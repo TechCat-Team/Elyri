@@ -4,5 +4,7 @@ export { Caustics } from './Caustics';
 export type { CausticsProps } from './Caustics';
 export { DragonScales } from './DragonScales';
 export type { DragonScalesProps } from './DragonScales';
+export { PixelVortex } from './PixelVortex';
+export type { PixelVortexProps } from './PixelVortex';
 export { SilkWaves } from './SilkWaves';
 export type { SilkWavesProps } from './SilkWaves';

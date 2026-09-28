@@ -12,6 +12,15 @@
   );
 }
 
+/* 浅色主题：兜底底色同步翻转为浅色，避免就绪前闪深色 */
+.elyri-dragon-scales[data-scheme='light'] {
+  background: radial-gradient(
+    120% 90% at 50% 30%,
+    #ffffff,
+    color-mix(in srgb, var(--elyri-dragon-scales-color) 12%, #ffffff) 75%
+  );
+}
+
 .elyri-dragon-scales__canvas {
   position: absolute;
   inset: 0;

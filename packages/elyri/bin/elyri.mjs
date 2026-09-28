@@ -11,6 +11,7 @@ const components = {
   'dragon-scales': { folder: 'backgrounds/DragonScales', name: 'DragonScales' },
   'fade-in': { folder: 'animations/FadeIn', name: 'FadeIn' },
   'gradient-text': { folder: 'text/GradientText', name: 'GradientText' },
+  'pixel-vortex': { folder: 'backgrounds/PixelVortex', name: 'PixelVortex' },
   'silk-waves': { folder: 'backgrounds/SilkWaves', name: 'SilkWaves' },
 };
 

@@ -1,27 +1,27 @@
-.elyri-silk-waves {
-  --elyri-silk-waves-color: #9a6424;
+.elyri-pixel-vortex {
+  --elyri-pixel-vortex-color: #ff4d12;
 
   position: relative;
   isolation: isolate;
   overflow: hidden;
   /* WebGL 不可用或尚未绘制时的底色 */
   background: radial-gradient(
-    120% 90% at 40% 30%,
-    color-mix(in srgb, var(--elyri-silk-waves-color) 45%, #000),
-    #070503 75%
+    circle at 50% 45%,
+    color-mix(in srgb, var(--elyri-pixel-vortex-color) 45%, #000),
+    #0a0706 70%
   );
 }
 
 /* 浅色主题：兜底底色同步翻转为浅色，避免就绪前闪深色 */
-.elyri-silk-waves[data-scheme='light'] {
+.elyri-pixel-vortex[data-scheme='light'] {
   background: radial-gradient(
-    120% 90% at 40% 30%,
-    #ffffff,
-    color-mix(in srgb, var(--elyri-silk-waves-color) 18%, #ffffff) 75%
+    circle at 50% 45%,
+    color-mix(in srgb, var(--elyri-pixel-vortex-color) 18%, #ffffff),
+    #f6f5f4 70%
   );
 }
 
-.elyri-silk-waves__canvas {
+.elyri-pixel-vortex__canvas {
   position: absolute;
   inset: 0;
   z-index: 0;
@@ -33,11 +33,11 @@
   transition: opacity var(--elyri-duration-slow) var(--elyri-ease-out);
 }
 
-.elyri-silk-waves__canvas[data-ready] {
+.elyri-pixel-vortex__canvas[data-ready] {
   opacity: 1;
 }
 
-.elyri-silk-waves__content {
+.elyri-pixel-vortex__content {
   position: relative;
   z-index: 1;
   height: 100%;

@@ -5,6 +5,7 @@ import { causticsDoc } from './components/caustics';
 import { dragonScalesDoc } from './components/dragon-scales';
 import { fadeInDoc } from './components/fade-in';
 import { gradientTextDoc } from './components/gradient-text';
+import { pixelVortexDoc } from './components/pixel-vortex';
 import { silkWavesDoc } from './components/silk-waves';
 
 /**
@@ -18,6 +19,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => [
   auroraDoc(lang),
   silkWavesDoc(lang),
   causticsDoc(lang),
+  pixelVortexDoc(lang),
 ];
 
 export const getCategories = (docs: ComponentDoc[]) => [...new Set(docs.map((doc) => doc.category))];

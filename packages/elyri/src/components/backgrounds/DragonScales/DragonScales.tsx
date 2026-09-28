@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react';
 
-import { cn, hexToLinearRgb, useShaderCanvas } from '../../../core';
+import { cn, hexToLinearRgb, useColorScheme, useShaderCanvas } from '../../../core';
 
 import './DragonScales.css';
 
@@ -34,6 +34,7 @@ uniform float uScale;
 uniform vec3 uBase;
 uniform vec3 uHighlight;
 uniform float uFlare;
+uniform float uScheme;
 
 const float R = 0.92;
 const float D = 0.30;
@@ -189,8 +190,18 @@ void main() {
   color += uHighlight * 0.03 * exp(-pow(length(frag - uPointer) / (minRes * 0.4), 2.0));
 
   vec2 vc = frag / uResolution - 0.5;
-  color *= 1.0 - dot(vc, vc) * 1.5;
-  color = pow(aces(color * 1.3), vec3(1.0 / 2.2));
+  float vig = dot(vc, vc);
+
+  if (uScheme > 0.5) {
+    // 浅色：先色调映射，再做亮暗镜像，保留色相 —— 黑曜石鳞面翻转成浅色鳞面，反光条转为深色鳞缘
+    vec3 c = pow(aces(color * 1.3), vec3(1.0 / 2.2));
+    float lum = dot(c, vec3(0.2126, 0.7152, 0.0722));
+    color = clamp(c + (1.0 - 2.0 * lum), 0.0, 1.0) * (1.0 - vig * 0.35);
+  } else {
+    color *= 1.0 - vig * 1.5;
+    color = pow(aces(color * 1.3), vec3(1.0 / 2.2));
+  }
+
   color += (hash(frag + fract(t)) - 0.5) / 255.0;
 
   gl_FragColor = vec4(color, 1.0);
@@ -207,6 +218,7 @@ export function DragonScales({
   flare = 0,
   interactive = true,
 }: DragonScalesProps) {
+  const scheme = useColorScheme();
   const canvasRef = useShaderCanvas({
     fragmentShader: FRAGMENT_SHADER,
     speed,
@@ -216,12 +228,14 @@ export function DragonScales({
       gl.uniform3fv(uniform('uBase'), hexToLinearRgb(color));
       gl.uniform3fv(uniform('uHighlight'), hexToLinearRgb(highlightColor));
       gl.uniform1f(uniform('uFlare'), Math.min(Math.max(flare, 0), 1));
+      gl.uniform1f(uniform('uScheme'), scheme === 'light' ? 1 : 0);
     },
   });
 
   return (
     <div
       className={cn('elyri-dragon-scales', className)}
+      data-scheme={scheme}
       style={{ '--elyri-dragon-scales-color': color } as CSSProperties}
     >
       <canvas ref={canvasRef} className="elyri-dragon-scales__canvas" aria-hidden="true" />

@@ -1,0 +1,1 @@
+export { pixelVortexDoc } from './doc';
