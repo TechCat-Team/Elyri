@@ -11,7 +11,7 @@ const cli = fileURLToPath(new URL('./elyri.mjs', import.meta.url));
 test('add copies editable components and never overwrites them', async () => {
   const cwd = await mkdtemp(join(tmpdir(), 'elyri-cli-'));
   try {
-    await writeFile(join(cwd, 'package.json'), JSON.stringify({ dependencies: { elyri: '^0.1.0' } }));
+    await writeFile(join(cwd, 'package.json'), JSON.stringify({ dependencies: { elyri: '^0.0.1' } }));
     const added = {
       'fade-in': 'FadeIn',
       'gradient-text': 'GradientText',
