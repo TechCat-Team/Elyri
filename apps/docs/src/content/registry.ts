@@ -7,6 +7,7 @@ import { countUpDoc } from './components/count-up';
 import { dragonScalesDoc } from './components/dragon-scales';
 import { fadeInDoc } from './components/fade-in';
 import { gradientTextDoc } from './components/gradient-text';
+import { liquidMetalDoc } from './components/liquid-metal';
 import { marqueeDoc } from './components/marquee';
 import { morphGridDoc } from './components/morph-grid';
 import { particleTextDoc } from './components/particle-text';
@@ -39,6 +40,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => [
   auroraDoc(lang),
   silkWavesDoc(lang),
   causticsDoc(lang),
+  liquidMetalDoc(lang),
   pixelVortexDoc(lang),
   morphGridDoc(lang),
   asciiImageDoc(lang),

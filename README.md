@@ -44,25 +44,26 @@ export function Hero() {
 
 ## Components
 
-| Component       | Category    | Description                                               |
-| --------------- | ----------- | --------------------------------------------------------- |
-| `FadeIn`        | Animations  | Fades and slides content in when it enters the viewport   |
-| `ScaleIn`       | Animations  | Scales and fades content in when it enters the viewport   |
-| `CountUp`       | Animations  | Counts a number up to its target when it enters view      |
-| `Tilt`          | Animations  | Tilts content in 3D following the pointer                 |
-| `DragonScales`  | Backgrounds | WebGL dragon-scale background with interactive lighting   |
-| `Aurora`        | Backgrounds | WebGL aurora night sky with layered curtains and stars    |
-| `SilkWaves`     | Backgrounds | WebGL flowing silk with satin sheen                       |
-| `Caustics`      | Backgrounds | WebGL underwater caustics with pointer ripples            |
-| `MorphGrid`     | Backgrounds | WebGL grid cycling between circles, squares and crosses   |
-| `GradientText`  | Text        | Applies an animated gradient to text                      |
-| `SplitReveal`   | Text        | Reveals text character by character as it enters view     |
-| `Typewriter`    | Text        | Types text out with a blinking cursor                     |
-| `ScrambleText`  | Text        | Decodes text from glowing scrambled glyphs                |
-| `ParticleText`  | Text        | Text made of particles that scatter from the pointer      |
-| `ScrollMarquee` | Text        | Slides text horizontally as the page scrolls vertically   |
-| `Marquee`       | Text        | Loops content infinitely in the chosen direction and back |
-| `AsciiImage`    | Media       | Turns an image into ASCII art with a decoding reveal      |
+| Component       | Category    | Description                                                |
+| --------------- | ----------- | ---------------------------------------------------------- |
+| `FadeIn`        | Animations  | Fades and slides content in when it enters the viewport    |
+| `ScaleIn`       | Animations  | Scales and fades content in when it enters the viewport    |
+| `CountUp`       | Animations  | Counts a number up to its target when it enters view       |
+| `Tilt`          | Animations  | Tilts content in 3D following the pointer                  |
+| `DragonScales`  | Backgrounds | WebGL dragon-scale background with interactive lighting    |
+| `Aurora`        | Backgrounds | WebGL aurora night sky with layered curtains and stars     |
+| `SilkWaves`     | Backgrounds | WebGL flowing silk with satin sheen                        |
+| `Caustics`      | Backgrounds | WebGL underwater caustics with pointer ripples             |
+| `LiquidMetal`   | Backgrounds | WebGL liquid chrome with iridescent film and pointer bulge |
+| `MorphGrid`     | Backgrounds | WebGL grid cycling between circles, squares and crosses    |
+| `GradientText`  | Text        | Applies an animated gradient to text                       |
+| `SplitReveal`   | Text        | Reveals text character by character as it enters view      |
+| `Typewriter`    | Text        | Types text out with a blinking cursor                      |
+| `ScrambleText`  | Text        | Decodes text from glowing scrambled glyphs                 |
+| `ParticleText`  | Text        | Text made of particles that scatter from the pointer       |
+| `ScrollMarquee` | Text        | Slides text horizontally as the page scrolls vertically    |
+| `Marquee`       | Text        | Loops content infinitely in the chosen direction and back  |
+| `AsciiImage`    | Media       | Turns an image into ASCII art with a decoding reveal       |
 
 ## Requirements
 
