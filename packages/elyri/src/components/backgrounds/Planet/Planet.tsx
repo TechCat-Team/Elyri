@@ -129,29 +129,33 @@ vec4 noised(vec3 x) {
 
 // 像素足迹超过噪声周期时淡出该层，远处地表不再闪烁
 float lod(float freqTimesFootprint) {
-  return 1.0 - smoothstep(0.2, 0.6, freqTimesFootprint);
+  return 1.0 - smoothstep(0.25, 0.6, freqTimesFootprint);
 }
 
 float fbm3(vec3 p, float fp) {
   float s = 0.0;
   float a = 0.5;
   float f = 1.0;
-  for (int i = 0; i < 5; i++) {
-    s += a * lod(f * fp) * (noise3(p * f + float(i) * 7.13) - 0.5);
-    a *= 0.5;
+  for (int i = 0; i < 8; i++) {
+    float w = lod(f * fp);
+    if (w <= 0.0) break;
+    s += a * w * (noise3(p * f + float(i) * 7.13) - 0.5);
+    a *= 0.55;
     f *= 2.02;
   }
   return s;
 }
 
-// 地形高度：带侵蚀感的 fbm（坡度越大后续细节越弱），返回高度与梯度
+// 地形高度：带侵蚀感的 fbm（坡度越大后续细节越弱），返回高度与梯度。
+// 八度数足够多，让最细一层在近处也只占两三个像素
 vec4 terrain(vec3 p, float fp) {
   vec4 s = vec4(0.0);
   vec3 dsum = vec3(0.0);
   float a = 0.5;
   float f = 1.0;
-  for (int i = 0; i < 7; i++) {
+  for (int i = 0; i < 10; i++) {
     float w = lod(f * fp);
+    if (w <= 0.0) break;
     vec4 n = noised(p * f + float(i) * vec3(3.1, 7.7, 1.3));
     vec3 g = n.yzw * f;
     dsum += g * a;
@@ -283,15 +287,18 @@ void main() {
     crater += craterLayer(q, 11.0, fp, 7.9, grad);
     crater += craterLayer(q, 23.0, fp, 4.1, grad);
     crater += craterLayer(q, 47.0, fp, 9.6, grad);
+    crater += craterLayer(q, 97.0, fp, 5.7, grad);
+    crater += craterLayer(q, 199.0, fp, 2.2, grad);
     grad = grad * spin;
     grad -= dot(grad, n) * n;
     vec3 nb = normalize(n - grad);
 
-    // 反照率：大尺度暗区 + 中尺度尘带 + 坑底偏暗、坑沿抛射物偏亮
+    // 反照率：大尺度暗区 + 中尺度尘带 + 细碎的岩屑明暗 + 坑底偏暗、坑沿抛射物偏亮
     float big = fbm3(q * 1.7 + 4.0, fp * 1.7);
     float mid = fbm3(q * 9.0 + 1.0, fp * 9.0);
-    vec3 albedo = mix(uSurface, uTerrain, smoothstep(-0.12, 0.22, big + 0.35 * mid));
-    albedo *= 0.8 + 0.7 * (mid + 0.5) * 0.6 + 2.0 * ter.x;
+    float fine = fbm3(q * 70.0 + 3.0, fp * 70.0);
+    vec3 albedo = mix(uSurface, uTerrain, smoothstep(-0.12, 0.22, big + 0.35 * mid + 0.15 * fine));
+    albedo *= 0.8 + 0.7 * (mid + 0.5) * 0.6 + 2.0 * ter.x + 0.5 * fine;
     albedo *= 1.0 + 0.3 * crater;
     albedo = max(albedo, 0.0);
 
@@ -299,7 +306,7 @@ void main() {
     float ngl = dot(n, sun);
     float mu0 = max(dot(nb, sun), 0.0);
     float lsl = mu0 / (mu0 + ndv + 1e-3);
-    float brdf = mix(mu0, lsl, 0.5) * smoothstep(-0.03, 0.08, ngl);
+    float brdf = mix(mu0, lsl, 0.35) * smoothstep(-0.03, 0.08, ngl);
     vec3 sunT = exp(-beta * H * chapman(X, 0.0, ngl));
     vec3 sky = uAtmosphere * uDensity * 0.05 * smoothstep(-0.3, 0.4, ngl);
     vec3 surface = albedo * (SUN_I * 0.9 * sunT * brdf + sky + 0.004);
