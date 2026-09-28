@@ -1,0 +1,35 @@
+.elyri-velvet {
+  --elyri-velvet-color: #6a1230;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  /* WebGL 不可用或尚未绘制时的底色 */
+  background: radial-gradient(
+    ellipse at 60% 30%,
+    color-mix(in srgb, var(--elyri-velvet-color) 70%, #000),
+    color-mix(in srgb, var(--elyri-velvet-color) 15%, #000)
+  );
+}
+
+.elyri-velvet__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--elyri-duration-slow) var(--elyri-ease-out);
+}
+
+.elyri-velvet__canvas[data-ready] {
+  opacity: 1;
+}
+
+.elyri-velvet__content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+}

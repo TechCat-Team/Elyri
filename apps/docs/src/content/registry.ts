@@ -19,6 +19,7 @@ import { silkWavesDoc } from './components/silk-waves';
 import { splitRevealDoc } from './components/split-reveal';
 import { tiltDoc } from './components/tilt';
 import { typewriterDoc } from './components/typewriter';
+import { velvetDoc } from './components/velvet';
 
 /**
  * 全部组件文档。新增组件只需在 components 下建一个文件夹，
@@ -41,6 +42,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => [
   silkWavesDoc(lang),
   causticsDoc(lang),
   liquidMetalDoc(lang),
+  velvetDoc(lang),
   pixelVortexDoc(lang),
   morphGridDoc(lang),
   asciiImageDoc(lang),

@@ -36,15 +36,16 @@ export function Hero() {
 
 ## 组件
 
-| 组件           | 分类        | 说明                                     |
-| -------------- | ----------- | ---------------------------------------- |
-| `GradientText` | text        | 渐变文字，支持自定义配色与流动动画       |
-| `FadeIn`       | animations  | 进入视口时淡入位移                       |
-| `DragonScales` | backgrounds | WebGL 龙鳞动态背景，光源跟随指针         |
-| `Aurora`       | backgrounds | WebGL 极光夜空，多层光帘与星空           |
-| `SilkWaves`    | backgrounds | WebGL 流动丝绸，缎面光泽                 |
-| `Caustics`     | backgrounds | WebGL 水下焦散光网，指针荡开水波         |
-| `LiquidMetal`  | backgrounds | WebGL 液态铬面，彩虹薄膜，指针处液面鼓起 |
+| 组件           | 分类        | 说明                                           |
+| -------------- | ----------- | ---------------------------------------------- |
+| `GradientText` | text        | 渐变文字，支持自定义配色与流动动画             |
+| `FadeIn`       | animations  | 进入视口时淡入位移                             |
+| `DragonScales` | backgrounds | WebGL 龙鳞动态背景，光源跟随指针               |
+| `Aurora`       | backgrounds | WebGL 极光夜空，多层光帘与星空                 |
+| `SilkWaves`    | backgrounds | WebGL 流动丝绸，缎面光泽                       |
+| `Caustics`     | backgrounds | WebGL 水下焦散光网，指针荡开水波               |
+| `LiquidMetal`  | backgrounds | WebGL 液态铬面，彩虹薄膜，指针处液面鼓起       |
+| `Velvet`       | backgrounds | WebGL 垂坠丝绒，褶皱泛起绒光，指针划出渐消压痕 |
 
 ## Hooks
 

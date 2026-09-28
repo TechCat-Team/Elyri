@@ -12,3 +12,5 @@ export { PixelVortex } from './PixelVortex';
 export type { PixelVortexProps } from './PixelVortex';
 export { SilkWaves } from './SilkWaves';
 export type { SilkWavesProps } from './SilkWaves';
+export { Velvet } from './Velvet';
+export type { VelvetProps } from './Velvet';

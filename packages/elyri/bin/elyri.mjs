@@ -25,6 +25,7 @@ const components = {
   'split-reveal': { folder: 'text/SplitReveal', name: 'SplitReveal' },
   tilt: { folder: 'animations/Tilt', name: 'Tilt' },
   typewriter: { folder: 'text/Typewriter', name: 'Typewriter' },
+  velvet: { folder: 'backgrounds/Velvet', name: 'Velvet' },
 };
 
 const available = Object.keys(components);
