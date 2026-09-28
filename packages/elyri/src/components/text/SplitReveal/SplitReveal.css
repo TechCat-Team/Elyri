@@ -1,0 +1,52 @@
+.elyri-split-reveal {
+  --elyri-split-reveal-duration: var(--elyri-duration-base);
+  --elyri-split-reveal-delay: 0ms;
+  --elyri-split-reveal-stagger: 40ms;
+  --elyri-split-reveal-distance: 24px;
+
+  display: inline;
+  /* 保留原始空白，同时允许在空白处换行 */
+  white-space: pre-wrap;
+}
+
+/* 单词容器：整词不拆行，逐字模式下作为字符的布局外壳 */
+.elyri-split-reveal__word {
+  display: inline-block;
+}
+
+/* 动画单元：逐字模式下为单字，逐词模式下为单词 */
+.elyri-split-reveal__unit {
+  display: inline-block;
+  white-space: pre;
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.elyri-split-reveal--visible .elyri-split-reveal__unit {
+  animation: elyri-split-reveal-rise var(--elyri-split-reveal-duration) var(--elyri-ease-out) both;
+  animation-delay: calc(
+    var(--elyri-split-reveal-delay) + var(--elyri-split-reveal-index, 0) * var(--elyri-split-reveal-stagger)
+  );
+}
+
+@keyframes elyri-split-reveal-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, var(--elyri-split-reveal-distance), 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-split-reveal__unit {
+    opacity: 1;
+  }
+
+  .elyri-split-reveal--visible .elyri-split-reveal__unit {
+    animation: none;
+  }
+}

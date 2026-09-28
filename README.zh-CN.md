@@ -54,6 +54,8 @@ export function Hero() {
 | `SilkWaves`    | Backgrounds | WebGL 流动丝绸，缎面光泽         |
 | `Caustics`     | Backgrounds | WebGL 水下焦散光网，指针荡开水波 |
 | `GradientText` | Text        | 为文字应用动态渐变               |
+| `SplitReveal`  | Text        | 文本进入视口时逐字或逐词错峰浮现 |
+| `Typewriter`   | Text        | 打字机效果逐字输出，带闪烁光标   |
 
 ## 环境要求
 

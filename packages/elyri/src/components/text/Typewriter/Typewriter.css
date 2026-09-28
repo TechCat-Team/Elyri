@@ -1,0 +1,37 @@
+.elyri-typewriter {
+  display: inline;
+  white-space: pre-wrap;
+}
+
+.elyri-typewriter__text {
+  white-space: pre-wrap;
+}
+
+/* 块状光标，随 currentColor 取色 */
+.elyri-typewriter__cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 0.1em;
+  border-radius: 1px;
+  background: currentColor;
+  vertical-align: -0.15em;
+  animation: elyri-typewriter-blink 1s step-end infinite;
+}
+
+@keyframes elyri-typewriter-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-typewriter__cursor {
+    animation: none;
+  }
+}

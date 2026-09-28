@@ -13,6 +13,8 @@ const components = {
   'gradient-text': { folder: 'text/GradientText', name: 'GradientText' },
   'pixel-vortex': { folder: 'backgrounds/PixelVortex', name: 'PixelVortex' },
   'silk-waves': { folder: 'backgrounds/SilkWaves', name: 'SilkWaves' },
+  'split-reveal': { folder: 'text/SplitReveal', name: 'SplitReveal' },
+  typewriter: { folder: 'text/Typewriter', name: 'Typewriter' },
 };
 
 const available = Object.keys(components);

@@ -1,0 +1,1 @@
+export { splitRevealDoc } from './doc';

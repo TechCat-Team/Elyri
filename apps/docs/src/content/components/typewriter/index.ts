@@ -1,0 +1,1 @@
+export { typewriterDoc } from './doc';

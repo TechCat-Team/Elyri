@@ -518,6 +518,12 @@
   font-weight: 800;
   text-align: center;
 }
+/* 文本类演示：给足宽度，避免长标题在窄容器里提前换行 */
+.demo-text {
+  width: 100%;
+  max-width: 760px;
+  text-align: center;
+}
 .demo-card {
   padding: 16px 20px;
   border: 1px solid var(--docs-border);

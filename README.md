@@ -52,6 +52,8 @@ export function Hero() {
 | `SilkWaves`    | Backgrounds | WebGL flowing silk with satin sheen                     |
 | `Caustics`     | Backgrounds | WebGL underwater caustics with pointer ripples          |
 | `GradientText` | Text        | Applies an animated gradient to text                    |
+| `SplitReveal`  | Text        | Reveals text character by character as it enters view   |
+| `Typewriter`   | Text        | Types text out with a blinking cursor                   |
 
 ## Requirements
 

@@ -7,6 +7,8 @@ import { fadeInDoc } from './components/fade-in';
 import { gradientTextDoc } from './components/gradient-text';
 import { pixelVortexDoc } from './components/pixel-vortex';
 import { silkWavesDoc } from './components/silk-waves';
+import { splitRevealDoc } from './components/split-reveal';
+import { typewriterDoc } from './components/typewriter';
 
 /**
  * 全部组件文档。新增组件只需在 components 下建一个文件夹，
@@ -14,6 +16,8 @@ import { silkWavesDoc } from './components/silk-waves';
  */
 export const getDocs = (lang: Lang): ComponentDoc[] => [
   gradientTextDoc(lang),
+  splitRevealDoc(lang),
+  typewriterDoc(lang),
   fadeInDoc(lang),
   dragonScalesDoc(lang),
   auroraDoc(lang),
