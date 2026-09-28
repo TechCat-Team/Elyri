@@ -6,11 +6,12 @@ export interface ScrollMarqueeDemoProps {
   direction: ScrollMarqueeDirection;
   speed: number;
   rows: number;
+  infinite: boolean;
 }
 
-export default function ScrollMarqueeDemo({ text, direction, speed, rows }: ScrollMarqueeDemoProps) {
+export default function ScrollMarqueeDemo({ text, direction, speed, rows, infinite }: ScrollMarqueeDemoProps) {
   return (
-    <ScrollMarquee className="demo-marquee" direction={direction} speed={speed} rows={rows}>
+    <ScrollMarquee className="demo-marquee" direction={direction} speed={speed} rows={rows} infinite={infinite}>
       {text}
     </ScrollMarquee>
   );

@@ -30,9 +30,10 @@ export function RouterProvider({ url, children }: { url: string; children: React
       const next = { lang: lang ?? route.lang, path: clean(path) };
       window.history.pushState(null, '', href(next.lang, next.path));
       setRoute(next);
-      window.scrollTo({ top: 0 });
+      // 只有真正换页面才回到顶部；同页切换语言等情况保留滚动位置
+      if (next.path !== route.path) window.scrollTo({ top: 0 });
     },
-    [route.lang],
+    [route.lang, route.path],
   );
 
   // 缺少语言段（旧链接、直接落在根路径）时改写为规范 URL

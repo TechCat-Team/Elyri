@@ -19,6 +19,8 @@ export interface ScrollMarqueeProps {
   rows?: number;
   /** 内容重复份数，用于铺满并实现无缝循环 */
   repeat?: number;
+  /** 是否无限循环，关闭时走满一份内容后停住 */
+  infinite?: boolean;
 }
 
 export function ScrollMarquee({
@@ -28,6 +30,7 @@ export function ScrollMarquee({
   speed = 0.5,
   rows = 1,
   repeat = 6,
+  infinite = true,
 }: ScrollMarqueeProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const firstCopyRef = useRef<HTMLSpanElement>(null);
@@ -46,7 +49,9 @@ export function ScrollMarquee({
       const copyWidth = firstCopyRef.current?.offsetWidth ?? 0;
       if (!copyWidth) return;
 
-      const shift = -((window.scrollY * speed) % copyWidth);
+      const offset = window.scrollY * speed;
+      // 无限循环时按单份宽度取模，滚动中不断回绕；关闭时走满一份内容后停住
+      const shift = infinite ? -(offset % copyWidth) : -Math.min(offset, copyWidth);
       root.style.setProperty('--elyri-scroll-marquee-shift', `${shift}px`);
       root.style.setProperty('--elyri-scroll-marquee-copy-width', `${copyWidth}px`);
     };
@@ -65,7 +70,7 @@ export function ScrollMarquee({
       window.removeEventListener('resize', onScroll);
       if (frame) cancelAnimationFrame(frame);
     };
-  }, [prefersReducedMotion, speed, rows, repeat]);
+  }, [prefersReducedMotion, speed, rows, repeat, infinite]);
 
   const rowCount = Math.max(1, Math.floor(rows));
   const copyCount = Math.max(1, Math.floor(repeat));
