@@ -23,6 +23,10 @@ export interface PlanetProps {
   horizon?: number;
   /** 动画速度倍率 */
   speed?: number;
+  /** 是否显示太阳 */
+  sun?: boolean;
+  /** 太阳固定的归一化位置（0-1，原点左上，x 为方位、y 为高度）；设置后太阳锁定在该处，不再跟随指针或游移 */
+  sunPosition?: { x: number; y: number };
   /** 太阳是否跟随指针移动 */
   interactive?: boolean;
 }
@@ -47,6 +51,9 @@ uniform float uDensity;
 uniform float uCraters;
 uniform float uStars;
 uniform float uHorizon;
+uniform float uSun;
+uniform vec2 uSunPos;
+uniform float uSunFixed;
 
 const float ALT = 0.15;
 const float FL = 1.25;
@@ -245,9 +252,10 @@ void main() {
   vec3 up = cross(right, fw);
   vec3 rd = normalize(uv.x * right + uv.y * up + FL * fw);
 
-  // 太阳：默认在左上方画外，随指针沿地平线游移与升降
-  float az = -0.85 + (ptr.x - 0.5) * 1.2;
-  float el = -0.24 - (ptr.y - 0.5) * 0.3;
+  // 太阳：默认在左上方画外，随指针沿地平线游移与升降；给定固定位置时锁定不动
+  vec2 sunRef = mix(ptr, uSunPos, uSunFixed);
+  float az = -0.85 + (sunRef.x - 0.5) * 1.2;
+  float el = -0.24 - (sunRef.y - 0.5) * 0.3;
   vec3 sun = normalize(vec3(sin(az) * cos(el), sin(el), -cos(az) * cos(el)));
 
   vec3 beta = uAtmosphere * 7.0 * uDensity + 1e-4;
@@ -265,7 +273,7 @@ void main() {
   float mu = dot(rd, sun);
   float sunAng = sqrt(max(2.0 * (1.0 - mu), 0.0));
   vec3 space = stars(rd, pixAngle);
-  space += vec3(1.0, 0.96, 0.9) * 60.0 * smoothstep(SUN_R, SUN_R * 0.75, sunAng);
+  space += vec3(1.0, 0.96, 0.9) * 60.0 * smoothstep(SUN_R, SUN_R * 0.75, sunAng) * uSun;
 
   vec3 background = space;
   if (coverage > 0.0) {
@@ -361,7 +369,7 @@ void main() {
   vec2 sd = uv - sunUv;
   float glow = 0.9 * exp(-sunAng * 30.0) + 0.1 * exp(-sunAng * 7.0) + 0.015 * exp(-sunAng * 2.0);
   float streak = exp(-abs(sd.y) * 110.0) * exp(-abs(sd.x) * 3.0) * 0.08 * step(0.0, dot(sun, fw));
-  color += vec3(1.0, 0.93, 0.85) * sunTrans * sunVis * (glow + streak);
+  color += vec3(1.0, 0.93, 0.85) * sunTrans * sunVis * (glow + streak) * uSun;
 
   // 暗角
   color *= 1.0 - 0.35 * dot(uv * vec2(0.6, 1.0), uv * vec2(0.6, 1.0));
@@ -383,6 +391,8 @@ export function Planet({
   stars = 0.6,
   horizon = 0.62,
   speed = 1,
+  sun = false,
+  sunPosition,
   interactive = true,
 }: PlanetProps) {
   const canvasRef = useShaderCanvas({
@@ -398,6 +408,9 @@ export function Planet({
       gl.uniform1f(uniform('uCraters'), clamp01(craters));
       gl.uniform1f(uniform('uStars'), clamp01(stars));
       gl.uniform1f(uniform('uHorizon'), Math.min(0.95, Math.max(0.05, horizon)));
+      gl.uniform1f(uniform('uSun'), sun ? 1 : 0);
+      gl.uniform2f(uniform('uSunPos'), clamp01(sunPosition?.x ?? 0.5), clamp01(sunPosition?.y ?? 0.5));
+      gl.uniform1f(uniform('uSunFixed'), sunPosition ? 1 : 0);
     },
   });
 

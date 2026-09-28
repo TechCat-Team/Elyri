@@ -30,6 +30,10 @@ const copy = {
     starsLabel: '星空密度',
     horizonLabel: '地平线位置',
     speedLabel: '速度',
+    sunLabel: '显示太阳',
+    sunFixedLabel: '固定太阳位置',
+    sunXLabel: '太阳 X',
+    sunYLabel: '太阳 Y',
     interactiveLabel: '太阳跟随指针',
     descChildren: '叠加在背景之上的内容',
     descColor: '地表主色（hex）',
@@ -40,6 +44,8 @@ const copy = {
     descStars: '星空密度，0 为无星星',
     descHorizon: '地平线弧顶距容器顶部的比例',
     descSpeed: '动画速度倍率',
+    descSun: '是否显示太阳',
+    descSunPosition: '太阳固定的归一化位置（0-1，原点左上，x 为方位、y 为高度）；设置后不再跟随指针或游移',
     descInteractive: '太阳是否跟随指针移动',
     descClassName: '自定义类名',
   },
@@ -55,6 +61,10 @@ const copy = {
     starsLabel: 'Stars',
     horizonLabel: 'Horizon',
     speedLabel: 'Speed',
+    sunLabel: 'Sun',
+    sunFixedLabel: 'Pin sun',
+    sunXLabel: 'Sun X',
+    sunYLabel: 'Sun Y',
     interactiveLabel: 'Sun follows pointer',
     descChildren: 'Content layered above the background',
     descColor: 'Main surface color (hex)',
@@ -65,6 +75,9 @@ const copy = {
     descStars: 'Star density, 0 disables them',
     descHorizon: 'Distance from the top of the container to the horizon crest, as a fraction',
     descSpeed: 'Animation speed multiplier',
+    descSun: 'Whether to render the sun',
+    descSunPosition:
+      'Fixed normalized position of the sun (0-1, origin top-left, x azimuth, y elevation); stops following the pointer',
     descInteractive: 'Whether the sun follows the pointer',
     descClassName: 'Extra class name',
   },
@@ -107,6 +120,10 @@ export const planetDoc = (lang: Lang): ComponentDoc => {
         step: 0.01,
       },
       { type: 'number', name: 'speed', label: t.speedLabel, default: DEFAULTS.speed, min: 0, max: 5, step: 0.1 },
+      { type: 'boolean', name: 'sun', label: t.sunLabel, default: false },
+      { type: 'boolean', name: 'sunFixed', label: t.sunFixedLabel, default: false },
+      { type: 'number', name: 'sunX', label: t.sunXLabel, default: 0.5, min: 0, max: 1, step: 0.01 },
+      { type: 'number', name: 'sunY', label: t.sunYLabel, default: 0.5, min: 0, max: 1, step: 0.01 },
       { type: 'boolean', name: 'interactive', label: t.interactiveLabel, default: true },
     ],
     props: [
@@ -124,6 +141,8 @@ export const planetDoc = (lang: Lang): ComponentDoc => {
       { name: 'stars', type: 'number', default: String(DEFAULTS.stars), description: t.descStars },
       { name: 'horizon', type: 'number', default: String(DEFAULTS.horizon), description: t.descHorizon },
       { name: 'speed', type: 'number', default: String(DEFAULTS.speed), description: t.descSpeed },
+      { name: 'sun', type: 'boolean', default: 'false', description: t.descSun },
+      { name: 'sunPosition', type: '{ x: number; y: number }', description: t.descSunPosition },
       { name: 'interactive', type: 'boolean', default: 'true', description: t.descInteractive },
       { name: 'className', type: 'string', description: t.descClassName },
     ],
@@ -138,6 +157,8 @@ export const planetDoc = (lang: Lang): ComponentDoc => {
         stars={v.stars as number}
         horizon={v.horizon as number}
         speed={v.speed as number}
+        sun={v.sun as boolean}
+        sunPosition={v.sunFixed ? { x: v.sunX as number, y: v.sunY as number } : undefined}
         interactive={v.interactive as boolean}
       />
     ),
@@ -155,6 +176,8 @@ export const planetDoc = (lang: Lang): ComponentDoc => {
           stars: unlessDefault(v.stars, DEFAULTS.stars),
           horizon: unlessDefault(v.horizon, DEFAULTS.horizon),
           speed: unlessDefault(v.speed, DEFAULTS.speed),
+          sun: v.sun ? true : undefined,
+          sunPosition: v.sunFixed ? { x: v.sunX as number, y: v.sunY as number } : undefined,
           interactive: v.interactive ? undefined : false,
         },
         children: `<h1>${v.text as string}</h1>`,

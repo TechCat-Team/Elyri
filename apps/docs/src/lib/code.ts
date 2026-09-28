@@ -23,7 +23,7 @@ export function highlight(code: string) {
   return html + escape(code.slice(last));
 }
 
-type PropValue = ControlValue | string[] | undefined;
+type PropValue = ControlValue | string[] | Record<string, number> | undefined;
 
 const DEPENDENCY_COMMANDS: Record<PackageManager, string> = {
   pnpm: 'pnpm add elyri',
@@ -50,6 +50,11 @@ const formatValue = (value: PropValue) => {
   if (value === undefined) return null;
   if (typeof value === 'string') return `'${value}'`;
   if (Array.isArray(value)) return `[${value.map((item) => `'${item}'`).join(', ')}]`;
+  if (typeof value === 'object') {
+    return `{ ${Object.entries(value)
+      .map(([key, item]) => `${key}: ${item}`)
+      .join(', ')} }`;
+  }
   return String(value);
 };
 
