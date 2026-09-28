@@ -19,7 +19,8 @@ const copy = {
     description:
       'WebGL 渲染的 LED 屏：把视频降采样成像素灯珠播放；未提供视频时显示缓慢流动的火焰，亮区跟随指针，自动适配明暗主题。',
     videoSrcLabel: '视频地址',
-    descVideoSrc: '在 LED 屏上播放的视频地址（跨域需 CORS），未提供时显示火焰效果',
+    descVideoSrc:
+      '在 LED 屏上播放的视频地址（跨域需 CORS，服务端需支持 Range 请求以便大视频流式播放），未提供时显示火焰效果',
     colorLabel: '火焰色',
     highlightLabel: '高光色',
     cellSizeLabel: '灯珠尺寸',
@@ -41,7 +42,8 @@ const copy = {
     description:
       'A WebGL LED screen: plays a video downsampled into pixel diodes; without a video, a slow flowing flame glows toward the pointer. Adapts to light and dark themes.',
     videoSrcLabel: 'Video URL',
-    descVideoSrc: 'Video played on the LED wall (cross-origin needs CORS); falls back to flames when omitted',
+    descVideoSrc:
+      'Video played on the LED wall (cross-origin needs CORS; the server needs Range support for streaming large videos); falls back to flames when omitted',
     colorLabel: 'Fire',
     highlightLabel: 'Highlight',
     cellSizeLabel: 'Pixel size',

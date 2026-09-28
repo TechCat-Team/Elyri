@@ -571,6 +571,11 @@
   transform: translateY(-1px);
   box-shadow: 0 14px 36px color-mix(in srgb, var(--demo-accent) 58%, transparent);
 }
+/* Aurora 演示中的 Get started 按钮不发光 */
+.elyri-aurora .demo-hero-button--primary,
+.elyri-aurora .demo-hero-button--primary:hover {
+  box-shadow: none;
+}
 .demo-hero-button--ghost {
   border-color: rgba(255, 255, 255, 0.28);
   background: rgba(255, 255, 255, 0.07);

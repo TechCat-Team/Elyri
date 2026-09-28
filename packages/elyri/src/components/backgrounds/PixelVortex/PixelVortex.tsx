@@ -8,7 +8,10 @@ import './PixelVortex.css';
 export interface PixelVortexProps {
   children?: ReactNode;
   className?: string;
-  /** 在 LED 屏上播放的视频地址；跨域视频需服务端允许 CORS。未提供或加载失败时显示火焰流动效果 */
+  /**
+   * 在 LED 屏上播放的视频地址。跨域视频需服务端允许 CORS；服务端还需支持 Range 请求，
+   * 否则大视频会整段下载而无法边下边播。未提供或加载失败时显示火焰流动效果。
+   */
   videoSrc?: string;
   /** 火焰主色（hex） */
   color?: string;
@@ -164,9 +167,12 @@ export function PixelVortex({
 }: PixelVortexProps) {
   const scheme = useColorScheme();
   const [video, setVideo] = useState<HTMLVideoElement | null>(null);
+  // 一旦出过帧就锁定为「有视频」：大视频中途缓冲时保留上一帧，不回退到火焰
+  const [videoReady, setVideoReady] = useState(false);
   const textureRef = useRef<{ gl: WebGLRenderingContext; texture: WebGLTexture | null } | null>(null);
 
-  // 视频不挂到 DOM 中，仅作为纹理来源；可以播放后才切换到视频画面
+  // 视频不挂到 DOM 中，仅作为纹理来源；可以播放后才切换到视频画面。
+  // 大视频依赖服务端支持 Range 请求做流式播放：边下边播，只缓冲播放位置附近的数据。
   useEffect(() => {
     if (!videoSrc) return;
     const el = document.createElement('video');
@@ -175,19 +181,49 @@ export function PixelVortex({
     el.loop = true;
     el.playsInline = true;
     el.preload = 'auto';
-    const handleReady = () => setVideo(el);
-    const handleError = () => setVideo(null);
+
+    let disposed = false;
+    const tryPlay = () => {
+      // 页面不可见时暂停，避免大视频在后台持续缓冲
+      if (disposed || document.hidden) return;
+      el.play().catch(() => {});
+    };
+    const handleReady = () => {
+      if (disposed) return;
+      setVideo(el);
+      setVideoReady(true);
+    };
+    const handleError = () => {
+      if (disposed) return;
+      setVideoReady(false);
+      setVideo(null);
+    };
+    // 大视频会周期性卡顿而暂停，恢复可播/可见时继续自动播放
+    const handlePause = () => tryPlay();
+    const handleVisibility = () => {
+      if (document.hidden) el.pause();
+      else tryPlay();
+    };
+
     el.addEventListener('loadeddata', handleReady);
+    el.addEventListener('canplay', handleReady);
     el.addEventListener('error', handleError);
+    el.addEventListener('pause', handlePause);
+    document.addEventListener('visibilitychange', handleVisibility);
     el.src = videoSrc;
-    el.play().catch(() => {});
+    tryPlay();
 
     return () => {
+      disposed = true;
       el.removeEventListener('loadeddata', handleReady);
+      el.removeEventListener('canplay', handleReady);
       el.removeEventListener('error', handleError);
+      el.removeEventListener('pause', handlePause);
+      document.removeEventListener('visibilitychange', handleVisibility);
       el.pause();
       el.removeAttribute('src');
       el.load();
+      setVideoReady(false);
       setVideo(null);
     };
   }, [videoSrc]);
@@ -204,9 +240,10 @@ export function PixelVortex({
       gl.uniform1f(uniform('uScheme'), scheme === 'light' ? 1 : 0);
       gl.uniform1f(uniform('uSeam'), seams ? Math.max(0.5, seamWidth) * dpr : 0);
 
-      const hasVideo = video != null && video.readyState >= video.HAVE_CURRENT_DATA;
+      // 用锁定状态判断是否已切到视频；缓冲中 readyState 会掉，但画面保留上一帧
+      const hasVideo = video != null && videoReady;
       gl.uniform1f(uniform('uHasVideo'), hasVideo ? 1 : 0);
-      if (!hasVideo) return;
+      if (!hasVideo || !video) return;
 
       if (textureRef.current?.gl !== gl) {
         const texture = gl.createTexture();
@@ -219,7 +256,10 @@ export function PixelVortex({
       }
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, textureRef.current.texture);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, video);
+      // 只在拿到当前帧时上传；缓冲中沿用上一帧纹理
+      if (video.readyState >= video.HAVE_CURRENT_DATA && video.videoWidth > 0) {
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, video);
+      }
       gl.uniform1i(uniform('uVideo'), 0);
       gl.uniform2f(uniform('uVideoSize'), video.videoWidth, video.videoHeight);
     },
