@@ -5,15 +5,17 @@ import { SearchDialog } from './components/SearchDialog';
 import { Sidebar } from './components/Sidebar';
 import { guides } from './content/guides';
 import { getCategories, getDocs } from './content/registry';
-import { useHashRoute } from './lib/hooks/useHashRoute';
+import { useDocumentHead } from './lib/hooks/useDocumentHead';
 import { useTheme } from './lib/hooks/useTheme';
 import { useI18n } from './lib/i18n';
+import { pageMeta } from './lib/meta';
+import { useRoute } from './lib/router';
 import { ComponentPage } from './pages/ComponentPage';
 
 export function App() {
-  const path = useHashRoute();
-  const { lang, t } = useI18n();
-  const { theme, toggle: toggleTheme } = useTheme();
+  const { lang, path, to } = useRoute();
+  const { t } = useI18n();
+  const { toggle: toggleTheme } = useTheme();
   const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -25,6 +27,9 @@ export function App() {
     [categories, docs],
   );
   const navItems = useMemo(() => guides.map((guide) => ({ path: guide.path, title: t(guide.titleKey) })), [t]);
+  const meta = useMemo(() => pageMeta(lang, path), [lang, path]);
+
+  useDocumentHead(lang, meta);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -52,7 +57,7 @@ export function App() {
       <article className="doc-page">
         <h1 className="page-title">404</h1>
         <p className="page-description">{t('page.notFoundHint')}</p>
-        <a className="primary-button" href="#/">
+        <a className="primary-button" href={to(lang, '')}>
           {t('page.backHome')}
         </a>
       </article>
@@ -62,7 +67,6 @@ export function App() {
   return (
     <div className="docs">
       <Header
-        theme={theme}
         onToggleTheme={toggleTheme}
         onOpenSearch={() => setSearchOpen(true)}
         onToggleMenu={() => setMenuOpen((open) => !open)}

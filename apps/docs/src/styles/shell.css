@@ -181,7 +181,7 @@
   color: var(--docs-text);
 }
 
-/* 明暗切换：日月变形 */
+/* 明暗切换：日月变形，状态由 <html data-theme> 驱动，服务端渲染无需知道主题 */
 .theme-icon > * {
   transform-box: fill-box;
   transform-origin: center;
@@ -192,17 +192,17 @@
 .theme-icon-rays {
   transform-box: view-box;
 }
-.theme-toggle.is-dark .theme-icon-core {
+:root[data-theme='dark'] .theme-icon-core {
   transform: scale(1.5);
 }
-.theme-toggle.is-dark .theme-icon-rays {
+:root[data-theme='dark'] .theme-icon-rays {
   opacity: 0;
   transform: rotate(-60deg) scale(0.5);
 }
 .theme-icon-cut {
   transition: transform 500ms var(--elyri-ease-out);
 }
-.theme-toggle.is-dark .theme-icon-cut {
+:root[data-theme='dark'] .theme-icon-cut {
   transform: translate(-8px, 5px);
 }
 

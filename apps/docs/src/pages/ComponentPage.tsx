@@ -6,6 +6,7 @@ import { Controls } from '../components/Controls';
 import { InstallSnippet } from '../components/InstallSnippet';
 import { useI18n } from '../lib/i18n';
 import type { MessageKey } from '../lib/messages';
+import { Link } from '../lib/router';
 import type { CodeLang, ComponentDoc, ControlValue, ControlValues } from '../lib/types';
 
 const LANG_ITEMS = [
@@ -220,18 +221,18 @@ export function ComponentPage({ doc, prev, next }: ComponentPageProps) {
 
       <nav className="pager">
         {prev ? (
-          <a href={`#/components/${prev.slug}`} className="pager-link">
+          <Link to={`components/${prev.slug}`} className="pager-link">
             <span>{t('page.prev')}</span>
             {prev.title}
-          </a>
+          </Link>
         ) : (
           <span />
         )}
         {next && (
-          <a href={`#/components/${next.slug}`} className="pager-link is-next">
+          <Link to={`components/${next.slug}`} className="pager-link is-next">
             <span>{t('page.next')}</span>
             {next.title}
-          </a>
+          </Link>
         )}
       </nav>
     </article>

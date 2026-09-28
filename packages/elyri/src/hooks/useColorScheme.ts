@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 
 export type ColorScheme = 'light' | 'dark';
 
@@ -12,19 +12,19 @@ const readColorScheme = (): ColorScheme => {
   return 'dark';
 };
 
+const subscribe = (onChange: () => void) => {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'class'] });
+  return () => observer.disconnect();
+};
+
+/** 服务端渲染时按深色输出，水合后再切到页面的真实主题 */
+const getServerSnapshot = (): ColorScheme => 'dark';
+
 /**
  * 跟随页面主题实时切换明暗：主题由页面（<html data-theme> 或 .dark/.light）决定，
  * 组件只做镜像，不读取系统偏好。
  */
 export function useColorScheme(): ColorScheme {
-  const [scheme, setScheme] = useState(readColorScheme);
-
-  useEffect(() => {
-    const root = document.documentElement;
-    const observer = new MutationObserver(() => setScheme(readColorScheme()));
-    observer.observe(root, { attributes: true, attributeFilter: ['data-theme', 'class'] });
-    return () => observer.disconnect();
-  }, []);
-
-  return scheme;
+  return useSyncExternalStore(subscribe, readColorScheme, getServerSnapshot);
 }

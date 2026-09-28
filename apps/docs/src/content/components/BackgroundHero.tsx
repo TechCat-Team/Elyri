@@ -1,5 +1,7 @@
 import type { CSSProperties } from 'react';
 
+import { Link } from '../../lib/router';
+
 const NAV_LINKS = ['Components', 'Docs', 'GitHub'];
 
 export interface BackgroundHeroProps {
@@ -18,9 +20,9 @@ export function BackgroundHero({ title, slug, accent }: BackgroundHeroProps) {
         <span className="demo-hero-brand">Elyri</span>
         <nav className="demo-hero-links">
           {NAV_LINKS.map((link) => (
-            <a key={link} href={`#/components/${slug}`}>
+            <Link key={link} to={`components/${slug}`}>
               {link}
-            </a>
+            </Link>
           ))}
         </nav>
       </header>

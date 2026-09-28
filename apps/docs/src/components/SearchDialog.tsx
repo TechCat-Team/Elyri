@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
 
-import { navigate } from '../lib/hooks/useHashRoute';
 import { useI18n } from '../lib/i18n';
+import { useRoute } from '../lib/router';
 import type { ComponentDoc } from '../lib/types';
 
 interface SearchDialogProps {
@@ -12,6 +12,7 @@ interface SearchDialogProps {
 
 export function SearchDialog({ docs, onClose }: SearchDialogProps) {
   const { t } = useI18n();
+  const { push } = useRoute();
   const [query, setQuery] = useState('');
   const [cursor, setCursor] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -29,7 +30,7 @@ export function SearchDialog({ docs, onClose }: SearchDialogProps) {
   }, []);
 
   const select = (doc: ComponentDoc) => {
-    navigate(`components/${doc.slug}`);
+    push(`components/${doc.slug}`);
     onClose();
   };
 

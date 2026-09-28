@@ -1,22 +1,27 @@
+import { useSyncExternalStore } from 'react';
 import type { MouseEvent } from 'react';
 
 import { useI18n } from '../lib/i18n';
-import type { Theme } from '../lib/hooks/useTheme';
+import { Link } from '../lib/router';
 import { site } from '../lib/site';
 
 import { LangSwitch } from './LangSwitch';
 import { ThemeToggle } from './ThemeToggle';
 
 interface HeaderProps {
-  theme: Theme;
   onToggleTheme: (event: MouseEvent<HTMLElement>) => void;
   onOpenSearch: () => void;
   onToggleMenu: () => void;
 }
 
-export function Header({ theme, onToggleTheme, onOpenSearch, onToggleMenu }: HeaderProps) {
-  const isMac = navigator.platform.toUpperCase().includes('MAC');
+const noop = () => () => {};
+/** 服务端无法判断平台，先按非 Mac 输出，水合后再切到真实值 */
+const isMacPlatform = () => navigator.platform.toUpperCase().includes('MAC');
+const serverIsMac = () => false;
+
+export function Header({ onToggleTheme, onOpenSearch, onToggleMenu }: HeaderProps) {
   const { t } = useI18n();
+  const isMac = useSyncExternalStore(noop, isMacPlatform, serverIsMac);
 
   return (
     <header className="topbar">
@@ -26,10 +31,10 @@ export function Header({ theme, onToggleTheme, onOpenSearch, onToggleMenu }: Hea
             <path d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
-        <a href="#/" className="logo">
+        <Link to="" className="logo">
           <img className="logo-mark" src={`${import.meta.env.BASE_URL}logo.svg`} alt="" width="28" height="28" />
           {site.name}
-        </a>
+        </Link>
         <span className="version-badge">v{site.version}</span>
       </div>
 
@@ -45,7 +50,7 @@ export function Header({ theme, onToggleTheme, onOpenSearch, onToggleMenu }: Hea
 
         <LangSwitch />
 
-        <ThemeToggle theme={theme} onToggle={onToggleTheme} />
+        <ThemeToggle onToggle={onToggleTheme} />
 
         {site.github && (
           <a className="icon-button" href={site.github} target="_blank" rel="noreferrer" aria-label="GitHub">

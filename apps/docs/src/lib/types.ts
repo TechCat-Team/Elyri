@@ -48,3 +48,11 @@ export interface NavItem {
   path: string;
   title: string;
 }
+
+/** 单个页面的 SEO 信息，预渲染与服务端都从这里取 */
+export interface PageMeta {
+  title: string;
+  description: string;
+  /** 没有匹配到任何页面 */
+  notFound?: boolean;
+}

@@ -5,11 +5,11 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['**/dist/**', '**/node_modules/**'] },
+  { ignores: ['**/dist/**', '**/dist-ssr/**', '**/node_modules/**'] },
   js.configs.recommended,
   tseslint.configs.recommended,
   {
-    files: ['packages/elyri/bin/*.mjs'],
+    files: ['packages/elyri/bin/*.mjs', 'apps/docs/scripts/*.mjs'],
     languageOptions: { globals: globals.node },
   },
   {

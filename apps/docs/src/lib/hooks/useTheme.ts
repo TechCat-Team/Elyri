@@ -1,43 +1,51 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import type { MouseEvent } from 'react';
-import { flushSync } from 'react-dom';
 
 export type Theme = 'light' | 'dark';
 
 const STORAGE_KEY = 'elyri-theme';
-const media = window.matchMedia('(prefers-color-scheme: dark)');
+const DARK_QUERY = '(prefers-color-scheme: dark)';
 
-const getInitialTheme = (): Theme => {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored === 'light' || stored === 'dark') return stored;
-  return media.matches ? 'dark' : 'light';
-};
+const read = (): Theme => (document.documentElement.dataset.theme === 'light' ? 'light' : 'dark');
 
 const apply = (theme: Theme) => {
   document.documentElement.dataset.theme = theme;
 };
 
+const readStored = (): string | null => {
+  try {
+    return localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return null;
+  }
+};
+
+/**
+ * 主题以 <html data-theme> 为准，首屏由 index.html 的内联脚本写入，
+ * 组件只负责改写它，因此服务端渲染不会与客户端不一致。
+ */
 export function useTheme() {
-  const [theme, setTheme] = useState<Theme>(getInitialTheme);
-
-  useEffect(() => apply(theme), [theme]);
-
-  // 用户未手动选择时，跟随系统
+  // 用户未手动选择时跟随系统
   useEffect(() => {
+    const media = window.matchMedia(DARK_QUERY);
     const onChange = (event: MediaQueryListEvent) => {
-      if (!localStorage.getItem(STORAGE_KEY)) setTheme(event.matches ? 'dark' : 'light');
+      if (!readStored()) apply(event.matches ? 'dark' : 'light');
     };
     media.addEventListener('change', onChange);
     return () => media.removeEventListener('change', onChange);
   }, []);
 
   const toggle = (event: MouseEvent<HTMLElement>) => {
-    const next: Theme = theme === 'dark' ? 'light' : 'dark';
-    localStorage.setItem(STORAGE_KEY, next);
+    const next: Theme = read() === 'dark' ? 'light' : 'dark';
+    try {
+      localStorage.setItem(STORAGE_KEY, next);
+    } catch {
+      // 隐私模式下写入失败不影响切换
+    }
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!document.startViewTransition || reduceMotion) {
-      setTheme(next);
+      apply(next);
       return;
     }
 
@@ -47,10 +55,7 @@ export function useTheme() {
     const y = rect.top + rect.height / 2;
     const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
 
-    const transition = document.startViewTransition(() => {
-      apply(next);
-      flushSync(() => setTheme(next));
-    });
+    const transition = document.startViewTransition(() => apply(next));
 
     transition.ready.then(() => {
       document.documentElement.animate(
@@ -60,5 +65,5 @@ export function useTheme() {
     });
   };
 
-  return { theme, toggle };
+  return { toggle };
 }

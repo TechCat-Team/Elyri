@@ -1,8 +1,9 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo } from 'react';
 import type { ReactNode } from 'react';
 
 import { messages } from './messages';
 import type { MessageKey } from './messages';
+import { useRoute } from './router';
 import type { Lang } from './types';
 
 const STORAGE_KEY = 'elyri-docs-lang';
@@ -15,22 +16,19 @@ interface I18nValue {
 
 const I18nContext = createContext<I18nValue | null>(null);
 
-const getInitialLang = (): Lang => {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored === 'zh' || stored === 'en') return stored;
-  return navigator.language.toLowerCase().startsWith('zh') ? 'zh' : 'en';
-};
-
+/** 语言由 URL 决定；这里只把选择记下来，供根路径跳转时参考 */
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<Lang>(getInitialLang);
+  const { lang, setLang } = useRoute();
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, lang);
-    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
-    document.title = messages[lang]['app.title'];
+    try {
+      localStorage.setItem(STORAGE_KEY, lang);
+    } catch {
+      // 隐私模式下写入失败不影响使用
+    }
   }, [lang]);
 
-  const value = useMemo<I18nValue>(() => ({ lang, setLang, t: (key) => messages[lang][key] }), [lang]);
+  const value = useMemo<I18nValue>(() => ({ lang, setLang, t: (key) => messages[lang][key] }), [lang, setLang]);
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }

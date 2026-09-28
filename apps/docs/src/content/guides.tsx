@@ -2,10 +2,12 @@ import type { ComponentType } from 'react';
 
 import { CodeBlock } from '../components/CodeBlock';
 import { InstallSnippet } from '../components/InstallSnippet';
+import { Link } from '../lib/router';
+import { messages } from '../lib/messages';
 import type { MessageKey } from '../lib/messages';
 import { site } from '../lib/site';
 import { useI18n } from '../lib/i18n';
-import type { ComponentDoc } from '../lib/types';
+import type { ComponentDoc, Lang, PageMeta } from '../lib/types';
 
 /** 引导页收到的都是同一份文档数据，页面按需取用 */
 export interface GuideProps {
@@ -53,9 +55,9 @@ function IntroPage({ docs }: GuideProps) {
     <article className="doc-page index-page">
       <h1 className="page-title">{site.name}</h1>
       <p className="page-description">{t.introDescription}</p>
-      <a className="primary-button" href="#/installation">
+      <Link className="primary-button" to="installation">
         {t.introCta}
-      </a>
+      </Link>
 
       <section className="section">
         <div className="index-heading">
@@ -66,12 +68,12 @@ function IntroPage({ docs }: GuideProps) {
         </div>
         <div className="index-list">
           {docs.map((doc) => (
-            <a className="index-link" key={doc.slug} href={`#/components/${doc.slug}`}>
+            <Link className="index-link" key={doc.slug} to={`components/${doc.slug}`}>
               <span className="index-link-title">{doc.title}</span>
               <span className="index-link-meta">
                 {doc.category} · {doc.description}
               </span>
-            </a>
+            </Link>
           ))}
         </div>
       </section>
@@ -109,3 +111,14 @@ export const guides: Guide[] = [
   { path: '', titleKey: 'guides.intro', Component: IntroPage },
   { path: 'installation', titleKey: 'guides.installation', Component: InstallPage },
 ];
+
+/** 引导页的标题与描述，供预渲染与 <head> 使用 */
+export const guideMeta = (lang: Lang, path: string): PageMeta | null => {
+  const t = copy[lang];
+
+  if (path === '') return { title: messages[lang]['app.title'], description: t.introDescription };
+  if (path === 'installation') {
+    return { title: `${t.installTitle} · ${site.name}`, description: t.installDescription };
+  }
+  return null;
+};

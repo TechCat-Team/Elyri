@@ -1,4 +1,5 @@
 import { useI18n } from '../lib/i18n';
+import { Link } from '../lib/router';
 import type { ComponentDoc, NavItem } from '../lib/types';
 
 interface SidebarProps {
@@ -22,9 +23,9 @@ export function Sidebar({ docs, categories, guides, activePath, open, onClose }:
           <div className="sidebar-group">
             <p className="sidebar-group-title">{t('nav.getStarted')}</p>
             {guides.map((guide) => (
-              <a key={guide.path} href={`#/${guide.path}`} className={linkClass(guide.path)}>
+              <Link key={guide.path} to={guide.path} className={linkClass(guide.path)}>
                 {guide.title}
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -36,10 +37,10 @@ export function Sidebar({ docs, categories, guides, activePath, open, onClose }:
                 .map((doc) => {
                   const path = `components/${doc.slug}`;
                   return (
-                    <a key={doc.slug} href={`#/${path}`} className={linkClass(path)}>
+                    <Link key={doc.slug} to={path} className={linkClass(path)}>
                       {doc.title}
                       {doc.isNew && <span className="new-tag">New</span>}
-                    </a>
+                    </Link>
                   );
                 })}
             </div>
