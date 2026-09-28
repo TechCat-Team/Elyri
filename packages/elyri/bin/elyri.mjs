@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 const components = {
   'ascii-image': { folder: 'media/AsciiImage', name: 'AsciiImage' },
   aurora: { folder: 'backgrounds/Aurora', name: 'Aurora' },
+  'brushed-metal': { folder: 'backgrounds/BrushedMetal', name: 'BrushedMetal' },
   caustics: { folder: 'backgrounds/Caustics', name: 'Caustics' },
   'count-up': { folder: 'animations/CountUp', name: 'CountUp' },
   'dragon-scales': { folder: 'backgrounds/DragonScales', name: 'DragonScales' },

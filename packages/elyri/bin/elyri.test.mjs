@@ -22,6 +22,7 @@ test('add copies editable components and never overwrites them', async () => {
       caustics: 'Caustics',
       'liquid-metal': 'LiquidMetal',
       velvet: 'Velvet',
+      'brushed-metal': 'BrushedMetal',
       'morph-grid': 'MorphGrid',
       'ascii-image': 'AsciiImage',
       'count-up': 'CountUp',

@@ -56,6 +56,7 @@ export function Hero() {
 | `Caustics`      | Backgrounds | WebGL underwater caustics with pointer ripples                |
 | `LiquidMetal`   | Backgrounds | WebGL liquid chrome with iridescent film and pointer bulge    |
 | `Velvet`        | Backgrounds | WebGL draped velvet with fold sheen and fading pointer trails |
+| `BrushedMetal`  | Backgrounds | WebGL brushed metal plate with anisotropic light beams        |
 | `MorphGrid`     | Backgrounds | WebGL grid cycling between circles, squares and crosses       |
 | `GradientText`  | Text        | Applies an animated gradient to text                          |
 | `SplitReveal`   | Text        | Reveals text character by character as it enters view         |

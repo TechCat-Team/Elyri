@@ -26,13 +26,14 @@ const TRAIL_STEP_MS = 40;
 const TRAIL_FADE_S = 1.6;
 const trailData = new Float32Array(TRAIL * 3);
 
-// 丝绒：斜向垂坠的褶皱高度场缓慢摆动。与缎面相反，丝绒正对视线处吸光发暗，
-// 褶皱侧面因绒毛掠射散射而泛起柔光；叠加细密的绒毛颗粒。
+// 丝绒：圆背窄谷的斜向垂坠褶皱缓慢摆动。用 Charlie 绒面分布着色——正对视线处吸光发暗，
+// 褶皱侧面因绒毛掠射散射而泛起柔光；叠加碎绒明暗与像素级绒毛颗粒。
 // 指针轨迹以线段形式传入，被压倒的绒毛光晕消失、略显光亮，随时间回弹。
 const FRAGMENT_SHADER = `
 precision highp float;
 
 #define TRAIL ${TRAIL}
+#define PI 3.14159265
 
 uniform vec2 uResolution;
 uniform float uTime;
@@ -59,14 +60,21 @@ float noise(vec2 p) {
   );
 }
 
+// 圆润的褶背 + 收紧的折痕：|sin| 在零点处形成 V 形谷，k 控制谷底锐度
+float fold(float s, float k) {
+  return sqrt(s * s + k);
+}
+
 float drape(vec2 p, float t) {
   // 褶皱沿 x 分布、顺 y 垂下，并随高度缓慢摆动
-  float sway = 0.35 * sin(p.y * 0.6 + t * 0.35) + 0.15 * sin(p.y * 1.3 - t * 0.27 + p.x * 0.4);
+  float sway = 0.28 * sin(p.y * 0.5 + t * 0.3) + 0.12 * sin(p.y * 1.15 - t * 0.23 + p.x * 0.3);
   float x = p.x + sway;
-  float h = 0.55 * sin(x * 1.7 + 0.8 * sin(x * 0.5 + t * 0.1))
-    + 0.3 * sin(x * 3.1 + p.y * 0.35 - t * 0.22)
-    + 0.12 * sin(x * 5.3 - p.y * 0.6 + t * 0.3);
-  h += 0.4 * (noise(p * 0.45 + vec2(t * 0.05, -t * 0.03)) - 0.5);
+  float s1 = sin(x * 1.35 + 0.6 * sin(x * 0.37 + t * 0.08));
+  float s2 = sin(x * 2.7 + p.y * 0.28 - t * 0.18 + 1.3);
+  float h = 0.62 * fold(s1, 0.012) + 0.26 * fold(s2, 0.03);
+  // 褶背上的斜向细皱
+  h += 0.05 * sin(p.x * 4.0 - p.y * 5.5 + t * 0.25) * s1 * s1;
+  h += 0.25 * noise(p * 0.5 + vec2(t * 0.04, -t * 0.03));
   return h;
 }
 
@@ -96,44 +104,60 @@ void main() {
   vec2 uv = frag / minRes;
   float t = uTime;
 
-  // 斜向约 20° 的垂坠
-  mat2 rot = mat2(0.94, 0.34, -0.34, 0.94);
-  vec2 p = rot * uv * 2.4 * uFolds;
+  // 斜向约 16° 的垂坠
+  mat2 rot = mat2(0.96, 0.28, -0.28, 0.96);
+  vec2 p = rot * uv * 2.2 * uFolds;
 
-  float e = 0.01;
+  // 中心差分求法线，步长足够小以保留折痕的锐利边缘
+  float e = 0.004;
+  vec2 ex = vec2(e, 0.0);
+  vec2 ey = vec2(0.0, e);
   float h = drape(p, t);
-  vec2 grad = vec2(drape(p + vec2(e, 0.0), t) - h, drape(p + vec2(0.0, e), t) - h) / e;
+  vec2 grad = vec2(drape(p + ex, t) - drape(p - ex, t), drape(p + ey, t) - drape(p - ey, t)) / (2.0 * e);
   // 梯度转回屏幕坐标系
   grad = grad * rot;
-  vec3 n = normalize(vec3(-grad * 0.5, 1.0));
+  vec3 n = normalize(vec3(-grad * 0.75, 1.0));
+  float NdotV = max(n.z, 1e-3);
 
-  vec2 ptr = uPointer / minRes;
-  vec3 L = normalize(vec3(ptr - uv, 0.8));
-  vec3 H = normalize(L + vec3(0.0, 0.0, 1.0));
-  float atten = 1.0 / (1.0 + 1.1 * dot(ptr - uv, ptr - uv));
-  float NdotL = max(dot(n, L), 0.0);
-  float wrap = clamp(dot(n, L) * 0.5 + 0.5, 0.0, 1.0);
-  float rim = smoothstep(0.0, 0.45, 1.0 - n.z);
-
-  float cavity = mix(0.3, 1.0, smoothstep(-0.9, 0.6, h));
   float pressed = pressAt(frag, minRes);
+  // 绒毛朝向不一造成的大块明暗（碎绒感）+ 约 1.6 像素的细密绒毛颗粒
+  float nap = 0.7 + 0.6 * noise(p * 0.9 + 3.1);
+  vec2 fp = rot * frag / 1.6;
+  float pile = 0.6 * noise(fp) + 0.4 * noise(fp * 0.43 + 17.0);
+  float ao = mix(0.4, 1.0, smoothstep(0.1, 0.8, h));
 
-  // 绒毛颗粒：跟随布面，不随屏幕滑动
-  float grain = 0.82 + 0.36 * noise(p * 70.0) * noise(p * 23.0 + 7.0);
+  // 主光：左上方固定柔光，保证形体稳定可读；辅光：跟随指针的点光
+  vec2 ptr = uPointer / minRes;
+  vec2 toPtr = ptr - uv;
+  vec3 lights[2];
+  lights[0] = normalize(vec3(-0.45, -0.55, 0.7));
+  lights[1] = normalize(vec3(toPtr, 0.55));
+  float power[2];
+  power[0] = 1.5;
+  power[1] = 1.6 / (1.0 + 3.0 * dot(toPtr, toPtr));
 
-  vec3 color = uBase * (0.05 + 0.4 * NdotL * NdotL * atten) * cavity;
-  // 掠射角的绒面光晕，是丝绒的标志
-  color += uSheen * rim * (0.25 + 0.9 * wrap * atten) * 0.75 * cavity * (1.0 - 0.85 * pressed);
-  color += mix(uBase, uSheen, 0.4) * pow(max(dot(n, H), 0.0), 8.0) * 0.1 * atten;
-  color *= mix(grain, 1.0, pressed * 0.7);
-
-  // 压倒的绒毛：更暗、带一点顺毛的光泽
-  color *= 1.0 - 0.3 * pressed;
-  color += mix(uBase, uSheen, 0.6) * pow(max(dot(n, H), 0.0), 30.0) * 0.35 * pressed;
+  // Charlie 绒面分布：正对光处吸光，掠射角散射出柔光
+  const float INV_A = 1.0 / 0.38;
+  vec3 color = uBase * 0.03 * ao;
+  for (int i = 0; i < 2; i++) {
+    vec3 L = lights[i];
+    vec3 H = normalize(L + vec3(0.0, 0.0, 1.0));
+    float NdotL = max(dot(n, L), 0.0);
+    float NdotH = max(dot(n, H), 0.0);
+    float sin2 = max(1.0 - NdotH * NdotH, 0.0078125);
+    float D = (2.0 + INV_A) * pow(sin2, INV_A * 0.5) / (2.0 * PI);
+    float vis = 1.0 / (4.0 * (NdotL + NdotV - NdotL * NdotV) + 1e-3);
+    vec3 diffuse = uBase * (0.08 + 0.55 * NdotL) * ao;
+    vec3 sheen = uSheen * D * vis * NdotL * nap * (0.75 + 0.5 * pile) * (1.0 - 0.85 * pressed);
+    // 压倒的绒毛：顺毛方向出现一点缎面般的光泽
+    vec3 gloss = mix(uBase, uSheen, 0.6) * pow(NdotH, 40.0) * 0.35 * pressed;
+    color += (diffuse * (1.0 - 0.3 * pressed) + sheen + gloss) * power[i];
+  }
+  color *= mix(0.88 + 0.24 * pile, 1.0, pressed * 0.7);
 
   vec2 vc = frag / uResolution - 0.5;
-  color *= 1.0 - dot(vc, vc) * 1.2;
-  color = pow(aces(color * 1.3), vec3(1.0 / 2.2));
+  color *= 1.0 - dot(vc, vc) * 0.6;
+  color = pow(aces(color * 1.2), vec3(1.0 / 2.2));
   color += (hash(frag + fract(t)) - 0.5) / 255.0;
 
   gl_FragColor = vec4(color, 1.0);
