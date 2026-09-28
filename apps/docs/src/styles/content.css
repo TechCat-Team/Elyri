@@ -83,57 +83,144 @@
 .index-page .page-description {
   margin-bottom: 26px;
 }
-.index-heading {
+.index-actions {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--docs-border);
+  flex-wrap: wrap;
+  gap: 10px;
 }
-.index-heading .section-title {
-  margin: 0;
+/* 浏览页：按分类的卡片墙，卡片内直接渲染实时预览 */
+.showcase-group {
+  margin-top: 44px;
 }
-.index-count {
+.showcase-group:first-of-type {
+  margin-top: 6px;
+}
+.showcase-group .section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.showcase-count {
+  color: var(--docs-muted);
   font:
     11px 'SFMono-Regular',
     Consolas,
     monospace;
-  color: var(--docs-muted);
 }
-.index-list {
+.showcase-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 28px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
 }
-.index-link {
+.showcase-card {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  padding: 17px 0;
+  border: 1px solid var(--docs-border);
+  border-radius: 14px;
+  background: var(--docs-surface);
+  overflow: hidden;
+  transition:
+    border-color 180ms,
+    transform 180ms,
+    box-shadow 180ms;
+}
+.showcase-card:hover {
+  border-color: var(--docs-accent);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16);
+}
+.showcase-card:focus-within {
+  border-color: var(--docs-accent);
+}
+/* 覆盖式链接让整张卡片可点，又不会把演示里的链接嵌进 <a> */
+.showcase-card-link {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+}
+.showcase-preview {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
   border-bottom: 1px solid var(--docs-border);
-  text-decoration: none;
-  transition: color 180ms;
+  background-color: var(--docs-preview);
+  background-image: radial-gradient(var(--docs-dot) 0.7px, transparent 0.7px);
+  background-size: 18px 18px;
 }
-.index-link:hover .index-link-title {
-  color: var(--docs-accent);
+/* 卡片只是缩略预览，交互统一交给覆盖链接 */
+.showcase-preview > * {
+  pointer-events: none;
 }
-.index-link-title {
+/* 未播放时冻结纯 CSS 动画；WebGL / 粒子等由组件库的 reduced-motion 处理。
+   负延迟把动画推到末尾，避免入场类动画停在 opacity: 0 的起始帧。 */
+.showcase-preview:not(.is-playing) * {
+  animation-play-state: paused !important;
+  animation-delay: -10s !important;
+}
+.showcase-preview .demo-title {
+  font-size: 30px;
+}
+.showcase-preview .demo-text {
+  max-width: 100%;
+  padding: 0 12px;
+}
+.showcase-preview .demo-stack {
+  width: min(230px, 100%);
+  gap: 8px;
+}
+.showcase-preview .demo-card {
+  padding: 9px 14px;
+  font-size: 12px;
+}
+.showcase-preview .demo-marquee {
+  font-size: 26px;
+}
+.showcase-preview .demo-tilt {
+  width: 220px;
+  height: 130px;
+  font-size: 16px;
+}
+.showcase-preview .demo-ascii {
+  max-width: 300px;
+}
+.showcase-preview .demo-background {
+  height: 100%;
+  border-radius: 0;
+  box-shadow: none;
+}
+.showcase-preview .demo-hero-links,
+.showcase-preview .demo-hero-subtitle,
+.showcase-preview .demo-hero-actions {
+  display: none;
+}
+.showcase-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 13px 16px 15px;
+}
+.showcase-card-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 8px;
+}
+.showcase-card-title {
   font-size: 14px;
   font-weight: 650;
 }
-.index-link-title::after {
-  content: '↗';
-  color: var(--docs-muted);
-  font-size: 13px;
-  font-weight: 400;
-}
-.index-link-meta {
+.showcase-card-desc {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
   color: var(--docs-muted);
   font-size: 12px;
+  line-height: 1.6;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 .index-quickstart {
   margin-top: 56px;
@@ -475,7 +562,7 @@
   .index-page .page-title {
     font-size: 30px;
   }
-  .index-list {
+  .showcase-grid {
     grid-template-columns: minmax(0, 1fr);
   }
   .props-table {

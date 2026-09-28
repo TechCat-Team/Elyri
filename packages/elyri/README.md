@@ -47,9 +47,10 @@ export function Hero() {
 
 ## Hooks
 
-| Hook                      | 说明                         |
-| ------------------------- | ---------------------------- |
-| `usePrefersReducedMotion` | 读取系统「减弱动态效果」偏好 |
+| Hook / Provider           | 说明                                        |
+| ------------------------- | ------------------------------------------- |
+| `usePrefersReducedMotion` | 读取系统「减弱动态效果」偏好                |
+| `ReducedMotionProvider`   | 强制某棵子树播放 / 静止，优先级高于系统偏好 |
 
 ## License
 
