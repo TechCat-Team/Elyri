@@ -47,6 +47,7 @@ export function Hero() {
 | `LiquidMetal`  | backgrounds | WebGL 液态铬面，彩虹薄膜，指针处液面鼓起       |
 | `Velvet`       | backgrounds | WebGL 垂坠丝绒，褶皱泛起绒光，指针划出渐消压痕 |
 | `BrushedMetal` | backgrounds | WebGL 拉丝金属板，各向异性光柱随指针移动       |
+| `Planet`       | backgrounds | WebGL 轨道视角星球（默认火星），大气辉光与日出 |
 
 ## Hooks
 

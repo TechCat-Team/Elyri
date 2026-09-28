@@ -59,6 +59,7 @@ export function Hero() {
 | `LiquidMetal`   | Backgrounds | WebGL 液态铬面，彩虹薄膜，指针处液面鼓起       |
 | `Velvet`        | Backgrounds | WebGL 垂坠丝绒，褶皱泛起绒光，指针划出渐消压痕 |
 | `BrushedMetal`  | Backgrounds | WebGL 拉丝金属板，各向异性光柱随指针移动       |
+| `Planet`        | Backgrounds | WebGL 轨道视角星球（默认火星），大气辉光与日出 |
 | `MorphGrid`     | Backgrounds | WebGL 网格图形在圆形、方形、十字间循环变换     |
 | `GradientText`  | Text        | 为文字应用动态渐变                             |
 | `SplitReveal`   | Text        | 文本进入视口时逐字或逐词错峰浮现               |

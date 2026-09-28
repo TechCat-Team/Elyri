@@ -13,6 +13,7 @@ import { marqueeDoc } from './components/marquee';
 import { morphGridDoc } from './components/morph-grid';
 import { particleTextDoc } from './components/particle-text';
 import { pixelVortexDoc } from './components/pixel-vortex';
+import { planetDoc } from './components/planet';
 import { scaleInDoc } from './components/scale-in';
 import { scrambleTextDoc } from './components/scramble-text';
 import { scrollMarqueeDoc } from './components/scroll-marquee';
@@ -45,6 +46,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => [
   liquidMetalDoc(lang),
   velvetDoc(lang),
   brushedMetalDoc(lang),
+  planetDoc(lang),
   pixelVortexDoc(lang),
   morphGridDoc(lang),
   asciiImageDoc(lang),

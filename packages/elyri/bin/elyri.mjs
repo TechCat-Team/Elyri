@@ -19,6 +19,7 @@ const components = {
   'morph-grid': { folder: 'backgrounds/MorphGrid', name: 'MorphGrid' },
   'particle-text': { folder: 'text/ParticleText', name: 'ParticleText' },
   'pixel-vortex': { folder: 'backgrounds/PixelVortex', name: 'PixelVortex' },
+  planet: { folder: 'backgrounds/Planet', name: 'Planet' },
   'scale-in': { folder: 'animations/ScaleIn', name: 'ScaleIn' },
   'scramble-text': { folder: 'text/ScrambleText', name: 'ScrambleText' },
   'scroll-marquee': { folder: 'text/ScrollMarquee', name: 'ScrollMarquee' },

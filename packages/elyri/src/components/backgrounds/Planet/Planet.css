@@ -1,0 +1,40 @@
+.elyri-planet {
+  --elyri-planet-color: #c1532b;
+  --elyri-planet-atmosphere: #f2a57c;
+  --elyri-planet-horizon: 62%;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  /* WebGL 不可用或尚未绘制时的底色：深空 + 地平线处的一抹大气辉光 */
+  background:
+    radial-gradient(
+      120% 60% at 50% calc(var(--elyri-planet-horizon) + 55%),
+      color-mix(in srgb, var(--elyri-planet-color) 35%, #000) 70%,
+      color-mix(in srgb, var(--elyri-planet-atmosphere) 45%, transparent) 72%,
+      transparent 78%
+    ),
+    #030307;
+}
+
+.elyri-planet__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--elyri-duration-slow) var(--elyri-ease-out);
+}
+
+.elyri-planet__canvas[data-ready] {
+  opacity: 1;
+}
+
+.elyri-planet__content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+}

@@ -1,0 +1,1 @@
+export { planetDoc } from './doc';
