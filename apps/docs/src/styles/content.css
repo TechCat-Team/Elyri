@@ -415,11 +415,14 @@
   color: var(--docs-accent);
 }
 
-/* 复制图标按钮 */
-.code-copy {
+/* 复制 / 编辑图标按钮 */
+.code-copy,
+.code-icon-button {
   display: inline-grid;
   place-items: center;
   flex: none;
+  /* 重置按钮默认内边距，保证图标在按钮内严格居中 */
+  padding: 0;
   width: 26px;
   height: 26px;
   border: 1px solid transparent;
@@ -432,10 +435,20 @@
     background 180ms,
     border-color 180ms;
 }
-.code-copy:hover {
+.code-copy svg,
+.code-icon-button svg {
+  display: block;
+}
+.code-copy:hover,
+.code-icon-button:hover {
   color: var(--docs-accent);
   border-color: var(--docs-border);
   background: var(--docs-surface);
+}
+.code-icon-button.is-active {
+  color: var(--docs-accent);
+  border-color: color-mix(in srgb, var(--docs-accent) 45%, transparent);
+  background: var(--docs-accent-soft);
 }
 .code-block pre {
   margin: 0;

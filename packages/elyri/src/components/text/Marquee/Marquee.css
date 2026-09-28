@@ -5,6 +5,8 @@
 
   width: 100%;
   overflow: hidden;
+  /* 隔离绘制，内容再重也不会波及页面其他部分（注意：不能用 layout 包含，否则自动高度会塌陷） */
+  contain: paint;
 }
 
 /* 轨道宽度由内容撑开，整体平移一份内容宽度后与起点重合，从而实现无缝循环 */
@@ -60,7 +62,17 @@
   animation-direction: reverse;
 }
 
+/* 关闭无限重复时只播放一轮 */
+.elyri-marquee--once .elyri-marquee__track {
+  animation-iteration-count: 1;
+}
+
 .elyri-marquee--pausable:hover .elyri-marquee__track {
+  animation-play-state: paused;
+}
+
+/* 离开视口或页面切到后台时暂停，避免无谓的合成开销与耗电 */
+.elyri-marquee--paused .elyri-marquee__track {
   animation-play-state: paused;
 }
 

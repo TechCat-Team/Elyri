@@ -100,3 +100,22 @@ export function usageExample(
     '}',
   ].join('\n');
 }
+
+/**
+ * 在线编辑器用的转换：把用法示例转成沙箱可执行的片段，
+ * 去掉 import（组件由编辑器 scope 注入）与 export，
+ * 并在末尾调用 render 让 react-live 以 noInline 方式渲染。
+ */
+export function toPlaygroundCode(usage: string) {
+  const name = /export function (\w+)/.exec(usage)?.[1] ?? 'Example';
+
+  const body = usage
+    .split('\n')
+    .filter((line) => !line.startsWith('import '))
+    .join('\n')
+    .replace(/^export\s+/m, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
+  return `${body}\n\nrender(<${name} />);\n`;
+}

@@ -19,30 +19,30 @@ const copy = {
   zh: {
     description:
       '内容自动无限循环滚动，支持任意节点、横向与纵向以及反向播放，悬停可暂停，自动尊重系统的减弱动态效果偏好。',
-    textLabel: '内容',
     directionLabel: '方向',
     durationLabel: '时长',
     gapLabel: '间距',
     descChildren: '需要循环滚动的内容，任意节点',
     descDirection: '滚动方向',
     descDuration: '跑完一轮所需的秒数，数值越大越慢',
-    descRepeat: '内容重复份数，内容较窄时可增大以铺满容器',
+    descRepeat: '最少重复份数；实际份数会按容器尺寸自动补足，保证循环无缝',
     descGap: '每份内容之间的间距（px）',
+    descInfinite: '是否无限重复播放，关闭时只播放一轮',
     descPauseOnHover: '鼠标悬停时是否暂停',
     descClassName: '自定义类名',
   },
   en: {
     description:
       'Loops content infinitely on its own, supporting any nodes, horizontal and vertical directions, reverse playback and hover-to-pause, while respecting reduced-motion preferences.',
-    textLabel: 'Content',
     directionLabel: 'Direction',
     durationLabel: 'Duration',
     gapLabel: 'Gap',
     descChildren: 'Content to loop, any node',
     descDirection: 'Direction the content travels in',
     descDuration: 'Seconds for one full loop; a larger value scrolls slower',
-    descRepeat: 'How many times the content repeats, to fill wide containers',
+    descRepeat: 'Minimum number of copies; the actual count auto-expands to fill the container',
     descGap: 'Spacing between each copy of the content (px)',
+    descInfinite: 'Whether to repeat forever; when off, plays a single pass',
     descPauseOnHover: 'Whether to pause while hovered',
     descClassName: 'Extra class name',
   },
@@ -58,7 +58,6 @@ export const marqueeDoc = (lang: Lang): ComponentDoc => {
     description: t.description,
     isNew: true,
     controls: [
-      { type: 'text', name: 'text', label: t.textLabel, default: DEFAULTS.text },
       {
         type: 'select',
         name: 'direction',
@@ -88,12 +87,13 @@ export const marqueeDoc = (lang: Lang): ComponentDoc => {
       { name: 'duration', type: 'number', default: String(DEFAULTS.duration), description: t.descDuration },
       { name: 'repeat', type: 'number', default: '2', description: t.descRepeat },
       { name: 'gap', type: 'number', default: '0', description: t.descGap },
+      { name: 'infinite', type: 'boolean', default: 'true', description: t.descInfinite },
       { name: 'pauseOnHover', type: 'boolean', default: 'true', description: t.descPauseOnHover },
       { name: 'className', type: 'string', description: t.descClassName },
     ],
     render: (v) => (
       <MarqueeDemo
-        text={v.text as string}
+        text={DEFAULTS.text}
         direction={v.direction as MarqueeDirection}
         duration={v.duration as number}
         gap={v.gap as number}
@@ -107,9 +107,10 @@ export const marqueeDoc = (lang: Lang): ComponentDoc => {
         props: {
           direction: v.direction === DEFAULTS.direction ? undefined : v.direction,
           duration: v.duration === DEFAULTS.duration ? undefined : v.duration,
-          gap: v.gap === DEFAULTS.gap ? undefined : v.gap,
+          // 组件的 gap 默认值是 0，而演示起始值是 16，所以始终写进示例，保证接缝有间距
+          gap: v.gap,
         },
-        children: v.text as string,
+        children: DEFAULTS.text,
       }),
   };
 };

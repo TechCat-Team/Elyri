@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, lazy, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import type { ReactNode } from 'react';
 
 import { CodeBlock } from '../components/CodeBlock';
@@ -8,6 +8,14 @@ import { useI18n } from '../lib/i18n';
 import type { MessageKey } from '../lib/messages';
 import { Link } from '../lib/router';
 import type { CodeLang, ComponentDoc, ControlValue, ControlValues } from '../lib/types';
+
+// 在线编辑器依赖浏览器内的 JSX 编译器，按需加载且只在客户端挂载
+const Playground = lazy(() => import('../components/Playground').then((module) => ({ default: module.Playground })));
+
+/** 服务端渲染返回 false，水合后再切到 true，用于只在客户端渲染的内容 */
+const subscribeToNothing = () => () => {};
+const isClient = () => true;
+const isServer = () => false;
 
 const LANG_ITEMS = [
   { value: 'ts', label: 'TS' },
@@ -63,6 +71,8 @@ export function ComponentPage({ doc, prev, next }: ComponentPageProps) {
   const [codeLang, setCodeLang] = useState<CodeLang>('ts');
   const [replayKey, setReplayKey] = useState(0);
   const [deviceView, setDeviceView] = useState<Device>('desktop');
+  // 在线编辑器只在客户端挂载，避免预渲染时执行浏览器内的编译器
+  const mounted = useSyncExternalStore(subscribeToNothing, isClient, isServer);
   const tabsRef = useRef<HTMLDivElement>(null);
 
   // 滑动下划线：测量当前激活标签的位置与宽度，写入 CSS 变量
@@ -83,6 +93,16 @@ export function ComponentPage({ doc, prev, next }: ComponentPageProps) {
 
   const usage = useMemo(() => doc.usage(values, codeLang), [doc, values, codeLang]);
   const hasControls = Boolean(doc.controls?.length);
+
+  const usageTitle = codeLang === 'ts' ? 'Usage.tsx' : 'Usage.jsx';
+  const usageSwitcher = {
+    label: t('code.language'),
+    value: codeLang,
+    items: LANG_ITEMS,
+    onChange: (value: string) => setCodeLang(value as CodeLang),
+  };
+  // 服务端渲染与编辑器加载期间都退回静态代码块，保证首屏有内容
+  const staticUsage = <CodeBlock title={usageTitle} code={usage} switcher={usageSwitcher} />;
 
   const handleChange = (name: string, value: ControlValue) => {
     setValues((current) => ({ ...current, [name]: value }));
@@ -182,16 +202,13 @@ export function ComponentPage({ doc, prev, next }: ComponentPageProps) {
             <h2 className="section-title">{t('page.install')}</h2>
             <InstallSnippet component={doc.slug} />
             <h2 className="section-title">{t('page.usage')}</h2>
-            <CodeBlock
-              title={codeLang === 'ts' ? 'Usage.tsx' : 'Usage.jsx'}
-              code={usage}
-              switcher={{
-                label: t('code.language'),
-                value: codeLang,
-                items: LANG_ITEMS,
-                onChange: (value) => setCodeLang(value as CodeLang),
-              }}
-            />
+            {mounted ? (
+              <Suspense fallback={staticUsage}>
+                <Playground key={codeLang} title={usageTitle} code={usage} switcher={usageSwitcher} />
+              </Suspense>
+            ) : (
+              staticUsage
+            )}
           </div>
         )}
       </div>

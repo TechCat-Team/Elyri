@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import type { ReactNode } from 'react';
 
 import { highlight } from '../lib/code';
 import { useI18n } from '../lib/i18n';
@@ -11,13 +12,24 @@ export interface CodeSwitcher {
   onChange: (value: string) => void;
 }
 
+/** 头部右侧的图标按钮（如在线编辑开关） */
+export interface CodeBlockAction {
+  label: string;
+  icon: ReactNode;
+  active?: boolean;
+  onClick: () => void;
+}
+
 interface CodeBlockProps {
   code: string;
   title?: string;
   switcher?: CodeSwitcher;
+  actions?: CodeBlockAction[];
+  /** 传入后替换默认的高亮代码区，例如换成可编辑的编辑器 */
+  children?: ReactNode;
 }
 
-export function CodeBlock({ code, title, switcher }: CodeBlockProps) {
+export function CodeBlock({ code, title, switcher, actions, children }: CodeBlockProps) {
   const { t } = useI18n();
   const [copied, setCopied] = useState(false);
   const html = useMemo(() => highlight(code), [code]);
@@ -57,6 +69,20 @@ export function CodeBlock({ code, title, switcher }: CodeBlockProps) {
             </div>
           )}
 
+          {actions?.map((action) => (
+            <button
+              key={action.label}
+              type="button"
+              aria-label={action.label}
+              aria-pressed={action.active}
+              title={action.label}
+              className={action.active ? 'code-icon-button is-active' : 'code-icon-button'}
+              onClick={action.onClick}
+            >
+              {action.icon}
+            </button>
+          ))}
+
           <button type="button" className="code-copy" aria-label={copyLabel} title={copyLabel} onClick={handleCopy}>
             {copied ? (
               <svg
@@ -90,9 +116,11 @@ export function CodeBlock({ code, title, switcher }: CodeBlockProps) {
         </div>
       </div>
 
-      <pre>
-        <code dangerouslySetInnerHTML={{ __html: html }} />
-      </pre>
+      {children ?? (
+        <pre>
+          <code dangerouslySetInnerHTML={{ __html: html }} />
+        </pre>
+      )}
     </div>
   );
 }

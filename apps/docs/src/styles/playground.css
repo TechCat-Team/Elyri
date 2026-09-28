@@ -752,3 +752,53 @@
     display: none;
   }
 }
+
+/* 在线编辑：用法代码块变成可编辑后的下方预览区 */
+.playground-result {
+  margin-top: 16px;
+}
+.playground-result-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.playground-hint {
+  color: var(--docs-muted);
+  font-size: 12px;
+}
+/* 可编辑代码区：只负责高度与滚动，配色由编辑器主题复用文档变量 */
+.playground-editor {
+  max-height: 420px;
+  overflow: auto;
+}
+/* react-live 会给 pre 写内联的 padding / font-family，这里拉回与只读代码块一致 */
+.playground-editor pre {
+  padding: 18px 20px !important;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace !important;
+  caret-color: var(--docs-accent);
+}
+.playground-preview {
+  display: grid;
+  place-items: center;
+  min-height: 240px;
+  padding: 32px 20px;
+  border: 1px solid var(--docs-border);
+  border-radius: 12px;
+  background-color: var(--docs-preview);
+  background-image: radial-gradient(var(--docs-dot) 0.7px, transparent 0.7px);
+  background-size: 20px 20px;
+  overflow: hidden;
+}
+.playground-error {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border: 1px solid color-mix(in srgb, #ff5c5c 42%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, #ff5c5c 10%, transparent);
+  color: #ff7a7a;
+  font-size: 12px;
+  white-space: pre-wrap;
+}
