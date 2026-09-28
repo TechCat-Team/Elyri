@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 
 import { CodeBlock } from '../components/CodeBlock';
@@ -63,6 +63,23 @@ export function ComponentPage({ doc, prev, next }: ComponentPageProps) {
   const [codeLang, setCodeLang] = useState<CodeLang>('ts');
   const [replayKey, setReplayKey] = useState(0);
   const [deviceView, setDeviceView] = useState<Device>('desktop');
+  const tabsRef = useRef<HTMLDivElement>(null);
+
+  // 滑动下划线：测量当前激活标签的位置与宽度，写入 CSS 变量
+  useEffect(() => {
+    const tabs = tabsRef.current;
+    if (!tabs) return;
+    const update = () => {
+      const active = tabs.querySelector<HTMLElement>('.tab.is-active');
+      if (!active) return;
+      tabs.style.setProperty('--tab-x', `${active.offsetLeft}px`);
+      tabs.style.setProperty('--tab-w', `${active.offsetWidth}px`);
+    };
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(tabs);
+    return () => observer.disconnect();
+  }, [tab]);
 
   const usage = useMemo(() => doc.usage(values, codeLang), [doc, values, codeLang]);
   const hasControls = Boolean(doc.controls?.length);
@@ -82,7 +99,7 @@ export function ComponentPage({ doc, prev, next }: ComponentPageProps) {
       <p className="page-description">{doc.description}</p>
 
       <div className="tabs-row">
-        <div className="tabs" role="tablist">
+        <div className="tabs" role="tablist" ref={tabsRef}>
           {(['preview', 'code'] as const).map((key) => (
             <button
               key={key}
@@ -95,6 +112,7 @@ export function ComponentPage({ doc, prev, next }: ComponentPageProps) {
               {key === 'preview' ? 'Preview' : 'Code'}
             </button>
           ))}
+          <span className="tab-underline" aria-hidden="true" />
         </div>
 
         <div className="preview-toolbar">
@@ -138,43 +156,45 @@ export function ComponentPage({ doc, prev, next }: ComponentPageProps) {
         </div>
       </div>
 
-      {tab === 'preview' ? (
-        <>
-          <div className="preview-box">
-            <div key={replayKey} className={`preview-stage is-${deviceView}`}>
-              <Suspense fallback={<div className="demo-fallback" />}>{doc.render(values)}</Suspense>
-            </div>
-          </div>
-
-          {hasControls && (
-            <section className="section">
-              <div className="section-head">
-                <h2 className="section-title">Customize</h2>
-                <button type="button" className="ghost-button" onClick={handleReset}>
-                  {t('page.reset')}
-                </button>
+      <div key={tab} className="tab-panel">
+        {tab === 'preview' ? (
+          <>
+            <div className="preview-box">
+              <div key={replayKey} className={`preview-stage is-${deviceView}`}>
+                <Suspense fallback={<div className="demo-fallback" />}>{doc.render(values)}</Suspense>
               </div>
-              <Controls controls={doc.controls ?? []} values={values} onChange={handleChange} />
-            </section>
-          )}
-        </>
-      ) : (
-        <div className="code-stack">
-          <h2 className="section-title">{t('page.install')}</h2>
-          <InstallSnippet component={doc.slug} />
-          <h2 className="section-title">{t('page.usage')}</h2>
-          <CodeBlock
-            title={codeLang === 'ts' ? 'Usage.tsx' : 'Usage.jsx'}
-            code={usage}
-            switcher={{
-              label: t('code.language'),
-              value: codeLang,
-              items: LANG_ITEMS,
-              onChange: (value) => setCodeLang(value as CodeLang),
-            }}
-          />
-        </div>
-      )}
+            </div>
+
+            {hasControls && (
+              <section className="section">
+                <div className="section-head">
+                  <h2 className="section-title">Customize</h2>
+                  <button type="button" className="ghost-button" onClick={handleReset}>
+                    {t('page.reset')}
+                  </button>
+                </div>
+                <Controls controls={doc.controls ?? []} values={values} onChange={handleChange} />
+              </section>
+            )}
+          </>
+        ) : (
+          <div className="code-stack">
+            <h2 className="section-title">{t('page.install')}</h2>
+            <InstallSnippet component={doc.slug} />
+            <h2 className="section-title">{t('page.usage')}</h2>
+            <CodeBlock
+              title={codeLang === 'ts' ? 'Usage.tsx' : 'Usage.jsx'}
+              code={usage}
+              switcher={{
+                label: t('code.language'),
+                value: codeLang,
+                items: LANG_ITEMS,
+                onChange: (value) => setCodeLang(value as CodeLang),
+              }}
+            />
+          </div>
+        )}
+      </div>
 
       <section className="section">
         <h2 className="section-title">Props</h2>
