@@ -4,7 +4,7 @@ import { cn, hexToLinearRgb, useShaderCanvas } from '../../../core';
 
 import './Planet.css';
 
-export type PlanetKind = 'mars' | 'jupiter';
+export type PlanetKind = 'mars' | 'jupiter' | 'earth';
 
 export interface PlanetProps {
   children?: ReactNode;
@@ -15,6 +15,7 @@ export interface PlanetProps {
   atmosphereColor?: string;
   atmosphere?: number;
   craters?: number;
+  cityLights?: boolean;
   stars?: number;
   horizon?: number;
   speed?: number;
@@ -29,6 +30,7 @@ const PLANET_PRESETS: Record<
 > = {
   mars: { color: '#c1532b', terrainColor: '#4e1e12', atmosphereColor: '#f2a57c', atmosphere: 0.6 },
   jupiter: { color: '#ecdcc0', terrainColor: '#a86a3a', atmosphereColor: '#d9cdb8', atmosphere: 0.3 },
+  earth: { color: '#3f5a2a', terrainColor: '#0a2744', atmosphereColor: '#6fa8ff', atmosphere: 0.55 },
 };
 
 const COMMON = `
@@ -151,11 +153,7 @@ vec3 aces(vec3 x) {
 }
 `;
 
-const MARS_SURFACE = `
-uniform float uCraters;
-
-const float BUMP = 0.06;
-
+const RELIEF = `
 vec4 noised(vec3 x) {
   vec3 i = floor(x);
   vec3 w = fract(x);
@@ -205,6 +203,12 @@ vec4 terrain(vec3 p, float fp) {
   }
   return s;
 }
+`;
+
+const MARS_SURFACE = `
+uniform float uCraters;
+
+const float BUMP = 0.06;
 
 float craterProfile(float x) {
   return 0.8 * (smoothstep(0.0, 1.0, x) - 1.0) + 0.3 * exp(-10.0 * (x - 1.0) * (x - 1.0));
@@ -401,6 +405,170 @@ vec3 shadeSurface(vec3 n, float ndv, float pix, vec3 sun, vec3 beta, float X) {
 }
 `;
 
+const EARTH_SURFACE = `
+uniform float uCityLights;
+
+const float CLOUD_H = 0.0016;
+const vec3 CITY_WARM = vec3(1.0, 0.5, 0.16);
+const vec3 CITY_COOL = vec3(1.0, 0.86, 0.66);
+
+mat3 spinX(float a) {
+  float c = cos(a);
+  float s = sin(a);
+  return mat3(1.0, 0.0, 0.0, 0.0, c, s, 0.0, -s, c);
+}
+
+vec3 cloudWarp(vec3 p, float fp) {
+  vec3 s = p * 1.8 + vec3(0.0, 0.0, uTime * 0.0035);
+  return vec3(fbm3(s + 1.3, fp * 1.8, 4), fbm3(s + 7.1, fp * 1.8, 4), fbm3(s + 4.4, fp * 1.8, 4));
+}
+
+float cloudCover(vec3 p, vec3 w, float fp) {
+  float t = uTime * 0.006;
+  float big = fbm3(p * 3.2 + w * 2.4 + vec3(t, 0.0, -t), fp * 3.2, 6);
+  float puff = fbm3(p * 21.0 + w * 5.0 - vec3(0.0, t, t) * 3.0, fp * 21.0, 6);
+  float c = big + 0.4 * puff * smoothstep(-0.15, 0.1, big);
+  return smoothstep(0.03, 0.26, c + 0.02);
+}
+
+// 每个格子至多一座聚落，位置在格内完全随机；查 2x2x2 邻格避免被格子边界截断
+float settlements(vec3 q, float scale, float fp, float P, float seed) {
+  vec3 g = q * scale + seed * 17.0;
+  vec3 base = floor(g - 0.5);
+  float f2 = fp * scale * fp * scale * 0.25;
+  float sum = 0.0;
+  for (int i = 0; i < 8; i++) {
+    float fi = float(i);
+    vec3 cell = base + vec3(mod(fi, 2.0), mod(floor(fi * 0.5), 2.0), floor(fi * 0.25));
+    vec3 r = hash33(cell + seed);
+    float w = smoothstep(r.x, r.x + 0.15, P);
+    if (w <= 0.0) continue;
+    vec3 d = g - cell - hash33(cell * 1.7 + seed + 5.0);
+    d -= dot(d, q) * q;
+    float s2 = mix(0.03, 0.14, r.y * r.y);
+    s2 *= s2;
+    float t2 = s2 + f2;
+    sum += w * exp(-dot(d, d) / t2) * s2 / t2 * (0.5 + 0.5 * r.z);
+  }
+  return sum;
+}
+
+vec3 cityLights(vec3 q, float fp, float P) {
+  float metro = settlements(q, 40.0, fp, P * 0.75, 1.0);
+  float town = settlements(q, 170.0, fp, P * 0.45 + min(metro, 1.0) * 0.4, 2.0);
+  float t = min(metro, 1.0);
+  // 街区颗粒：市中心连成一片，越往郊区越破碎
+  float grain = 0.6 * noise3(q * 1800.0) + 0.4 * noise3(q * 700.0 + 3.1);
+  float lo = 0.72 - 0.55 * t;
+  float mask = mix(0.2 + 0.6 * t, smoothstep(lo, lo + 0.2, grain), lod(fp * 1800.0));
+  vec3 tint = mix(CITY_WARM, CITY_COOL, t * t * 0.8);
+  return tint * metro * mask * 1.1 + CITY_WARM * min(town, 1.5) * 0.35;
+}
+
+vec3 shadeSurface(vec3 n, float ndv, float pix, vec3 sun, vec3 beta, float X) {
+  float fp = pix / max(sqrt(ndv), 0.12);
+
+  mat3 spin = spinX(-uTime * 0.008);
+  vec3 q = spin * n;
+
+  vec3 cw = vec3(fbm3(q * 1.2 + 3.7, fp * 1.2, 4), fbm3(q * 1.2 + 9.1, fp * 1.2, 4), fbm3(q * 1.2 + 5.3, fp * 1.2, 4));
+  float cont = fbm3(q * 1.9 + cw * 1.4 + 0.7, fp * 1.9, 6);
+  vec4 ter = terrain(q * 7.0 + 2.0, fp * 7.0);
+  float e = cont + 0.3 * ter.x - 0.035;
+  float aa = fp * 4.0 + 5e-4;
+  float land = smoothstep(-aa, aa, e);
+  float alt = max(e, 0.0);
+  float mtn = smoothstep(0.02, 0.14, alt + 0.15 * ter.x);
+
+  vec3 grad = ter.yzw * 7.0 * 0.022 * (0.35 + 2.0 * mtn) * land;
+  grad = grad * spin;
+  grad -= dot(grad, n) * n;
+  vec3 nb = normalize(n - grad);
+
+  float mid = fbm3(q * 14.0 + 1.0, fp * 14.0, 6);
+  float dry = 0.0;
+  float snow = 0.0;
+  vec3 ground = uTerrain;
+  if (land > 0.0) {
+    float fine = fbm3(q * 60.0 + 3.0, fp * 60.0, 5);
+    float moist = fbm3(q * 2.6 + 8.0, fp * 2.6, 6) + 0.15 * exp(-alt * 25.0);
+    dry = 1.0 - smoothstep(-0.12, 0.02, moist + 0.25 * mid);
+    float wet = smoothstep(-0.02, 0.12, moist + 0.2 * mid);
+    vec3 grass = uSurface * vec3(1.9, 1.55, 1.0) + vec3(0.02, 0.012, 0.0);
+    vec3 la = mix(grass, uSurface, wet);
+    la = mix(la, vec3(0.36, 0.25, 0.13) * (0.85 + 0.4 * mid), dry);
+    la = mix(la, vec3(0.1, 0.085, 0.07), mtn * 0.8);
+    snow = smoothstep(0.17, 0.22, alt + 0.06 * fine + 0.04 * mid + 0.1 * abs(q.x));
+    la = mix(la, vec3(0.8), snow);
+    la *= max(0.85 + 0.5 * fine + 0.25 * mid, 0.2);
+    ground = la;
+  }
+  float depth = max(-e, 0.0);
+  vec3 ocean = mix(uTerrain, uTerrain * vec3(0.6, 2.4, 2.0) + vec3(0.0, 0.02, 0.02), exp(-depth * 60.0));
+  ocean *= 0.9 + 0.4 * mid;
+  vec3 albedo = mix(ocean, ground, land);
+
+  float ngl = dot(n, sun);
+  float mu0 = max(dot(nb, sun), 0.0);
+  float lsl = mu0 / (mu0 + ndv + 1e-3);
+  float day = smoothstep(-0.03, 0.08, ngl);
+  float brdf = mix(mu0, lsl, 0.25) * day;
+  vec3 sunT = exp(-beta * H * chapman(X, 0.0, ngl));
+  vec3 sky = uAtmosphere * uDensity * 0.05 * smoothstep(-0.3, 0.4, ngl);
+
+  mat3 cspin = spinX(-uTime * 0.0095);
+  vec3 c = cspin * n;
+  vec3 w = cloudWarp(c, fp);
+  float cov = cloudCover(c, w, fp);
+  vec3 sunTan = sun - ngl * n;
+  sunTan = cspin * (sunTan * inversesqrt(max(dot(sunTan, sunTan), 1e-6)));
+  float shade = 1.0;
+  float relief = 1.0;
+  if (ngl > -0.06) {
+    float reach = CLOUD_H * sqrt(max(1.0 - ngl * ngl, 0.0)) / max(ngl, 0.05);
+    shade = 1.0 - 0.75 * cloudCover(c + sunTan * reach, w, fp);
+    relief = clamp(1.0 - 2.2 * (cloudCover(c + sunTan * 0.006, w, fp) - cov), 0.3, 1.25);
+  }
+
+  vec3 color = albedo * (SUN_I * 0.9 * sunT * brdf * shade + sky + 0.004);
+
+  if (land < 1.0) {
+    vec3 v = normalize(vec3(0.0, 1.0 + ALT, 0.0) - n);
+    float wind = fbm3(q * vec3(10.0, 10.0, 34.0) + 4.2, fp * 34.0, 5);
+    float alpha = mix(0.1, 0.3, smoothstep(-0.18, 0.18, wind));
+    float a2 = alpha * alpha;
+    vec3 hv = normalize(sun + v);
+    float nh = max(dot(n, hv), 0.0);
+    float nl = max(ngl, 0.0);
+    float nv = max(dot(n, v), 1e-3);
+    float dd = nh * nh * (a2 - 1.0) + 1.0;
+    float k = alpha * 0.5;
+    float G = nl / (nl * (1.0 - k) + k) * nv / (nv * (1.0 - k) + k);
+    float F = 0.02 + 0.98 * pow(1.0 - max(dot(v, hv), 0.0), 5.0);
+    float spec = a2 / (PI * dd * dd) * G * F / (4.0 * nv) * day;
+    float Fv = 0.02 + 0.98 * pow(1.0 - nv, 5.0);
+    vec3 skyRefl = uAtmosphere * uDensity * 0.35 * smoothstep(-0.2, 0.35, ngl) * Fv;
+    color += (SUN_I * 0.9 * sunT * spec * shade + skyRefl) * (1.0 - land);
+  }
+
+  float night = (1.0 - smoothstep(-0.08, -0.01, ngl)) * uCityLights;
+  vec3 lights = vec3(0.0);
+  if (night > 0.0 && land > 0.0) {
+    float pop = fbm3(q * 4.3 + 13.0, fp * 4.3, 5) + 0.35 * fbm3(q * 17.0 + 2.0, fp * 17.0, 4);
+    float P = smoothstep(-0.02, 0.2, pop + 0.12 * exp(-alt * 22.0) - 0.25 * dry - 0.3 * mtn - 0.5 * snow);
+    lights = cityLights(q, fp, P) * land * night;
+    color += lights;
+  }
+
+  float ngc = ngl + 0.055;
+  vec3 sunTc = exp(-beta * H * chapman(X, CLOUD_H / H, ngl));
+  float cBrdf = mix(max(ngc, 0.0), ngc / (abs(ngc) + ndv + 1e-3), 0.3) * smoothstep(0.0, 0.1, ngc) * relief;
+  vec3 cloud = vec3(0.78) * (SUN_I * 0.9 * sunTc * max(cBrdf, 0.0) + sky * 2.0 + 0.004);
+  cloud += lights * 0.12;
+  return mix(color, cloud, cov);
+}
+`;
+
 const MAIN = `
 void main() {
   vec2 frag = gl_FragCoord.xy;
@@ -501,8 +669,9 @@ void main() {
 `;
 
 const SHADERS: Record<PlanetKind, string> = {
-  mars: COMMON + MARS_SURFACE + MAIN,
+  mars: COMMON + RELIEF + MARS_SURFACE + MAIN,
   jupiter: COMMON + JUPITER_SURFACE + MAIN,
+  earth: COMMON + RELIEF + EARTH_SURFACE + MAIN,
 };
 
 export function Planet({
@@ -514,6 +683,7 @@ export function Planet({
   atmosphereColor,
   atmosphere,
   craters = 0.6,
+  cityLights = true,
   stars = 0.6,
   horizon = 0.62,
   speed = 1,
@@ -538,6 +708,7 @@ export function Planet({
       gl.uniform3fv(uniform('uAtmosphere'), hexToLinearRgb(airColor));
       gl.uniform1f(uniform('uDensity'), clamp01(density));
       gl.uniform1f(uniform('uCraters'), clamp01(craters));
+      gl.uniform1f(uniform('uCityLights'), cityLights ? 1 : 0);
       gl.uniform1f(uniform('uStars'), clamp01(stars));
       gl.uniform1f(uniform('uHorizon'), Math.min(0.95, Math.max(0.05, horizon)));
       gl.uniform1f(uniform('uSun'), sun ? 1 : 0);
