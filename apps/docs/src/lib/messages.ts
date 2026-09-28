@@ -16,6 +16,10 @@ export const messages = {
     'guides.intro': '介绍',
     'guides.browse': '浏览组件',
     'guides.installation': '安装',
+    'category.text': '文字',
+    'category.animations': '动画',
+    'category.backgrounds': '背景',
+    'category.media': '媒体',
     'code.copy': '复制',
     'code.copied': '已复制',
     'code.language': '代码语言',
@@ -55,6 +59,10 @@ export const messages = {
     'guides.intro': 'Introduction',
     'guides.browse': 'Browse components',
     'guides.installation': 'Installation',
+    'category.text': 'Text',
+    'category.animations': 'Animations',
+    'category.backgrounds': 'Backgrounds',
+    'category.media': 'Media',
     'code.copy': 'Copy',
     'code.copied': 'Copied',
     'code.language': 'Code language',
@@ -82,3 +90,17 @@ export const messages = {
 } satisfies Record<Lang, Record<string, string>>;
 
 export type MessageKey = keyof typeof messages.zh;
+
+/** 组件分类标识与其文案 key 的对应关系 */
+const categoryMessageKeys: Record<string, MessageKey> = {
+  Text: 'category.text',
+  Animations: 'category.animations',
+  Backgrounds: 'category.backgrounds',
+  Media: 'category.media',
+};
+
+/** 把组件文档里的分类标识（如 "Text"）翻译成当前语言的展示名 */
+export const categoryLabel = (category: string, t: (key: MessageKey) => string) => {
+  const key = categoryMessageKeys[category];
+  return key ? t(key) : category;
+};

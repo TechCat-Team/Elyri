@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
 
 import { useI18n } from '../lib/i18n';
+import { categoryLabel } from '../lib/messages';
 import { useRoute } from '../lib/router';
 import type { ComponentDoc } from '../lib/types';
 
@@ -73,7 +74,7 @@ export function SearchDialog({ docs, onClose }: SearchDialogProps) {
                 onClick={() => select(doc)}
               >
                 <span>{doc.title}</span>
-                <span className="search-item-category">{doc.category}</span>
+                <span className="search-item-category">{categoryLabel(doc.category, t)}</span>
               </button>
             </li>
           ))}

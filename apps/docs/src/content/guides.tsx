@@ -5,7 +5,7 @@ import { ReducedMotionProvider, usePrefersReducedMotion } from 'elyri';
 import { CodeBlock } from '../components/CodeBlock';
 import { InstallSnippet } from '../components/InstallSnippet';
 import { Link } from '../lib/router';
-import { messages } from '../lib/messages';
+import { messages, categoryLabel } from '../lib/messages';
 import type { MessageKey } from '../lib/messages';
 import { site } from '../lib/site';
 import { useI18n } from '../lib/i18n';
@@ -145,7 +145,7 @@ function ShowcaseCard({ doc }: { doc: ComponentDoc }) {
 }
 
 function BrowsePage({ docs }: GuideProps) {
-  const { lang } = useI18n();
+  const { lang, t: translate } = useI18n();
   const t = copy[lang];
   const categories = [...new Set(docs.map((doc) => doc.category))];
 
@@ -158,7 +158,7 @@ function BrowsePage({ docs }: GuideProps) {
         return (
           <section key={category} className="showcase-group">
             <h2 className="section-title">
-              {category}
+              {categoryLabel(category, translate)}
               <span className="showcase-count">
                 {items.length} {t.countSuffix}
               </span>

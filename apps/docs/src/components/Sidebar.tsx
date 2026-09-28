@@ -1,4 +1,5 @@
 import { useI18n } from '../lib/i18n';
+import { categoryLabel } from '../lib/messages';
 import { Link } from '../lib/router';
 import type { ComponentDoc, NavItem } from '../lib/types';
 
@@ -31,7 +32,7 @@ export function Sidebar({ docs, categories, guides, activePath, open, onClose }:
 
           {categories.map((category) => (
             <div key={category} className="sidebar-group">
-              <p className="sidebar-group-title">{category}</p>
+              <p className="sidebar-group-title">{categoryLabel(category, t)}</p>
               {docs
                 .filter((doc) => doc.category === category)
                 .map((doc) => {
