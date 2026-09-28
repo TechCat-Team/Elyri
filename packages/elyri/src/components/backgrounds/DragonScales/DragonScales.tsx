@@ -207,6 +207,9 @@ void main() {
 
 const UNIFORMS = ['uResolution', 'uTime', 'uLight', 'uScale', 'uBase', 'uHighlight', 'uFlare'] as const;
 
+/** 绘制帧率上限 */
+const FRAME_INTERVAL = 1000 / 60;
+
 type Rgb = [number, number, number];
 
 /** hex 转线性空间 RGB，着色器内统一在线性空间计算光照 */
@@ -342,6 +345,7 @@ export function DragonScales({
 
     const tick = (now: number) => {
       frame = requestAnimationFrame(tick);
+      if (last && now - last < FRAME_INTERVAL) return;
       const dt = last ? Math.min((now - last) / 1000, 0.1) : 0;
       last = now;
       time += dt * optionsRef.current.speed;
