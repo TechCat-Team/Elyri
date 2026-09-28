@@ -228,6 +228,64 @@
 .index-quickstart .install-steps {
   margin-top: 16px;
 }
+/* 首页统计：数字滚动展示组件与分类规模 */
+.index-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-top: 34px;
+}
+.index-stat {
+  padding: 15px 18px;
+  border: 1px solid var(--docs-border);
+  border-radius: 12px;
+  background: var(--docs-surface);
+}
+.index-stat-value {
+  font-size: 26px;
+  line-height: 1.15;
+  font-weight: 730;
+  font-variant-numeric: tabular-nums;
+}
+.index-stat-label {
+  margin-top: 5px;
+  color: var(--docs-muted);
+  font-size: 12px;
+}
+/* 首页特性亮点 */
+.index-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+.index-feature {
+  display: flex;
+  gap: 12px;
+  padding: 17px 18px;
+  border: 1px solid var(--docs-border);
+  border-radius: 12px;
+  background: var(--docs-surface);
+}
+.index-feature-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--docs-accent-soft);
+  color: var(--docs-accent);
+}
+.index-feature-title {
+  font-size: 13px;
+  font-weight: 650;
+}
+.index-feature-desc {
+  margin: 5px 0 0;
+  color: var(--docs-muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
 
 /* 标签页：左侧切换、右侧预览工具栏，共用同一条底线 */
 .tabs-row {

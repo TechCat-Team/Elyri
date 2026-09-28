@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { ComponentType } from 'react';
-import { ReducedMotionProvider, usePrefersReducedMotion } from 'elyri';
+import { CountUp, ReducedMotionProvider, usePrefersReducedMotion } from 'elyri';
 
 import { CodeBlock } from '../components/CodeBlock';
 import { InstallSnippet } from '../components/InstallSnippet';
@@ -35,6 +35,17 @@ const copy = {
     stepInstall: '1. 安装依赖并添加组件',
     stepStyles: '2. 引入公共样式',
     stepUsage: '3. 使用本地组件',
+    statComponents: '动效组件',
+    statCategories: '分类',
+    statDependencies: '运行时依赖',
+    featuredTitle: '精选动效',
+    featuresTitle: '为什么选择 Elyri',
+    features: [
+      { title: '零运行时依赖', description: '只依赖 React，包体轻量，组件源码可直接阅读与改造。' },
+      { title: 'CSS 变量主题', description: '所有可定制项都是 CSS 变量，可在全局或容器内局部覆盖。' },
+      { title: '性能优先', description: 'WebGL 与合成层驱动动效，离屏或切到后台时自动暂停，空闲不占 CPU。' },
+      { title: '尊重减弱动效', description: '跟随系统偏好，也可用 ReducedMotionProvider 强制子树播放或静止。' },
+    ],
   },
   en: {
     introDescription: 'Animation components for React. Preview them live, tune the props, then take the code with you.',
@@ -48,12 +59,56 @@ const copy = {
     stepInstall: '1. Install and add a component',
     stepStyles: '2. Import shared styles',
     stepUsage: '3. Use the local component',
+    statComponents: 'Components',
+    statCategories: 'Categories',
+    statDependencies: 'Runtime dependencies',
+    featuredTitle: 'Featured effects',
+    featuresTitle: 'Why Elyri',
+    features: [
+      {
+        title: 'Zero runtime dependencies',
+        description: 'React is the only peer dependency. A small bundle, with component source you can read and edit.',
+      },
+      {
+        title: 'CSS variable theming',
+        description: 'Every customizable value is a CSS variable, overridable globally or within any container.',
+      },
+      {
+        title: 'Performance first',
+        description: 'WebGL and compositor-driven motion that pauses offscreen or in background tabs.',
+      },
+      {
+        title: 'Reduced motion aware',
+        description: 'Follows the system preference, and ReducedMotionProvider can force a subtree to play or rest.',
+      },
+    ],
   },
 };
 
-function IntroPage() {
+/** 特性亮点图标，按 copy.features 的顺序一一对应 */
+const featureIcons = [
+  <>
+    <path d="M12 2 3 7v10l9 5 9-5V7l-9-5Z" />
+    <path d="m3 7 9 5 9-5" />
+    <path d="M12 12v10" />
+  </>,
+  <path d="M12 3s6 6.5 6 10.5A6 6 0 0 1 6 13.5C6 9.5 12 3 12 3Z" />,
+  <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" />,
+  <>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M10 9v6M14 9v6" />
+  </>,
+];
+
+function IntroPage({ docs }: GuideProps) {
   const { lang } = useI18n();
   const t = copy[lang];
+  const componentCount = docs.length;
+  const categoryCount = new Set(docs.map((doc) => doc.category)).size;
+  // 首页精选：挑三个最能代表动效能力的组件（龙鳞 / 字符画 / 水下焦散）
+  const featured = ['dragon-scales', 'ascii-image', 'caustics']
+    .map((slug) => docs.find((doc) => doc.slug === slug))
+    .filter((doc): doc is ComponentDoc => Boolean(doc));
 
   return (
     <article className="doc-page index-page">
@@ -68,9 +123,65 @@ function IntroPage() {
         </Link>
       </div>
 
+      <div className="index-stats">
+        <div className="index-stat">
+          <div className="index-stat-value">
+            <CountUp to={componentCount} />
+          </div>
+          <div className="index-stat-label">{t.statComponents}</div>
+        </div>
+        <div className="index-stat">
+          <div className="index-stat-value">
+            <CountUp to={categoryCount} />
+          </div>
+          <div className="index-stat-label">{t.statCategories}</div>
+        </div>
+        <div className="index-stat">
+          <div className="index-stat-value">0</div>
+          <div className="index-stat-label">{t.statDependencies}</div>
+        </div>
+      </div>
+
+      <section className="section">
+        <h2 className="section-title">{t.featuredTitle}</h2>
+        <div className="showcase-grid">
+          {featured.map((doc) => (
+            <ShowcaseCard key={doc.slug} doc={doc} />
+          ))}
+        </div>
+      </section>
+
       <section className="index-quickstart">
         <h2 className="section-title">{t.quickstart}</h2>
         <InstallSnippet />
+      </section>
+
+      <section className="section">
+        <h2 className="section-title">{t.featuresTitle}</h2>
+        <div className="index-features">
+          {t.features.map((feature, index) => (
+            <div key={feature.title} className="index-feature">
+              <span className="index-feature-icon" aria-hidden="true">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  {featureIcons[index]}
+                </svg>
+              </span>
+              <div>
+                <div className="index-feature-title">{feature.title}</div>
+                <p className="index-feature-desc">{feature.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
     </article>
   );
