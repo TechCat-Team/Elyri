@@ -1,0 +1,79 @@
+.elyri-marquee {
+  --elyri-marquee-duration: 20s;
+  --elyri-marquee-repeat: 2;
+  --elyri-marquee-gap: 0px;
+
+  width: 100%;
+  overflow: hidden;
+}
+
+/* 轨道宽度由内容撑开，整体平移一份内容宽度后与起点重合，从而实现无缝循环 */
+.elyri-marquee__track {
+  display: flex;
+  width: max-content;
+  animation: elyri-marquee-x var(--elyri-marquee-duration) linear infinite;
+  will-change: transform;
+}
+
+.elyri-marquee__copy {
+  display: flex;
+  flex: none;
+  /* 份内元素之间按间距排列 */
+  gap: var(--elyri-marquee-gap);
+  /* 再补一份尾随间距，使相邻两份内容之间的间隔与份内一致，且循环周期正好是整份内容宽度 */
+  padding-right: var(--elyri-marquee-gap);
+}
+
+@keyframes elyri-marquee-x {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(calc(-100% / var(--elyri-marquee-repeat)), 0, 0);
+  }
+}
+
+/* 纵向滚动改为上下平移，轨道沿列方向排列 */
+.elyri-marquee--vertical .elyri-marquee__track {
+  flex-direction: column;
+  width: auto;
+  height: max-content;
+  animation-name: elyri-marquee-y;
+}
+
+.elyri-marquee--vertical .elyri-marquee__copy {
+  padding-right: 0;
+  padding-bottom: var(--elyri-marquee-gap);
+}
+
+@keyframes elyri-marquee-y {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, calc(-100% / var(--elyri-marquee-repeat)), 0);
+  }
+}
+
+/* 反向播放即可实现向右 / 向下滚动 */
+.elyri-marquee--reverse .elyri-marquee__track {
+  animation-direction: reverse;
+}
+
+.elyri-marquee--pausable:hover .elyri-marquee__track {
+  animation-play-state: paused;
+}
+
+.elyri-marquee--static .elyri-marquee__track {
+  animation: none;
+  transform: none;
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-marquee__track {
+    animation: none;
+    transform: none;
+    will-change: auto;
+  }
+}

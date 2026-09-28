@@ -12,7 +12,8 @@
   "dependencies": {
     "elyri": "workspace:*",
     "react": "^19.3.0",
-    "react-dom": "^19.3.0"
+    "react-dom": "^19.3.0",
+    "react-live": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

@@ -15,6 +15,7 @@ test('add copies editable components and never overwrites them', async () => {
     const added = {
       'fade-in': 'FadeIn',
       'gradient-text': 'GradientText',
+      marquee: 'Marquee',
       'dragon-scales': 'DragonScales',
       aurora: 'Aurora',
       'silk-waves': 'SilkWaves',

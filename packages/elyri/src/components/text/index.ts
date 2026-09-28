@@ -1,5 +1,7 @@
 export { GradientText } from './GradientText';
 export type { GradientTextProps } from './GradientText';
+export { Marquee } from './Marquee';
+export type { MarqueeDirection, MarqueeProps } from './Marquee';
 export { ParticleText } from './ParticleText';
 export type { ParticleTextProps } from './ParticleText';
 export { ScrambleText } from './ScrambleText';

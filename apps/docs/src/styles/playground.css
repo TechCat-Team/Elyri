@@ -535,6 +535,30 @@
   font-weight: 800;
   letter-spacing: -0.01em;
 }
+/* 自动循环滚动演示 */
+.demo-marquee-auto {
+  width: min(560px, 100%);
+}
+.demo-marquee-auto--vertical {
+  height: 180px;
+}
+.demo-marquee-auto--vertical .elyri-marquee__copy {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.demo-pill {
+  flex: none;
+  padding: 6px 14px;
+  border: 1px solid var(--docs-border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--docs-border) 30%, var(--docs-surface));
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+:root[data-theme='light'] .demo-pill {
+  border-color: transparent;
+}
 /* 指针倾斜演示 */
 .demo-tilt {
   display: flex;
