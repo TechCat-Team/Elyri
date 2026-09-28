@@ -15,6 +15,8 @@ export default defineConfig({
     ],
   },
   server: {
+    // 监听 0.0.0.0，允许局域网内其他设备访问
+    host: true,
     fs: {
       // 允许通过 /@fs/ 直接引用仓库外的大视频做演示，避免复制进仓库
       allow: [workspaceRoot, 'E:/工作站/pdoom-video/out'],
