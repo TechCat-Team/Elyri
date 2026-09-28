@@ -8,13 +8,16 @@ import { fileURLToPath } from 'node:url';
 const components = {
   aurora: { folder: 'backgrounds/Aurora', name: 'Aurora' },
   caustics: { folder: 'backgrounds/Caustics', name: 'Caustics' },
+  'count-up': { folder: 'animations/CountUp', name: 'CountUp' },
   'dragon-scales': { folder: 'backgrounds/DragonScales', name: 'DragonScales' },
   'fade-in': { folder: 'animations/FadeIn', name: 'FadeIn' },
   'gradient-text': { folder: 'text/GradientText', name: 'GradientText' },
   'pixel-vortex': { folder: 'backgrounds/PixelVortex', name: 'PixelVortex' },
+  'scale-in': { folder: 'animations/ScaleIn', name: 'ScaleIn' },
   'scroll-marquee': { folder: 'text/ScrollMarquee', name: 'ScrollMarquee' },
   'silk-waves': { folder: 'backgrounds/SilkWaves', name: 'SilkWaves' },
   'split-reveal': { folder: 'text/SplitReveal', name: 'SplitReveal' },
+  tilt: { folder: 'animations/Tilt', name: 'Tilt' },
   typewriter: { folder: 'text/Typewriter', name: 'Typewriter' },
 };
 

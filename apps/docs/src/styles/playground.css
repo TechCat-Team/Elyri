@@ -530,6 +530,21 @@
   font-weight: 800;
   letter-spacing: -0.01em;
 }
+/* 指针倾斜演示 */
+.demo-tilt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(320px, 100%);
+  height: 200px;
+  border-radius: 16px;
+  background: linear-gradient(140deg, var(--docs-accent), color-mix(in srgb, var(--docs-accent) 30%, #101018));
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
+  color: #fff;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
 .demo-card {
   padding: 16px 20px;
   border: 1px solid var(--docs-border);

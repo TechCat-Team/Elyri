@@ -1,0 +1,24 @@
+.elyri-scale-in {
+  --elyri-scale-in-from: 0.9;
+  --elyri-scale-in-duration: var(--elyri-duration-base);
+  --elyri-scale-in-delay: 0ms;
+
+  opacity: 0;
+  transform: scale(var(--elyri-scale-in-from));
+  transition:
+    opacity var(--elyri-scale-in-duration) var(--elyri-ease-out) var(--elyri-scale-in-delay),
+    transform var(--elyri-scale-in-duration) var(--elyri-ease-out) var(--elyri-scale-in-delay);
+}
+
+.elyri-scale-in--visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-scale-in {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

@@ -1,0 +1,4 @@
+.elyri-count-up {
+  /* 等宽数字，滚动过程中宽度不跳动 */
+  font-variant-numeric: tabular-nums;
+}

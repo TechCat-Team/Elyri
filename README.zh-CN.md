@@ -49,6 +49,9 @@ export function Hero() {
 | 组件            | 分类        | 说明                             |
 | --------------- | ----------- | -------------------------------- |
 | `FadeIn`        | Animations  | 元素进入视口时淡入并位移         |
+| `ScaleIn`       | Animations  | 元素进入视口时缩放并淡入         |
+| `CountUp`       | Animations  | 数字进入视口时滚动到目标值       |
+| `Tilt`          | Animations  | 内容跟随指针做 3D 倾斜           |
 | `DragonScales`  | Backgrounds | WebGL 龙鳞动态背景，光源跟随指针 |
 | `Aurora`        | Backgrounds | WebGL 极光夜空，多层光帘与星空   |
 | `SilkWaves`     | Backgrounds | WebGL 流动丝绸，缎面光泽         |

@@ -47,6 +47,9 @@ export function Hero() {
 | Component       | Category    | Description                                             |
 | --------------- | ----------- | ------------------------------------------------------- |
 | `FadeIn`        | Animations  | Fades and slides content in when it enters the viewport |
+| `ScaleIn`       | Animations  | Scales and fades content in when it enters the viewport |
+| `CountUp`       | Animations  | Counts a number up to its target when it enters view    |
+| `Tilt`          | Animations  | Tilts content in 3D following the pointer               |
 | `DragonScales`  | Backgrounds | WebGL dragon-scale background with interactive lighting |
 | `Aurora`        | Backgrounds | WebGL aurora night sky with layered curtains and stars  |
 | `SilkWaves`     | Backgrounds | WebGL flowing silk with satin sheen                     |

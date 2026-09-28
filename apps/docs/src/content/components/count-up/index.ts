@@ -1,0 +1,1 @@
+export { countUpDoc } from './doc';

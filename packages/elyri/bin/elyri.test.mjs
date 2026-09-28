@@ -19,8 +19,11 @@ test('add copies editable components and never overwrites them', async () => {
       aurora: 'Aurora',
       'silk-waves': 'SilkWaves',
       caustics: 'Caustics',
+      'count-up': 'CountUp',
+      'scale-in': 'ScaleIn',
       'scroll-marquee': 'ScrollMarquee',
       'split-reveal': 'SplitReveal',
+      tilt: 'Tilt',
       typewriter: 'Typewriter',
     };
     execFileSync(process.execPath, [cli, 'add', ...Object.keys(added)], { cwd });

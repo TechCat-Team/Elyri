@@ -1,0 +1,35 @@
+.elyri-tilt {
+  position: relative;
+  transform: perspective(var(--elyri-tilt-perspective, 800px)) rotateX(var(--elyri-tilt-rotate-x, 0deg))
+    rotateY(var(--elyri-tilt-rotate-y, 0deg));
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.elyri-tilt__glare {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at var(--elyri-tilt-glare-x, 50%) var(--elyri-tilt-glare-y, 50%),
+    rgba(255, 255, 255, 0.4),
+    transparent 55%
+  );
+  opacity: 0;
+  transition: opacity var(--elyri-duration-base) var(--elyri-ease-out);
+  pointer-events: none;
+}
+
+.elyri-tilt--active .elyri-tilt__glare {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-tilt {
+    transform: none;
+  }
+
+  .elyri-tilt__glare {
+    display: none;
+  }
+}

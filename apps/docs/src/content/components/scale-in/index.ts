@@ -1,0 +1,1 @@
+export { scaleInDoc } from './doc';
