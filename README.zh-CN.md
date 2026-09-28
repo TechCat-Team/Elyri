@@ -46,16 +46,17 @@ export function Hero() {
 
 ## 组件
 
-| 组件           | 分类        | 说明                             |
-| -------------- | ----------- | -------------------------------- |
-| `FadeIn`       | Animations  | 元素进入视口时淡入并位移         |
-| `DragonScales` | Backgrounds | WebGL 龙鳞动态背景，光源跟随指针 |
-| `Aurora`       | Backgrounds | WebGL 极光夜空，多层光帘与星空   |
-| `SilkWaves`    | Backgrounds | WebGL 流动丝绸，缎面光泽         |
-| `Caustics`     | Backgrounds | WebGL 水下焦散光网，指针荡开水波 |
-| `GradientText` | Text        | 为文字应用动态渐变               |
-| `SplitReveal`  | Text        | 文本进入视口时逐字或逐词错峰浮现 |
-| `Typewriter`   | Text        | 打字机效果逐字输出，带闪烁光标   |
+| 组件            | 分类        | 说明                             |
+| --------------- | ----------- | -------------------------------- |
+| `FadeIn`        | Animations  | 元素进入视口时淡入并位移         |
+| `DragonScales`  | Backgrounds | WebGL 龙鳞动态背景，光源跟随指针 |
+| `Aurora`        | Backgrounds | WebGL 极光夜空，多层光帘与星空   |
+| `SilkWaves`     | Backgrounds | WebGL 流动丝绸，缎面光泽         |
+| `Caustics`      | Backgrounds | WebGL 水下焦散光网，指针荡开水波 |
+| `GradientText`  | Text        | 为文字应用动态渐变               |
+| `SplitReveal`   | Text        | 文本进入视口时逐字或逐词错峰浮现 |
+| `Typewriter`    | Text        | 打字机效果逐字输出，带闪烁光标   |
+| `ScrollMarquee` | Text        | 页面滚动时文字横向滚动，多行反向 |
 
 ## 环境要求
 

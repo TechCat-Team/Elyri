@@ -1,0 +1,33 @@
+.elyri-scroll-marquee {
+  --elyri-scroll-marquee-gap: 0.6em;
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+/* 每行内容横向平铺，位移由页面滚动量驱动，相邻行方向相反 */
+.elyri-scroll-marquee__row {
+  display: flex;
+  width: max-content;
+  /* --base 为 -1 时整体先左移一份内容宽度，让向右滚动时左侧也有内容可填，避免露白 */
+  margin-left: calc(var(--elyri-scroll-marquee-base, 0) * var(--elyri-scroll-marquee-copy-width, 0px));
+  will-change: transform;
+  transform: translate3d(calc(var(--elyri-scroll-marquee-shift, 0px) * var(--elyri-scroll-marquee-dir, 1)), 0, 0);
+}
+
+/* 单份内容，padding 计入宽度以保证取模后无缝衔接 */
+.elyri-scroll-marquee__copy {
+  flex: none;
+  padding-right: var(--elyri-scroll-marquee-gap);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-scroll-marquee__row {
+    transform: none;
+    will-change: auto;
+  }
+}

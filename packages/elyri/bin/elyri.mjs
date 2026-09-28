@@ -12,6 +12,7 @@ const components = {
   'fade-in': { folder: 'animations/FadeIn', name: 'FadeIn' },
   'gradient-text': { folder: 'text/GradientText', name: 'GradientText' },
   'pixel-vortex': { folder: 'backgrounds/PixelVortex', name: 'PixelVortex' },
+  'scroll-marquee': { folder: 'text/ScrollMarquee', name: 'ScrollMarquee' },
   'silk-waves': { folder: 'backgrounds/SilkWaves', name: 'SilkWaves' },
   'split-reveal': { folder: 'text/SplitReveal', name: 'SplitReveal' },
   typewriter: { folder: 'text/Typewriter', name: 'Typewriter' },

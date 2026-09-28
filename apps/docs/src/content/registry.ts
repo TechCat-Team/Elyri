@@ -6,6 +6,7 @@ import { dragonScalesDoc } from './components/dragon-scales';
 import { fadeInDoc } from './components/fade-in';
 import { gradientTextDoc } from './components/gradient-text';
 import { pixelVortexDoc } from './components/pixel-vortex';
+import { scrollMarqueeDoc } from './components/scroll-marquee';
 import { silkWavesDoc } from './components/silk-waves';
 import { splitRevealDoc } from './components/split-reveal';
 import { typewriterDoc } from './components/typewriter';
@@ -18,6 +19,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => [
   gradientTextDoc(lang),
   splitRevealDoc(lang),
   typewriterDoc(lang),
+  scrollMarqueeDoc(lang),
   fadeInDoc(lang),
   dragonScalesDoc(lang),
   auroraDoc(lang),

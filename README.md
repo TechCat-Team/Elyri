@@ -44,16 +44,17 @@ export function Hero() {
 
 ## Components
 
-| Component      | Category    | Description                                             |
-| -------------- | ----------- | ------------------------------------------------------- |
-| `FadeIn`       | Animations  | Fades and slides content in when it enters the viewport |
-| `DragonScales` | Backgrounds | WebGL dragon-scale background with interactive lighting |
-| `Aurora`       | Backgrounds | WebGL aurora night sky with layered curtains and stars  |
-| `SilkWaves`    | Backgrounds | WebGL flowing silk with satin sheen                     |
-| `Caustics`     | Backgrounds | WebGL underwater caustics with pointer ripples          |
-| `GradientText` | Text        | Applies an animated gradient to text                    |
-| `SplitReveal`  | Text        | Reveals text character by character as it enters view   |
-| `Typewriter`   | Text        | Types text out with a blinking cursor                   |
+| Component       | Category    | Description                                             |
+| --------------- | ----------- | ------------------------------------------------------- |
+| `FadeIn`        | Animations  | Fades and slides content in when it enters the viewport |
+| `DragonScales`  | Backgrounds | WebGL dragon-scale background with interactive lighting |
+| `Aurora`        | Backgrounds | WebGL aurora night sky with layered curtains and stars  |
+| `SilkWaves`     | Backgrounds | WebGL flowing silk with satin sheen                     |
+| `Caustics`      | Backgrounds | WebGL underwater caustics with pointer ripples          |
+| `GradientText`  | Text        | Applies an animated gradient to text                    |
+| `SplitReveal`   | Text        | Reveals text character by character as it enters view   |
+| `Typewriter`    | Text        | Types text out with a blinking cursor                   |
+| `ScrollMarquee` | Text        | Slides text horizontally as the page scrolls vertically |
 
 ## Requirements
 

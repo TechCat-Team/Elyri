@@ -524,6 +524,12 @@
   max-width: 760px;
   text-align: center;
 }
+/* 滚动跑马灯演示 */
+.demo-marquee {
+  font-size: clamp(30px, 5vw, 56px);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
 .demo-card {
   padding: 16px 20px;
   border: 1px solid var(--docs-border);
