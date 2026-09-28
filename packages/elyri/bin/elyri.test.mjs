@@ -12,9 +12,17 @@ test('add copies editable components and never overwrites them', async () => {
   const cwd = await mkdtemp(join(tmpdir(), 'elyri-cli-'));
   try {
     await writeFile(join(cwd, 'package.json'), JSON.stringify({ dependencies: { elyri: '^0.1.0' } }));
-    execFileSync(process.execPath, [cli, 'add', 'fade-in', 'gradient-text', 'dragon-scales'], { cwd });
+    const added = {
+      'fade-in': 'FadeIn',
+      'gradient-text': 'GradientText',
+      'dragon-scales': 'DragonScales',
+      aurora: 'Aurora',
+      'silk-waves': 'SilkWaves',
+      caustics: 'Caustics',
+    };
+    execFileSync(process.execPath, [cli, 'add', ...Object.keys(added)], { cwd });
 
-    for (const name of ['FadeIn', 'GradientText', 'DragonScales']) {
+    for (const name of Object.values(added)) {
       const component = await readFile(join(cwd, 'src/components/elyri', `${name}.tsx`), 'utf8');
       assert.match(component, /from 'elyri\/core'/);
       assert.doesNotMatch(component, /from '\.\.\/\.\.\/\.\.\/core'/);

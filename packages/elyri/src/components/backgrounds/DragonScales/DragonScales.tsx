@@ -1,7 +1,6 @@
-import { useEffect, useRef } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 
-import { cn, usePrefersReducedMotion } from '../../../core';
+import { cn, hexToLinearRgb, useShaderCanvas } from '../../../core';
 
 import './DragonScales.css';
 
@@ -22,13 +21,6 @@ export interface DragonScalesProps {
   interactive?: boolean;
 }
 
-const VERTEX_SHADER = `
-attribute vec2 aPosition;
-void main() {
-  gl_Position = vec4(aPosition, 0.0, 1.0);
-}
-`;
-
 // 鳞片为尖头鱼鳞形（vesica），侧向排列：鳞尖朝右，左侧鳞片压住右侧。
 // 表面是黑曜石般的高光釉面：窄倒角 + 平缓鼓面，反射一组线形灯带，
 // 灯带在曲面上被拉成贴着轮廓的弧形亮线，鳞缘再勾一道细亮边。
@@ -37,7 +29,7 @@ precision highp float;
 
 uniform vec2 uResolution;
 uniform float uTime;
-uniform vec2 uLight;
+uniform vec2 uPointer;
 uniform float uScale;
 uniform vec3 uBase;
 uniform vec3 uHighlight;
@@ -157,7 +149,7 @@ void main() {
 
   float minRes = min(uResolution.x, uResolution.y);
   vec3 V = vec3(0.0, 0.0, 1.0);
-  vec3 toLight = vec3(uLight - frag, minRes * 0.6);
+  vec3 toLight = vec3(uPointer - frag, minRes * 0.6);
   float dist = length(toLight);
   vec3 L = toLight / dist;
   float atten = 1.0 / (1.0 + 1.5 * pow(dist / minRes, 2.0));
@@ -169,7 +161,7 @@ void main() {
 
   // 线形灯带：主灯带穿过光源位置并缓慢转动，副灯带只落在朝向一侧的倒角上
   vec3 Rf = reflect(-V, n);
-  vec2 toL = (uLight - frag) / minRes;
+  vec2 toL = (uPointer - frag) / minRes;
   float a = 0.7 + 0.45 * sin(t * 0.17);
   vec2 dir = vec2(cos(a), sin(a));
   float s1 = dot(Rf.xy, dir) - dot(toL, dir) * 1.3 + 0.12 * sin(t * 0.5 + seed * TAU);
@@ -194,7 +186,7 @@ void main() {
 
   color += mix(uBase, uHighlight, 0.2) * gap * 0.35 * (0.3 + atten + band1);
 
-  color += uHighlight * 0.03 * exp(-pow(length(frag - uLight) / (minRes * 0.4), 2.0));
+  color += uHighlight * 0.03 * exp(-pow(length(frag - uPointer) / (minRes * 0.4), 2.0));
 
   vec2 vc = frag / uResolution - 0.5;
   color *= 1.0 - dot(vc, vc) * 1.5;
@@ -204,49 +196,6 @@ void main() {
   gl_FragColor = vec4(color, 1.0);
 }
 `;
-
-const UNIFORMS = ['uResolution', 'uTime', 'uLight', 'uScale', 'uBase', 'uHighlight', 'uFlare'] as const;
-
-/** 绘制帧率上限 */
-const FRAME_INTERVAL = 1000 / 60;
-
-type Rgb = [number, number, number];
-
-/** hex 转线性空间 RGB，着色器内统一在线性空间计算光照 */
-const toLinearRgb = (hex: string): Rgb => {
-  let value = hex.replace('#', '');
-  if (value.length === 3) value = [...value].map((char) => char + char).join('');
-  const int = parseInt(value.slice(0, 6), 16);
-  return [(int >> 16) & 255, (int >> 8) & 255, int & 255].map((channel) => (channel / 255) ** 2.2) as Rgb;
-};
-
-const createProgram = (gl: WebGLRenderingContext) => {
-  const program = gl.createProgram();
-  if (!program) return null;
-
-  for (const [type, source] of [
-    [gl.VERTEX_SHADER, VERTEX_SHADER],
-    [gl.FRAGMENT_SHADER, FRAGMENT_SHADER],
-  ] as const) {
-    const shader = gl.createShader(type);
-    if (!shader) return null;
-    gl.shaderSource(shader, source);
-    gl.compileShader(shader);
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-      console.error('[elyri] DragonScales shader failed:', gl.getShaderInfoLog(shader));
-    }
-    gl.attachShader(program, shader);
-    gl.deleteShader(shader);
-  }
-
-  gl.linkProgram(program);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    console.error('[elyri] DragonScales program failed:', gl.getProgramInfoLog(program));
-    gl.deleteProgram(program);
-    return null;
-  }
-  return program;
-};
 
 export function DragonScales({
   children,
@@ -258,151 +207,23 @@ export function DragonScales({
   flare = 0,
   interactive = true,
 }: DragonScalesProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const redrawRef = useRef<() => void>(undefined);
-  const prefersReducedMotion = usePrefersReducedMotion();
-  const optionsRef = useRef({ color, highlightColor, scaleSize, speed, flare, interactive });
-
-  useEffect(() => {
-    optionsRef.current = { color, highlightColor, scaleSize, speed, flare, interactive };
-    redrawRef.current?.();
-  }, [color, highlightColor, scaleSize, speed, flare, interactive]);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const gl = canvas?.getContext('webgl', { alpha: false, antialias: false });
-    if (!canvas || !gl) return;
-
-    const program = createProgram(gl);
-    if (!program) return;
-
-    // 单个覆盖全屏的三角形
-    const buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-    gl.useProgram(program);
-    const position = gl.getAttribLocation(program, 'aPosition');
-    gl.enableVertexAttribArray(position);
-    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
-
-    const uniforms = Object.fromEntries(UNIFORMS.map((name) => [name, gl.getUniformLocation(program, name)])) as Record<
-      (typeof UNIFORMS)[number],
-      WebGLUniformLocation | null
-    >;
-
-    let width = 1;
-    let height = 1;
-    let dpr = 1;
-    // 静止模式下停在一个光影较好的时刻
-    let time = prefersReducedMotion ? 2.4 : 0;
-    // 光源位置用 0-1 的相对坐标，指针离开时回到缓慢游走的轨迹
-    const light = { x: 0.62, y: 0.32 };
-    let pointer: { x: number; y: number } | null = null;
-
-    const wander = () => ({ x: 0.5 + 0.32 * Math.sin(time * 0.31), y: 0.42 + 0.26 * Math.cos(time * 0.23) });
-
-    const draw = () => {
-      const options = optionsRef.current;
-      gl.uniform2f(uniforms.uResolution, width, height);
-      gl.uniform1f(uniforms.uTime, time);
-      gl.uniform2f(uniforms.uLight, light.x * width, light.y * height);
-      gl.uniform1f(uniforms.uScale, Math.max(8, options.scaleSize) * dpr);
-      gl.uniform3fv(uniforms.uBase, toLinearRgb(options.color));
-      gl.uniform3fv(uniforms.uHighlight, toLinearRgb(options.highlightColor));
-      gl.uniform1f(uniforms.uFlare, Math.min(Math.max(options.flare, 0), 1));
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
-      canvas.dataset.ready = '';
-    };
-
-    const resize = () => {
-      const rect = canvas.getBoundingClientRect();
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      width = Math.max(1, Math.round(rect.width * dpr));
-      height = Math.max(1, Math.round(rect.height * dpr));
-      canvas.width = width;
-      canvas.height = height;
-      gl.viewport(0, 0, width, height);
-      draw();
-    };
-
-    const handlePointerMove = (event: PointerEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = (event.clientX - rect.left) / rect.width;
-      const y = (event.clientY - rect.top) / rect.height;
-      pointer = x >= 0 && x <= 1 && y >= 0 && y <= 1 ? { x, y } : null;
-      if (prefersReducedMotion && pointer && optionsRef.current.interactive) {
-        Object.assign(light, pointer);
-        draw();
-      }
-    };
-    const handlePointerLeave = () => {
-      pointer = null;
-    };
-
-    let frame = 0;
-    let last = 0;
-    let inView = true;
-
-    const tick = (now: number) => {
-      frame = requestAnimationFrame(tick);
-      if (last && now - last < FRAME_INTERVAL) return;
-      const dt = last ? Math.min((now - last) / 1000, 0.1) : 0;
-      last = now;
-      time += dt * optionsRef.current.speed;
-      const target = pointer && optionsRef.current.interactive ? pointer : wander();
-      const ease = 1 - Math.exp(-dt * 4);
-      light.x += (target.x - light.x) * ease;
-      light.y += (target.y - light.y) * ease;
-      draw();
-    };
-
-    const start = () => {
-      if (prefersReducedMotion || frame || !inView || document.hidden) return;
-      last = 0;
-      frame = requestAnimationFrame(tick);
-    };
-    const stop = () => {
-      cancelAnimationFrame(frame);
-      frame = 0;
-    };
-    const handleVisibility = () => (document.hidden ? stop() : start());
-
-    const resizeObserver = new ResizeObserver(resize);
-    resizeObserver.observe(canvas);
-    const intersectionObserver = new IntersectionObserver(([entry]) => {
-      inView = entry.isIntersecting;
-      if (inView) start();
-      else stop();
-    });
-    intersectionObserver.observe(canvas);
-
-    window.addEventListener('pointermove', handlePointerMove, { passive: true });
-    document.documentElement.addEventListener('pointerleave', handlePointerLeave);
-    document.addEventListener('visibilitychange', handleVisibility);
-    redrawRef.current = () => {
-      if (prefersReducedMotion) draw();
-    };
-
-    resize();
-    start();
-
-    return () => {
-      stop();
-      redrawRef.current = undefined;
-      resizeObserver.disconnect();
-      intersectionObserver.disconnect();
-      window.removeEventListener('pointermove', handlePointerMove);
-      document.documentElement.removeEventListener('pointerleave', handlePointerLeave);
-      document.removeEventListener('visibilitychange', handleVisibility);
-      gl.deleteBuffer(buffer);
-      gl.deleteProgram(program);
-    };
-  }, [prefersReducedMotion]);
-
-  const style = { '--elyri-dragon-scales-color': color } as CSSProperties;
+  const canvasRef = useShaderCanvas({
+    fragmentShader: FRAGMENT_SHADER,
+    speed,
+    interactive,
+    onDraw: ({ gl, uniform, dpr }) => {
+      gl.uniform1f(uniform('uScale'), Math.max(8, scaleSize) * dpr);
+      gl.uniform3fv(uniform('uBase'), hexToLinearRgb(color));
+      gl.uniform3fv(uniform('uHighlight'), hexToLinearRgb(highlightColor));
+      gl.uniform1f(uniform('uFlare'), Math.min(Math.max(flare, 0), 1));
+    },
+  });
 
   return (
-    <div className={cn('elyri-dragon-scales', className)} style={style}>
+    <div
+      className={cn('elyri-dragon-scales', className)}
+      style={{ '--elyri-dragon-scales-color': color } as CSSProperties}
+    >
       <canvas ref={canvasRef} className="elyri-dragon-scales__canvas" aria-hidden="true" />
       {children != null && <div className="elyri-dragon-scales__content">{children}</div>}
     </div>

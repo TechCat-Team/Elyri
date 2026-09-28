@@ -1,0 +1,33 @@
+.elyri-aurora {
+  --elyri-aurora-color: #3cffb0;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  /* WebGL 不可用或尚未绘制时的底色 */
+  background:
+    radial-gradient(90% 60% at 50% 55%, color-mix(in srgb, var(--elyri-aurora-color) 14%, transparent), transparent),
+    linear-gradient(#020409, #05091a);
+}
+
+.elyri-aurora__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--elyri-duration-slow) var(--elyri-ease-out);
+}
+
+.elyri-aurora__canvas[data-ready] {
+  opacity: 1;
+}
+
+.elyri-aurora__content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+}

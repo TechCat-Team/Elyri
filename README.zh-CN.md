@@ -50,6 +50,9 @@ export function Hero() {
 | -------------- | ----------- | -------------------------------- |
 | `FadeIn`       | Animations  | 元素进入视口时淡入并位移         |
 | `DragonScales` | Backgrounds | WebGL 龙鳞动态背景，光源跟随指针 |
+| `Aurora`       | Backgrounds | WebGL 极光夜空，多层光帘与星空   |
+| `SilkWaves`    | Backgrounds | WebGL 流动丝绸，缎面光泽         |
+| `Caustics`     | Backgrounds | WebGL 水下焦散光网，指针荡开水波 |
 | `GradientText` | Text        | 为文字应用动态渐变               |
 
 ## 环境要求

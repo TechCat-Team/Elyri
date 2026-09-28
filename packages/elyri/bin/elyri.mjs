@@ -6,9 +6,12 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const components = {
+  aurora: { folder: 'backgrounds/Aurora', name: 'Aurora' },
+  caustics: { folder: 'backgrounds/Caustics', name: 'Caustics' },
   'dragon-scales': { folder: 'backgrounds/DragonScales', name: 'DragonScales' },
   'fade-in': { folder: 'animations/FadeIn', name: 'FadeIn' },
   'gradient-text': { folder: 'text/GradientText', name: 'GradientText' },
+  'silk-waves': { folder: 'backgrounds/SilkWaves', name: 'SilkWaves' },
 };
 
 const available = Object.keys(components);

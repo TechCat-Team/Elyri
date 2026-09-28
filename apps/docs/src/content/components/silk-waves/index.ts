@@ -1,0 +1,1 @@
+export { silkWavesDoc } from './doc';

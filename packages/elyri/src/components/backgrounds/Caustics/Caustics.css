@@ -1,0 +1,34 @@
+.elyri-caustics {
+  --elyri-caustics-color: #0a6fa8;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  /* WebGL 不可用或尚未绘制时的底色 */
+  background: linear-gradient(
+    color-mix(in srgb, var(--elyri-caustics-color) 60%, #000),
+    color-mix(in srgb, var(--elyri-caustics-color) 12%, #000)
+  );
+}
+
+.elyri-caustics__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--elyri-duration-slow) var(--elyri-ease-out);
+}
+
+.elyri-caustics__canvas[data-ready] {
+  opacity: 1;
+}
+
+.elyri-caustics__content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+}

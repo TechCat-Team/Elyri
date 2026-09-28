@@ -464,19 +464,19 @@
 :root[data-theme='light'] .demo-card {
   border-color: transparent;
 }
-.demo-dragon {
+.demo-background {
   width: 100%;
   height: 520px;
   border-radius: 16px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
 }
-.demo-dragon-content {
+.demo-background-content {
   display: flex;
   flex-direction: column;
   gap: clamp(16px, 2.6vw, 28px);
   height: 100%;
   padding: clamp(20px, 3vw, 34px);
-  color: #f6ecff;
+  color: #fff;
 }
 .demo-hero-nav {
   display: flex;
@@ -498,7 +498,7 @@
   font-weight: 500;
 }
 .demo-hero-links a {
-  color: rgba(246, 236, 255, 0.78);
+  color: rgba(255, 255, 255, 0.78);
   text-decoration: none;
   transition: color 0.2s ease;
 }
@@ -516,9 +516,9 @@
 }
 .demo-hero-badge {
   padding: 6px 14px;
-  border: 1px solid rgba(231, 166, 255, 0.42);
+  border: 1px solid color-mix(in srgb, color-mix(in srgb, var(--demo-accent) 45%, #fff) 45%, transparent);
   border-radius: 999px;
-  background: rgba(123, 63, 228, 0.22);
+  background: color-mix(in srgb, var(--demo-accent) 22%, transparent);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.18em;
@@ -534,14 +534,14 @@
   letter-spacing: -0.01em;
   text-shadow:
     0 2px 24px rgba(0, 0, 0, 0.7),
-    0 0 40px rgba(200, 140, 255, 0.35);
+    0 0 40px color-mix(in srgb, var(--demo-accent) 45%, transparent);
 }
 .demo-hero-subtitle {
   margin: 0;
   max-width: 46ch;
   font-size: clamp(14px, 1.8vw, 16px);
   line-height: 1.6;
-  color: rgba(240, 226, 255, 0.75);
+  color: rgba(255, 255, 255, 0.75);
 }
 .demo-hero-actions {
   display: flex;
@@ -563,18 +563,18 @@
     background 0.2s ease;
 }
 .demo-hero-button--primary {
-  background: linear-gradient(135deg, #a855f7, #7b3fe4);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--demo-accent) 65%, #fff), var(--demo-accent));
   color: #fff;
-  box-shadow: 0 10px 30px rgba(123, 63, 228, 0.45);
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--demo-accent) 45%, transparent);
 }
 .demo-hero-button--primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 14px 36px rgba(123, 63, 228, 0.58);
+  box-shadow: 0 14px 36px color-mix(in srgb, var(--demo-accent) 58%, transparent);
 }
 .demo-hero-button--ghost {
   border-color: rgba(255, 255, 255, 0.28);
   background: rgba(255, 255, 255, 0.07);
-  color: #f6ecff;
+  color: #fff;
   backdrop-filter: blur(6px);
 }
 .demo-hero-button--ghost:hover {

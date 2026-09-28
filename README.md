@@ -48,6 +48,9 @@ export function Hero() {
 | -------------- | ----------- | ------------------------------------------------------- |
 | `FadeIn`       | Animations  | Fades and slides content in when it enters the viewport |
 | `DragonScales` | Backgrounds | WebGL dragon-scale background with interactive lighting |
+| `Aurora`       | Backgrounds | WebGL aurora night sky with layered curtains and stars  |
+| `SilkWaves`    | Backgrounds | WebGL flowing silk with satin sheen                     |
+| `Caustics`     | Backgrounds | WebGL underwater caustics with pointer ripples          |
 | `GradientText` | Text        | Applies an animated gradient to text                    |
 
 ## Requirements

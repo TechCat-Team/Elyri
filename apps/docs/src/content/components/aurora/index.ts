@@ -1,0 +1,1 @@
+export { auroraDoc } from './doc';
