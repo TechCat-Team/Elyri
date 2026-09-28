@@ -138,7 +138,7 @@
 .index-quickstart {
   margin-top: 56px;
 }
-.index-quickstart .code-block {
+.index-quickstart .install-steps {
   margin-top: 16px;
 }
 
@@ -177,6 +177,14 @@
 /* 代码块 */
 .code-stack {
   padding-top: 26px;
+}
+/* 安装流程拆成「装依赖」「加组件」两个代码块 */
+.install-steps {
+  display: grid;
+  gap: 12px;
+}
+.install-steps + .section-title {
+  margin-top: 32px;
 }
 .code-stack .section-title:not(:first-child),
 .code-block + .section-title {

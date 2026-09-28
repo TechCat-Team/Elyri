@@ -5,8 +5,13 @@
   "license": "MIT",
   "type": "module",
   "files": [
-    "dist"
+    "dist",
+    "bin/elyri.mjs",
+    "src/components"
   ],
+  "bin": {
+    "elyri": "./bin/elyri.mjs"
+  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,6 +20,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./core": {
+      "types": "./dist/core.d.ts",
+      "import": "./dist/core.js",
+      "require": "./dist/core.cjs"
     },
     "./styles.css": "./dist/index.css",
     "./package.json": "./package.json"
@@ -25,7 +35,8 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node --test bin/*.test.mjs"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",

@@ -1,4 +1,3 @@
-import { site } from './site';
 import type { CodeLang, ControlValue, PackageManager } from './types';
 
 const TOKEN =
@@ -26,14 +25,25 @@ export function highlight(code: string) {
 
 type PropValue = ControlValue | string[] | undefined;
 
-const INSTALL_COMMANDS: Record<PackageManager, (pkg: string) => string> = {
-  pnpm: (pkg) => `pnpm add ${pkg}`,
-  npm: (pkg) => `npm install ${pkg}`,
-  yarn: (pkg) => `yarn add ${pkg}`,
-  bun: (pkg) => `bun add ${pkg}`,
+const DEPENDENCY_COMMANDS: Record<PackageManager, string> = {
+  pnpm: 'pnpm add elyri',
+  npm: 'npm install elyri',
+  yarn: 'yarn add elyri',
+  bun: 'bun add elyri',
 };
 
-export const installCommand = (manager: PackageManager, pkg = site.packageName) => INSTALL_COMMANDS[manager](pkg);
+const ADD_COMMANDS: Record<PackageManager, (component: string) => string> = {
+  pnpm: (component) => `pnpm dlx elyri@latest add ${component}`,
+  npm: (component) => `npx elyri@latest add ${component}`,
+  yarn: (component) => `yarn dlx elyri@latest add ${component}`,
+  bun: (component) => `bunx elyri@latest add ${component}`,
+};
+
+/** 安装核心依赖 */
+export const installCommand = (manager: PackageManager) => DEPENDENCY_COMMANDS[manager];
+
+/** 把组件源码添加进项目 */
+export const addCommand = (manager: PackageManager, component: string) => ADD_COMMANDS[manager](component);
 
 /** 对象字面量里的值，字符串与数组统一用单引号 */
 const formatValue = (value: PropValue) => {
@@ -46,19 +56,14 @@ const formatValue = (value: PropValue) => {
 interface UsageExample {
   /** 组件名，用于 import 与标签 */
   component: string;
-  /** 组件的 props 类型名，仅 TS 变体使用 */
-  propsType: string;
   /** 示例 props，值为 undefined 的会被省略 */
+  propsType: string;
   props: Record<string, PropValue>;
-  /** 子元素，省略则为自闭合标签 */
   children?: string;
   name?: string;
 }
 
-/**
- * 生成可复制的使用示例。
- * TS 变体会把 props 标注为组件的 props 类型，JS 变体则是普通对象字面量。
- */
+/** 生成可复制的使用示例。 */
 export function usageExample(
   lang: CodeLang,
   { component, propsType, props, children, name = 'Example' }: UsageExample,
@@ -68,9 +73,10 @@ export function usageExample(
     .filter((entry): entry is [string, string] => entry[1] !== null);
   const hasProps = entries.length > 0;
 
-  const imports = [`import { ${component} } from '${site.packageName}';`];
+  const source = `./components/elyri/${component}`;
+  const imports = [`import { ${component} } from '${source}';`];
   if (hasProps && lang === 'ts') {
-    imports.push(`import type { ${propsType} } from '${site.packageName}';`);
+    imports.push(`import type { ${propsType} } from '${source}';`);
   }
 
   const target = hasProps ? `<${component} {...props}` : `<${component}`;

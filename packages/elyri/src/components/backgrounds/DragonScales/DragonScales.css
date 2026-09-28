@@ -1,0 +1,35 @@
+.elyri-dragon-scales {
+  --elyri-dragon-scales-color: #7b3fe4;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  /* WebGL 不可用或尚未绘制时的底色 */
+  background: radial-gradient(
+    120% 90% at 50% 30%,
+    color-mix(in srgb, var(--elyri-dragon-scales-color) 30%, #000),
+    #030206 75%
+  );
+}
+
+.elyri-dragon-scales__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--elyri-duration-slow) var(--elyri-ease-out);
+}
+
+.elyri-dragon-scales__canvas[data-ready] {
+  opacity: 1;
+}
+
+.elyri-dragon-scales__content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+}

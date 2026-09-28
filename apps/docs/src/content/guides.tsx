@@ -26,10 +26,10 @@ const copy = {
     countSuffix: '个组件',
     quickstart: '快速开始',
     installTitle: '安装',
-    installDescription: '通过包管理器安装，并在入口处引入样式。',
-    stepInstall: '1. 安装依赖',
-    stepStyles: '2. 引入样式',
-    stepUsage: '3. 使用组件',
+    installDescription: '安装底层依赖，再将组件源码添加到项目中；添加后可以直接修改组件。',
+    stepInstall: '1. 安装依赖并添加组件',
+    stepStyles: '2. 引入公共样式',
+    stepUsage: '3. 使用本地组件',
   },
   en: {
     introDescription: 'Animation components for React. Preview them live, tune the props, then take the code with you.',
@@ -38,10 +38,10 @@ const copy = {
     countSuffix: 'COMPONENTS',
     quickstart: 'Quick start',
     installTitle: 'Installation',
-    installDescription: 'Install with your package manager, then import the stylesheet once at your entry point.',
-    stepInstall: '1. Install the package',
-    stepStyles: '2. Import the styles',
-    stepUsage: '3. Use a component',
+    installDescription: 'Install the core dependency, then add editable component source to your project.',
+    stepInstall: '1. Install and add a component',
+    stepStyles: '2. Import shared styles',
+    stepUsage: '3. Use the local component',
   },
 };
 
@@ -99,7 +99,7 @@ function InstallPage() {
       <h2 className="section-title">{t.stepUsage}</h2>
       <CodeBlock
         title="App.tsx"
-        code={`import { GradientText } from '${site.packageName}';\n\nexport function App() {\n  return <GradientText>Hello</GradientText>;\n}`}
+        code={`import { GradientText } from './components/elyri/GradientText';\n\nexport function App() {\n  return <GradientText>Hello</GradientText>;\n}`}
       />
     </article>
   );

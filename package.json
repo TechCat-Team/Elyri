@@ -8,6 +8,7 @@
     "build": "pnpm --filter elyri build",
     "build:docs": "pnpm --filter @elyri/docs build",
     "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check ."

@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react';
 
-import { cn } from '../../../utils/cn';
+import { cn } from '../../../core';
 
 import './GradientText.css';
 

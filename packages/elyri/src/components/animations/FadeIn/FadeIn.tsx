@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 
-import { usePrefersReducedMotion } from '../../../hooks/usePrefersReducedMotion';
-import { cn } from '../../../utils/cn';
+import { cn, usePrefersReducedMotion } from '../../../core';
 
 import './FadeIn.css';
 

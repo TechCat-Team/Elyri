@@ -44,10 +44,11 @@ export function Hero() {
 
 ## Components
 
-| Component      | Category   | Description                                             |
-| -------------- | ---------- | ------------------------------------------------------- |
-| `FadeIn`       | Animations | Fades and slides content in when it enters the viewport |
-| `GradientText` | Text       | Applies an animated gradient to text                    |
+| Component      | Category    | Description                                             |
+| -------------- | ----------- | ------------------------------------------------------- |
+| `FadeIn`       | Animations  | Fades and slides content in when it enters the viewport |
+| `DragonScales` | Backgrounds | WebGL dragon-scale background with interactive lighting |
+| `GradientText` | Text        | Applies an animated gradient to text                    |
 
 ## Requirements
 

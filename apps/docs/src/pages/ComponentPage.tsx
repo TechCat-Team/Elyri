@@ -98,7 +98,7 @@ export function ComponentPage({ doc, prev, next }: ComponentPageProps) {
       ) : (
         <div className="code-stack">
           <h2 className="section-title">{t('page.install')}</h2>
-          <InstallSnippet />
+          <InstallSnippet component={doc.slug} />
           <h2 className="section-title">{t('page.usage')}</h2>
           <CodeBlock
             title={codeLang === 'ts' ? 'Usage.tsx' : 'Usage.jsx'}
