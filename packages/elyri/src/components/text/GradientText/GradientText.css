@@ -10,7 +10,9 @@
 
 .elyri-gradient-text--animated {
   background-size: 200% 100%;
-  animation: elyri-gradient-text-flow var(--elyri-duration-slow) var(--elyri-ease-in-out) infinite alternate;
+  /* --elyri-gradient-speed 为速度倍率，越大越快 */
+  animation: elyri-gradient-text-flow calc(var(--elyri-duration-slow) / var(--elyri-gradient-speed, 1))
+    var(--elyri-ease-in-out) infinite alternate;
 }
 
 @keyframes elyri-gradient-text-flow {
