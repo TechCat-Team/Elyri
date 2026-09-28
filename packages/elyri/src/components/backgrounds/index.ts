@@ -13,7 +13,7 @@ export type { MorphGridProps } from './MorphGrid';
 export { PixelVortex } from './PixelVortex';
 export type { PixelVortexProps } from './PixelVortex';
 export { Planet } from './Planet';
-export type { PlanetProps } from './Planet';
+export type { PlanetKind, PlanetProps } from './Planet';
 export { SilkWaves } from './SilkWaves';
 export type { SilkWavesProps } from './SilkWaves';
 export { Velvet } from './Velvet';

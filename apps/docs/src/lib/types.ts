@@ -37,6 +37,8 @@ export interface ComponentDoc {
   description: string;
   isNew?: boolean;
   controls?: Control[];
+  /** 某个控件变化时联动修改其他控件的值（例如切换预设时重置配色） */
+  linkedValues?: (name: string, value: ControlValue) => ControlValues | undefined;
   props: PropDoc[];
   dependencies?: string[];
   render: (values: ControlValues) => ReactNode;

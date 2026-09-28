@@ -4,38 +4,34 @@ import { cn, hexToLinearRgb, useShaderCanvas } from '../../../core';
 
 import './Planet.css';
 
+export type PlanetKind = 'mars' | 'jupiter';
+
 export interface PlanetProps {
   children?: ReactNode;
   className?: string;
-  /** 地表主色（hex） */
+  planet?: PlanetKind;
   color?: string;
-  /** 暗色地貌的颜色（hex） */
   terrainColor?: string;
-  /** 大气散射色（hex），掠射处会透出它的互补色 */
   atmosphereColor?: string;
-  /** 大气浓度，0 为无大气 */
   atmosphere?: number;
-  /** 陨石坑数量与深度，0 为无陨石坑 */
   craters?: number;
-  /** 星空密度，0 为无星星 */
   stars?: number;
-  /** 地平线弧顶距容器顶部的比例 */
   horizon?: number;
-  /** 动画速度倍率 */
   speed?: number;
-  /** 是否显示太阳 */
   sun?: boolean;
-  /** 太阳固定的归一化位置（0-1，原点左上，x 为方位、y 为高度）；设置后太阳锁定在该处，不再跟随指针或游移 */
   sunPosition?: { x: number; y: number };
-  /** 太阳是否跟随指针移动 */
   interactive?: boolean;
 }
 
-// 轨道视角的星球：相机悬停在半径为 1 的星球上方，光线求交得到地表，
-// 地表由带导数的 3D 噪声叠加多层陨石坑生成起伏与反照率，按像素足迹逐级淡出高频避免闪烁；
-// 大气按指数密度做单次散射积分（太阳方向光学厚度用 Chapman 近似），散射系数取自大气色，
-// 因此薄处呈大气色、掠射的厚处呈互补色；太阳随指针沿地平线游移，出现在画内时带光晕。
-const FRAGMENT_SHADER = `
+const PLANET_PRESETS: Record<
+  PlanetKind,
+  { color: string; terrainColor: string; atmosphereColor: string; atmosphere: number }
+> = {
+  mars: { color: '#c1532b', terrainColor: '#4e1e12', atmosphereColor: '#f2a57c', atmosphere: 0.6 },
+  jupiter: { color: '#ecdcc0', terrainColor: '#a86a3a', atmosphereColor: '#d9cdb8', atmosphere: 0.3 },
+};
+
+const COMMON = `
 precision highp float;
 
 #define PI 3.14159265
@@ -48,7 +44,6 @@ uniform vec3 uSurface;
 uniform vec3 uTerrain;
 uniform vec3 uAtmosphere;
 uniform float uDensity;
-uniform float uCraters;
 uniform float uStars;
 uniform float uHorizon;
 uniform float uSun;
@@ -61,7 +56,6 @@ const float H = 0.0045;
 const float RT = 1.0 + 10.0 * H;
 const float SUN_I = 5.0;
 const float SUN_R = 0.012;
-const float BUMP = 0.06;
 
 float hash12(vec2 p) {
   vec3 p3 = fract(vec3(p.xyx) * 0.1031);
@@ -103,7 +97,65 @@ float noise3(vec3 x) {
   );
 }
 
-// 值噪声及其解析梯度：x 为 0-1 的值，yzw 为梯度
+float lod(float freqTimesFootprint) {
+  return 1.0 - smoothstep(0.25, 0.6, freqTimesFootprint);
+}
+
+float fbm3(vec3 p, float fp, int octaves) {
+  float s = 0.0;
+  float a = 0.5;
+  float f = 1.0;
+  for (int i = 0; i < 8; i++) {
+    float w = lod(f * fp);
+    if (i >= octaves || w <= 0.0) break;
+    s += a * w * (noise3(p * f + float(i) * 7.13) - 0.5);
+    a *= 0.55;
+    f *= 2.02;
+  }
+  return s;
+}
+
+float chapman(float X, float h, float coschi) {
+  float c = sqrt(X + h);
+  if (coschi >= 0.0) return c / (c * coschi + 1.0) * exp(-h);
+  float x0 = sqrt(1.0 - coschi * coschi) * (X + h);
+  return 2.0 * sqrt(x0) * exp(min(X - x0, 40.0)) - c / (1.0 - c * coschi) * exp(-h);
+}
+
+vec3 stars(vec3 rd, float pixAngle) {
+  vec2 a = vec2(atan(rd.x, -rd.z), asin(clamp(rd.y, -1.0, 1.0)));
+  vec3 col = vec3(0.0);
+  for (int layer = 0; layer < 2; layer++) {
+    float scale = layer == 0 ? 70.0 : 190.0;
+    float seed = float(layer) * 17.0;
+    vec2 g = a * scale;
+    vec2 cell = floor(g);
+    if (hash12(cell + seed) > uStars * (layer == 0 ? 0.22 : 0.2)) continue;
+    vec2 pos = 0.2 + 0.6 * vec2(hash12(cell + seed + 3.1), hash12(cell + seed + 7.7));
+    float px = length(fract(g) - pos) / scale / pixAngle;
+    float h = hash12(cell + seed + 5.3);
+    float mag = layer == 0 ? 0.05 + 2.0 * pow(h, 8.0) : 0.015 + 0.05 * h;
+    float tw = 0.7 + 0.3 * sin(uTime * (0.8 + 2.5 * h) + h * 40.0);
+    vec3 tint = mix(vec3(0.62, 0.74, 1.0), vec3(1.0, 0.82, 0.64), hash12(cell + seed + 9.9));
+    col += tint * mag * tw * exp(-px * px * 1.4);
+  }
+  vec2 q = a * vec2(2.2, 3.4);
+  float neb = noise2(q) * 0.55 + noise2(q * 2.1 + 4.0) * 0.3 + noise2(q * 4.3 + 9.0) * 0.15;
+  float band = exp(-pow((a.y + 0.35 * a.x + 0.05) * 2.6, 2.0));
+  col += mix(vec3(0.05, 0.04, 0.12), vec3(0.1, 0.05, 0.07), neb) * smoothstep(0.35, 0.85, neb) * band * 0.12 * uStars;
+  return col;
+}
+
+vec3 aces(vec3 x) {
+  return clamp((x * (2.51 * x + 0.03)) / (x * (2.43 * x + 0.59) + 0.14), 0.0, 1.0);
+}
+`;
+
+const MARS_SURFACE = `
+uniform float uCraters;
+
+const float BUMP = 0.06;
+
 vec4 noised(vec3 x) {
   vec3 i = floor(x);
   vec3 w = fract(x);
@@ -134,27 +186,6 @@ vec4 noised(vec3 x) {
   );
 }
 
-// 像素足迹超过噪声周期时淡出该层，远处地表不再闪烁
-float lod(float freqTimesFootprint) {
-  return 1.0 - smoothstep(0.25, 0.6, freqTimesFootprint);
-}
-
-float fbm3(vec3 p, float fp) {
-  float s = 0.0;
-  float a = 0.5;
-  float f = 1.0;
-  for (int i = 0; i < 8; i++) {
-    float w = lod(f * fp);
-    if (w <= 0.0) break;
-    s += a * w * (noise3(p * f + float(i) * 7.13) - 0.5);
-    a *= 0.55;
-    f *= 2.02;
-  }
-  return s;
-}
-
-// 地形高度：带侵蚀感的 fbm（坡度越大后续细节越弱），返回高度与梯度。
-// 八度数足够多，让最细一层在近处也只占两三个像素
 vec4 terrain(vec3 p, float fp) {
   vec4 s = vec4(0.0);
   vec3 dsum = vec3(0.0);
@@ -179,8 +210,6 @@ float craterProfile(float x) {
   return 0.8 * (smoothstep(0.0, 1.0, x) - 1.0) + 0.3 * exp(-10.0 * (x - 1.0) * (x - 1.0));
 }
 
-// 一层陨石坑：每个网格至多一个坑且完整落在格内，只需查当前格。
-// 累加高度梯度到 grad，返回坑体剖面（坑底为负、坑沿为正）供反照率使用
 float craterLayer(vec3 p, float scale, float fp, float seed, inout vec3 grad) {
   vec3 g = p * scale + seed;
   vec3 cell = floor(g);
@@ -199,49 +228,186 @@ float craterLayer(vec3 p, float scale, float fp, float seed, inout vec3 grad) {
   return craterProfile(x) * w;
 }
 
-float chapman(float X, float h, float coschi) {
-  float c = sqrt(X + h);
-  if (coschi >= 0.0) return c / (c * coschi + 1.0) * exp(-h);
-  float x0 = sqrt(1.0 - coschi * coschi) * (X + h);
-  return 2.0 * sqrt(x0) * exp(min(X - x0, 40.0)) - c / (1.0 - c * coschi) * exp(-h);
+vec3 shadeSurface(vec3 n, float ndv, float pix, vec3 sun, vec3 beta, float X) {
+  float fp = pix / max(sqrt(ndv), 0.12);
+
+  float ang = -uTime * 0.01;
+  float cs = cos(ang);
+  float sn = sin(ang);
+  mat3 spin = mat3(1.0, 0.0, 0.0, 0.0, cs, sn, 0.0, -sn, cs);
+  vec3 q = spin * n;
+
+  vec4 ter = terrain(q * 4.0 + 2.0, fp * 4.0);
+  vec3 grad = ter.yzw * 4.0 * BUMP;
+  float crater = 0.0;
+  crater += craterLayer(q, 5.0, fp, 1.3, grad);
+  crater += craterLayer(q, 11.0, fp, 7.9, grad);
+  crater += craterLayer(q, 23.0, fp, 4.1, grad);
+  crater += craterLayer(q, 47.0, fp, 9.6, grad);
+  crater += craterLayer(q, 97.0, fp, 5.7, grad);
+  crater += craterLayer(q, 199.0, fp, 2.2, grad);
+  grad = grad * spin;
+  grad -= dot(grad, n) * n;
+  vec3 nb = normalize(n - grad);
+
+  float big = fbm3(q * 1.7 + 4.0, fp * 1.7, 8);
+  float mid = fbm3(q * 9.0 + 1.0, fp * 9.0, 8);
+  float fine = fbm3(q * 70.0 + 3.0, fp * 70.0, 8);
+  vec3 albedo = mix(uSurface, uTerrain, smoothstep(-0.12, 0.22, big + 0.35 * mid + 0.15 * fine));
+  albedo *= 0.8 + 0.7 * (mid + 0.5) * 0.6 + 2.0 * ter.x + 0.5 * fine;
+  albedo *= 1.0 + 0.3 * crater;
+  albedo = max(albedo, 0.0);
+
+  float ngl = dot(n, sun);
+  float mu0 = max(dot(nb, sun), 0.0);
+  float lsl = mu0 / (mu0 + ndv + 1e-3);
+  float brdf = mix(mu0, lsl, 0.35) * smoothstep(-0.03, 0.08, ngl);
+  vec3 sunT = exp(-beta * H * chapman(X, 0.0, ngl));
+  vec3 sky = uAtmosphere * uDensity * 0.05 * smoothstep(-0.3, 0.4, ngl);
+  return albedo * (SUN_I * 0.9 * sunT * brdf + sky + 0.004);
+}
+`;
+
+const JUPITER_SURFACE = `
+const vec3 AXIS = vec3(0.0, 0.2955, -0.9553);
+const vec3 EAST0 = vec3(1.0, 0.0, 0.0);
+const vec3 MERIDIAN0 = vec3(0.0, 0.9553, 0.2955);
+const float FLOW_T = 24.0;
+
+vec3 spinAxis(vec3 p, float a) {
+  float c = cos(a);
+  float s = sin(a);
+  return p * c + cross(AXIS, p) * s + AXIS * dot(AXIS, p) * (1.0 - c);
 }
 
-vec3 stars(vec3 rd, float pixAngle) {
-  vec2 a = vec2(atan(rd.x, -rd.z), asin(clamp(rd.y, -1.0, 1.0)));
-  vec3 col = vec3(0.0);
-  for (int layer = 0; layer < 2; layer++) {
-    float scale = layer == 0 ? 70.0 : 190.0;
-    float seed = float(layer) * 17.0;
-    vec2 g = a * scale;
-    vec2 cell = floor(g);
-    if (hash12(cell + seed) > uStars * (layer == 0 ? 0.22 : 0.2)) continue;
-    vec2 pos = 0.2 + 0.6 * vec2(hash12(cell + seed + 3.1), hash12(cell + seed + 7.7));
-    float px = length(fract(g) - pos) / scale / pixAngle;
-    float h = hash12(cell + seed + 5.3);
-    float mag = layer == 0 ? 0.05 + 2.0 * pow(h, 8.0) : 0.015 + 0.05 * h;
-    float tw = 0.7 + 0.3 * sin(uTime * (0.8 + 2.5 * h) + h * 40.0);
-    vec3 tint = mix(vec3(0.62, 0.74, 1.0), vec3(1.0, 0.82, 0.64), hash12(cell + seed + 9.9));
-    col += tint * mag * tw * exp(-px * px * 1.4);
+vec3 fromLatLon(float lat, float lon) {
+  return cos(lat) * (cos(lon) * MERIDIAN0 + sin(lon) * EAST0) + sin(lat) * AXIS;
+}
+
+vec2 harmonic(float lat, float k, float a, float ph, float fpLat) {
+  float w = a * lod(k * fpLat / (2.0 * PI));
+  return w * vec2(sin(k * lat + ph), k * cos(k * lat + ph));
+}
+
+vec2 bandField(float lat, float fpLat) {
+  return harmonic(lat, 61.0, 1.0, 0.9, fpLat)
+    + harmonic(lat, 107.0, 0.55, 2.4, fpLat)
+    + harmonic(lat, 211.0, 0.3, 4.1, fpLat)
+    + harmonic(lat, 409.0, 0.16, 1.7, fpLat);
+}
+
+float jet(float lat) {
+  return 0.00011 * (61.0 * cos(61.0 * lat + 0.9) + 0.55 * 107.0 * cos(107.0 * lat + 2.4));
+}
+
+vec2 cloudPhase(vec3 p, float lat, float t, float seed, float fp) {
+  vec3 q = spinAxis(p, -jet(lat) * t);
+  q += AXIS * dot(q, AXIS) * 2.0;
+  q += seed * vec3(1.7, 9.2, 4.3);
+  float wx = fbm3(q * 7.0, fp * 14.0, 5);
+  float wy = fbm3(q * 7.0 + 5.2, fp * 14.0, 5);
+  float detail = fbm3(q * 30.0 + vec3(wx, wy, wx - wy) * 9.0, fp * 60.0, 7);
+  return vec2(wx, detail);
+}
+
+vec2 vortexFrame(vec3 p, float lat0, float lon0, vec2 radii) {
+  vec3 c = fromLatLon(lat0, lon0);
+  vec3 east = normalize(cross(AXIS, c));
+  vec3 north = cross(c, east);
+  vec3 d = p - c;
+  return vec2(dot(d, east), dot(d, north)) / radii;
+}
+
+vec2 vortex(vec2 v, float spin, float seed, float fp) {
+  float r = length(v);
+  float ang = spin * uTime + 2.4 * (1.0 - smoothstep(0.0, 1.1, r));
+  float c = cos(ang);
+  float s = sin(ang);
+  vec2 w = mat2(c, -s, s, c) * v;
+  float tex = fbm3(vec3(w * 2.4, r * 6.0 + seed), fp * 6.0, 6);
+  float mask = 1.0 - smoothstep(0.6, 1.0, r + tex * 0.5);
+  return vec2(mask, tex);
+}
+
+float vortexPush(vec2 v, float radiusY) {
+  float r = length(v);
+  return v.y / max(r, 1e-3) * radiusY * 0.7 * (1.0 - smoothstep(0.9, 2.6, r)) * smoothstep(0.0, 0.9, r);
+}
+
+vec3 shadeSurface(vec3 n, float ndv, float pix, vec3 sun, vec3 beta, float X) {
+  float fp = pix / max(sqrt(ndv), 0.12);
+  float fpLat = pix / max(ndv, 0.03);
+
+  float lat = asin(clamp(dot(n, AXIS), -1.0, 1.0));
+
+  float cyc = uTime / FLOW_T;
+  float phA = fract(cyc);
+  float phB = fract(cyc + 0.5);
+  float wA = 1.0 - abs(2.0 * phA - 1.0);
+  vec2 A = cloudPhase(n, lat, phA * FLOW_T, mod(floor(cyc), 61.0), fp);
+  vec2 B = cloudPhase(n, lat, phB * FLOW_T, mod(floor(cyc + 0.5), 61.0) + 0.5, fp);
+  vec2 cl = (A * wA + B * (1.0 - wA)) / sqrt(wA * wA + (1.0 - wA) * (1.0 - wA));
+
+  const vec2 GRS_R = vec2(0.05, 0.028);
+  vec2 grs = vortexFrame(n, 0.6, -0.1 + 0.03 * sin(uTime * 0.021), GRS_R);
+  float push = vortexPush(grs, GRS_R.y);
+  const vec2 OVAL_R = vec2(0.013, 0.0085);
+  vec2 ovals[5];
+  for (int i = 0; i < 5; i++) {
+    float fi = float(i);
+    float lon = fi * 0.085 - 0.3 + 0.02 * sin(uTime * 0.017 + fi * 1.9);
+    ovals[i] = vortexFrame(n, 0.545 + 0.003 * sin(fi * 2.3), lon, OVAL_R);
+    push += vortexPush(ovals[i], OVAL_R.y);
   }
-  // 极淡的星云尘带，给纯黑的太空一点纵深
-  vec2 q = a * vec2(2.2, 3.4);
-  float neb = noise2(q) * 0.55 + noise2(q * 2.1 + 4.0) * 0.3 + noise2(q * 4.3 + 9.0) * 0.15;
-  float band = exp(-pow((a.y + 0.35 * a.x + 0.05) * 2.6, 2.0));
-  col += mix(vec3(0.05, 0.04, 0.12), vec3(0.1, 0.05, 0.07), neb) * smoothstep(0.35, 0.85, neb) * band * 0.12 * uStars;
-  return col;
-}
 
-vec3 aces(vec3 x) {
-  return clamp((x * (2.51 * x + 0.03)) / (x * (2.43 * x + 0.59) + 0.14), 0.0, 1.0);
-}
+  float latB = lat + cl.x * 0.02 + push;
+  vec2 band = bandField(latB, fpLat);
+  float soft = 0.25 + abs(band.y) * fpLat;
+  float belt = smoothstep(-soft, soft, band.x - 0.1);
+  float edge = 1.0 - abs(2.0 * belt - 1.0);
 
+  float hue = 0.5 + 0.5 * sin(latB * 17.0 + 1.7);
+  vec3 beltCol = mix(uTerrain, uTerrain * vec3(1.25, 0.9, 0.62), hue);
+  vec3 zoneCol = mix(uSurface, uSurface * vec3(1.0, 0.9, 0.72), 1.0 - hue);
+  vec3 albedo = mix(zoneCol, beltCol, belt);
+  albedo *= 1.0 + cl.y * (1.6 + 2.4 * edge) + 0.1 * band.x;
+  float festoon = smoothstep(0.05, 0.2, cl.y) * edge;
+  albedo = mix(albedo, albedo * vec3(0.5, 0.62, 0.78), festoon * 0.55);
+
+  float rg = length(grs);
+  vec2 gv = vortex(grs, 0.18, 3.0, fp / GRS_R.y);
+  float collar = exp(-pow((rg - 1.1) / 0.22, 2.0));
+  albedo = mix(albedo, zoneCol * (1.1 + cl.y), collar * 0.75);
+  vec3 red = uTerrain * vec3(1.7, 0.66, 0.4);
+  red *= (0.7 + 0.4 * smoothstep(0.0, 0.85, rg)) * (1.0 + 1.8 * gv.y);
+  albedo = mix(albedo, red, gv.x);
+
+  for (int i = 0; i < 5; i++) {
+    float r = length(ovals[i]);
+    if (r < 1.6) {
+      vec2 o = vortex(ovals[i], -0.4, float(i) * 3.1, fp / OVAL_R.y);
+      albedo *= 1.0 - 0.35 * exp(-pow((r - 1.0) / 0.18, 2.0));
+      albedo = mix(albedo, uSurface * (1.08 + 1.4 * o.y) * (0.9 + 0.15 * smoothstep(0.0, 0.7, r)), o.x * 0.92);
+    }
+  }
+  albedo = max(albedo, 0.0);
+
+  float ngl = dot(n, sun);
+  float mu0 = max(ngl, 0.0);
+  float brdf = mu0 * smoothstep(-0.02, 0.1, ngl) + 0.015 * smoothstep(-0.12, 0.04, ngl);
+  vec3 sunT = exp(-beta * H * chapman(X, 0.0, ngl));
+  vec3 sky = uAtmosphere * uDensity * 0.05 * smoothstep(-0.3, 0.4, ngl);
+  return albedo * (SUN_I * 0.9 * sunT * brdf + sky + 0.004);
+}
+`;
+
+const MAIN = `
 void main() {
   vec2 frag = gl_FragCoord.xy;
   vec2 uv = (frag - 0.5 * uResolution) / uResolution.y;
   vec2 ptr = uPointer / uResolution;
   float pixAngle = 1.0 / (uResolution.y * FL);
 
-  // 相机：按期望的地平线高度反推俯角，指针带来轻微视差
   float D = 1.0 + ALT;
   float dip = acos(1.0 / D);
   float yaw = (ptr.x - 0.5) * 0.04;
@@ -252,7 +418,6 @@ void main() {
   vec3 up = cross(right, fw);
   vec3 rd = normalize(uv.x * right + uv.y * up + FL * fw);
 
-  // 太阳：默认在左上方画外，随指针沿地平线游移与升降；给定固定位置时锁定不动
   vec2 sunRef = mix(ptr, uSunPos, uSunFixed);
   float az = -0.85 + (sunRef.x - 0.5) * 1.2;
   float el = -0.24 - (sunRef.y - 0.5) * 0.3;
@@ -261,7 +426,6 @@ void main() {
   vec3 beta = uAtmosphere * 7.0 * uDensity + 1e-4;
   float X = 1.0 / H;
 
-  // 与星球求交；边缘按像素距离做解析抗锯齿
   float b = dot(ro, rd);
   float tc = -b;
   float impact = sqrt(max(dot(ro, ro) - b * b, 0.0));
@@ -269,7 +433,6 @@ void main() {
   float disc = b * b - dot(ro, ro) + 1.0;
   float tPlanet = disc > 0.0 ? -b - sqrt(disc) : tc;
 
-  // 背景：星空 + 太阳圆盘（只在未被星球遮挡的像素）
   float mu = dot(rd, sun);
   float sunAng = sqrt(max(2.0 * (1.0 - mu), 0.0));
   vec3 space = stars(rd, pixAngle);
@@ -279,56 +442,16 @@ void main() {
   if (coverage > 0.0) {
     vec3 n = normalize(ro + rd * tPlanet);
     float ndv = max(dot(n, -rd), 0.0);
-    float fp = tPlanet * pixAngle / max(sqrt(ndv), 0.12);
-
-    // 星球缓慢自转：地表从地平线方向朝观察者流动
-    float ang = -uTime * 0.01;
-    float cs = cos(ang);
-    float sn = sin(ang);
-    mat3 spin = mat3(1.0, 0.0, 0.0, 0.0, cs, sn, 0.0, -sn, cs);
-    vec3 q = spin * n;
-
-    vec4 ter = terrain(q * 4.0 + 2.0, fp * 4.0);
-    vec3 grad = ter.yzw * 4.0 * BUMP;
-    float crater = 0.0;
-    crater += craterLayer(q, 5.0, fp, 1.3, grad);
-    crater += craterLayer(q, 11.0, fp, 7.9, grad);
-    crater += craterLayer(q, 23.0, fp, 4.1, grad);
-    crater += craterLayer(q, 47.0, fp, 9.6, grad);
-    crater += craterLayer(q, 97.0, fp, 5.7, grad);
-    crater += craterLayer(q, 199.0, fp, 2.2, grad);
-    grad = grad * spin;
-    grad -= dot(grad, n) * n;
-    vec3 nb = normalize(n - grad);
-
-    // 反照率：大尺度暗区 + 中尺度尘带 + 细碎的岩屑明暗 + 坑底偏暗、坑沿抛射物偏亮
-    float big = fbm3(q * 1.7 + 4.0, fp * 1.7);
-    float mid = fbm3(q * 9.0 + 1.0, fp * 9.0);
-    float fine = fbm3(q * 70.0 + 3.0, fp * 70.0);
-    vec3 albedo = mix(uSurface, uTerrain, smoothstep(-0.12, 0.22, big + 0.35 * mid + 0.15 * fine));
-    albedo *= 0.8 + 0.7 * (mid + 0.5) * 0.6 + 2.0 * ter.x + 0.5 * fine;
-    albedo *= 1.0 + 0.3 * crater;
-    albedo = max(albedo, 0.0);
-
-    // 风化层：Lambert 与 Lommel-Seeliger 混合，日面更"平"、更有尘土感
-    float ngl = dot(n, sun);
-    float mu0 = max(dot(nb, sun), 0.0);
-    float lsl = mu0 / (mu0 + ndv + 1e-3);
-    float brdf = mix(mu0, lsl, 0.35) * smoothstep(-0.03, 0.08, ngl);
-    vec3 sunT = exp(-beta * H * chapman(X, 0.0, ngl));
-    vec3 sky = uAtmosphere * uDensity * 0.05 * smoothstep(-0.3, 0.4, ngl);
-    vec3 surface = albedo * (SUN_I * 0.9 * sunT * brdf + sky + 0.004);
+    vec3 surface = shadeSurface(n, ndv, tPlanet * pixAngle, sun, beta, X);
     background = mix(space, surface, coverage);
   }
 
-  // 大气单次散射：沿视线在大气壳内积分
   vec3 inscatter = vec3(0.0);
   vec3 trans = vec3(1.0);
   float bA = b * b - dot(ro, ro) + RT * RT;
   if (bA > 0.0) {
     float t0 = max(-b - sqrt(bA), 0.0);
     float t1 = mix(-b + sqrt(bA), tPlanet, coverage);
-    // 以视线最低点为界分两段，采样点按平方分布向最低点（密度最大处）加密
     float tm = clamp(tc, t0, t1);
     float jitter = fract(52.9829189 * fract(dot(frag, vec2(0.06711056, 0.00583715))));
     float du = 1.0 / float(HALF);
@@ -351,13 +474,11 @@ void main() {
     float g = 0.76;
     float phaseR = 3.0 / (16.0 * PI) * (1.0 + mu * mu);
     float phaseM = (1.0 - g * g) / (4.0 * PI * pow(1.0 + g * g - 2.0 * g * mu, 1.5));
-    // 前向散射的尘埃光晕主要留给边缘，地表上方削弱，避免逆光时整片地表被雾化
     inscatter = SUN_I * 7.0 * beta * scat * mix(phaseR, phaseM, 0.4 - 0.25 * coverage);
   }
 
   vec3 color = inscatter + trans * background;
 
-  // 太阳光晕：随太阳高出星球边缘的程度出现，并被掠射的大气染色
   vec3 toCenter = -normalize(ro);
   float sunCos = dot(sun, toCenter);
   float clearance = acos(clamp(sunCos, -1.0, 1.0)) - asin(1.0 / D);
@@ -371,7 +492,6 @@ void main() {
   float streak = exp(-abs(sd.y) * 110.0) * exp(-abs(sd.x) * 3.0) * 0.08 * step(0.0, dot(sun, fw));
   color += vec3(1.0, 0.93, 0.85) * sunTrans * sunVis * (glow + streak) * uSun;
 
-  // 暗角
   color *= 1.0 - 0.35 * dot(uv * vec2(0.6, 1.0), uv * vec2(0.6, 1.0));
   color = pow(aces(color * 0.9), vec3(1.0 / 2.2));
   color += (hash12(frag + fract(uTime)) - 0.5) / 255.0;
@@ -380,13 +500,19 @@ void main() {
 }
 `;
 
+const SHADERS: Record<PlanetKind, string> = {
+  mars: COMMON + MARS_SURFACE + MAIN,
+  jupiter: COMMON + JUPITER_SURFACE + MAIN,
+};
+
 export function Planet({
   children,
   className,
-  color = '#c1532b',
-  terrainColor = '#4e1e12',
-  atmosphereColor = '#f2a57c',
-  atmosphere = 0.6,
+  planet = 'mars',
+  color,
+  terrainColor,
+  atmosphereColor,
+  atmosphere,
   craters = 0.6,
   stars = 0.6,
   horizon = 0.62,
@@ -395,16 +521,22 @@ export function Planet({
   sunPosition,
   interactive = true,
 }: PlanetProps) {
+  const preset = PLANET_PRESETS[planet] ?? PLANET_PRESETS.mars;
+  const surfaceColor = color ?? preset.color;
+  const darkColor = terrainColor ?? preset.terrainColor;
+  const airColor = atmosphereColor ?? preset.atmosphereColor;
+  const density = atmosphere ?? preset.atmosphere;
+
   const canvasRef = useShaderCanvas({
-    fragmentShader: FRAGMENT_SHADER,
+    fragmentShader: SHADERS[planet] ?? SHADERS.mars,
     speed,
     interactive,
     onDraw: ({ gl, uniform }) => {
       const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
-      gl.uniform3fv(uniform('uSurface'), hexToLinearRgb(color));
-      gl.uniform3fv(uniform('uTerrain'), hexToLinearRgb(terrainColor));
-      gl.uniform3fv(uniform('uAtmosphere'), hexToLinearRgb(atmosphereColor));
-      gl.uniform1f(uniform('uDensity'), clamp01(atmosphere));
+      gl.uniform3fv(uniform('uSurface'), hexToLinearRgb(surfaceColor));
+      gl.uniform3fv(uniform('uTerrain'), hexToLinearRgb(darkColor));
+      gl.uniform3fv(uniform('uAtmosphere'), hexToLinearRgb(airColor));
+      gl.uniform1f(uniform('uDensity'), clamp01(density));
       gl.uniform1f(uniform('uCraters'), clamp01(craters));
       gl.uniform1f(uniform('uStars'), clamp01(stars));
       gl.uniform1f(uniform('uHorizon'), Math.min(0.95, Math.max(0.05, horizon)));
@@ -417,10 +549,11 @@ export function Planet({
   return (
     <div
       className={cn('elyri-planet', className)}
+      data-planet={planet}
       style={
         {
-          '--elyri-planet-color': color,
-          '--elyri-planet-atmosphere': atmosphereColor,
+          '--elyri-planet-color': surfaceColor,
+          '--elyri-planet-atmosphere': airColor,
           '--elyri-planet-horizon': `${horizon * 100}%`,
         } as CSSProperties
       }

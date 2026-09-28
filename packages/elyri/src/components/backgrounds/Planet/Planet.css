@@ -6,7 +6,6 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  /* WebGL 不可用或尚未绘制时的底色：深空 + 地平线处的一抹大气辉光 */
   background:
     radial-gradient(
       120% 60% at 50% calc(var(--elyri-planet-horizon) + 55%),

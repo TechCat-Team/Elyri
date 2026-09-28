@@ -1,16 +1,23 @@
 import { lazy } from 'react';
 
+import type { PlanetKind } from 'elyri';
+
 import { usageExample } from '../../../lib/code';
 import type { ComponentDoc, Lang } from '../../../lib/types';
 
 // 演示按需加载，让每个组件的 Demo 各自成为一个 chunk
 const PlanetDemo = lazy(() => import('./PlanetDemo'));
 
+const PRESETS: Record<
+  PlanetKind,
+  { color: string; terrainColor: string; atmosphereColor: string; atmosphere: number }
+> = {
+  mars: { color: '#c1532b', terrainColor: '#4e1e12', atmosphereColor: '#f2a57c', atmosphere: 0.6 },
+  jupiter: { color: '#ecdcc0', terrainColor: '#a86a3a', atmosphereColor: '#d9cdb8', atmosphere: 0.3 },
+};
+
 const DEFAULTS = {
-  color: '#c1532b',
-  terrainColor: '#4e1e12',
-  atmosphereColor: '#f2a57c',
-  atmosphere: 0.6,
+  planet: 'mars' as PlanetKind,
   craters: 0.6,
   stars: 0.6,
   horizon: 0.62,
@@ -20,8 +27,9 @@ const DEFAULTS = {
 const copy = {
   zh: {
     description:
-      'WebGL 实时渲染的轨道视角星球，默认是火星：程序化生成的地形与陨石坑缓缓流过，大气单次散射勾勒出发光的边缘，掠射处透出互补色；太阳随指针沿地平线游移。',
+      'WebGL 实时渲染的轨道视角星球，可在火星与木星间切换：火星上程序化生成的地形与陨石坑缓缓流过；木星的云带随交替急流滑动，大红斑与白卵在湍流中旋转。大气单次散射勾勒出发光的边缘，掠射处透出互补色；太阳随指针沿地平线游移。',
     textLabel: '文本',
+    planetLabel: '星球',
     colorLabel: '地表色',
     terrainLabel: '暗色地貌',
     atmosphereColorLabel: '大气色',
@@ -36,11 +44,12 @@ const copy = {
     sunYLabel: '太阳 Y',
     interactiveLabel: '太阳跟随指针',
     descChildren: '叠加在背景之上的内容',
-    descColor: '地表主色（hex）',
-    descTerrain: '暗色地貌的颜色（hex）',
-    descAtmosphereColor: '大气散射色（hex），掠射处会透出它的互补色',
-    descAtmosphere: '大气浓度，0 为无大气',
-    descCraters: '陨石坑数量与深度，0 为无陨石坑',
+    descPlanet: "星球种类，'mars' 为火星、'jupiter' 为木星；切换后地表着色与默认配色随之改变",
+    descColor: '地表主色（hex）；木星为亮色区带。默认取所选星球的配色',
+    descTerrain: '暗色地貌的颜色（hex）；木星为暗色云带。默认取所选星球的配色',
+    descAtmosphereColor: '大气散射色（hex），掠射处会透出它的互补色。默认取所选星球的配色',
+    descAtmosphere: '大气浓度，0 为无大气。默认取所选星球的预设',
+    descCraters: '陨石坑数量与深度，0 为无陨石坑；仅火星生效',
     descStars: '星空密度，0 为无星星',
     descHorizon: '地平线弧顶距容器顶部的比例',
     descSpeed: '动画速度倍率',
@@ -51,8 +60,9 @@ const copy = {
   },
   en: {
     description:
-      'A WebGL planet seen from orbit, Mars by default: procedural terrain and craters drift past, single-scattering atmosphere lights up the limb with its complementary tint at grazing angles, and the sun follows the pointer along the horizon.',
+      'A WebGL planet seen from orbit, switchable between Mars and Jupiter: procedural Martian terrain and craters drift past, while Jupiter’s cloud bands slide along alternating jets with the Great Red Spot and white ovals churning in the turbulence. Single-scattering atmosphere lights up the limb with its complementary tint at grazing angles, and the sun follows the pointer along the horizon.',
     textLabel: 'Text',
+    planetLabel: 'Planet',
     colorLabel: 'Surface',
     terrainLabel: 'Dark terrain',
     atmosphereColorLabel: 'Atmosphere',
@@ -67,11 +77,13 @@ const copy = {
     sunYLabel: 'Sun Y',
     interactiveLabel: 'Sun follows pointer',
     descChildren: 'Content layered above the background',
-    descColor: 'Main surface color (hex)',
-    descTerrain: 'Dark terrain color (hex)',
-    descAtmosphereColor: 'Atmosphere scattering color (hex); grazing views reveal its complement',
-    descAtmosphere: 'Atmosphere density, 0 disables it',
-    descCraters: 'Crater count and depth, 0 disables them',
+    descPlanet: "Which planet to render, 'mars' or 'jupiter'; switches the surface shading and default palette",
+    descColor: 'Main surface color (hex); the light zones on Jupiter. Defaults to the planet palette',
+    descTerrain: 'Dark terrain color (hex); the dark belts on Jupiter. Defaults to the planet palette',
+    descAtmosphereColor:
+      'Atmosphere scattering color (hex); grazing views reveal its complement. Defaults to the planet palette',
+    descAtmosphere: 'Atmosphere density, 0 disables it. Defaults to the planet preset',
+    descCraters: 'Crater count and depth, 0 disables them; Mars only',
     descStars: 'Star density, 0 disables them',
     descHorizon: 'Distance from the top of the container to the horizon crest, as a fraction',
     descSpeed: 'Animation speed multiplier',
@@ -86,6 +98,7 @@ const copy = {
 export const planetDoc = (lang: Lang): ComponentDoc => {
   const t = copy[lang];
   const unlessDefault = <T,>(value: T, fallback: T) => (value === fallback ? undefined : value);
+  const initial = PRESETS[DEFAULTS.planet];
 
   return {
     slug: 'planet',
@@ -96,14 +109,21 @@ export const planetDoc = (lang: Lang): ComponentDoc => {
     dependencies: ['WebGL'],
     controls: [
       { type: 'text', name: 'text', label: t.textLabel, default: 'Components that come alive' },
-      { type: 'color', name: 'color', label: t.colorLabel, default: DEFAULTS.color },
-      { type: 'color', name: 'terrainColor', label: t.terrainLabel, default: DEFAULTS.terrainColor },
-      { type: 'color', name: 'atmosphereColor', label: t.atmosphereColorLabel, default: DEFAULTS.atmosphereColor },
+      {
+        type: 'select',
+        name: 'planet',
+        label: t.planetLabel,
+        default: DEFAULTS.planet,
+        options: Object.keys(PRESETS),
+      },
+      { type: 'color', name: 'color', label: t.colorLabel, default: initial.color },
+      { type: 'color', name: 'terrainColor', label: t.terrainLabel, default: initial.terrainColor },
+      { type: 'color', name: 'atmosphereColor', label: t.atmosphereColorLabel, default: initial.atmosphereColor },
       {
         type: 'number',
         name: 'atmosphere',
         label: t.atmosphereLabel,
-        default: DEFAULTS.atmosphere,
+        default: initial.atmosphere,
         min: 0,
         max: 1,
         step: 0.05,
@@ -126,17 +146,14 @@ export const planetDoc = (lang: Lang): ComponentDoc => {
       { type: 'number', name: 'sunY', label: t.sunYLabel, default: 0.5, min: 0, max: 1, step: 0.01 },
       { type: 'boolean', name: 'interactive', label: t.interactiveLabel, default: true },
     ],
+    linkedValues: (name, value) => (name === 'planet' ? { ...PRESETS[value as PlanetKind] } : undefined),
     props: [
       { name: 'children', type: 'ReactNode', description: t.descChildren },
-      { name: 'color', type: 'string', default: `'${DEFAULTS.color}'`, description: t.descColor },
-      { name: 'terrainColor', type: 'string', default: `'${DEFAULTS.terrainColor}'`, description: t.descTerrain },
-      {
-        name: 'atmosphereColor',
-        type: 'string',
-        default: `'${DEFAULTS.atmosphereColor}'`,
-        description: t.descAtmosphereColor,
-      },
-      { name: 'atmosphere', type: 'number', default: String(DEFAULTS.atmosphere), description: t.descAtmosphere },
+      { name: 'planet', type: "'mars' | 'jupiter'", default: `'${DEFAULTS.planet}'`, description: t.descPlanet },
+      { name: 'color', type: 'string', description: t.descColor },
+      { name: 'terrainColor', type: 'string', description: t.descTerrain },
+      { name: 'atmosphereColor', type: 'string', description: t.descAtmosphereColor },
+      { name: 'atmosphere', type: 'number', description: t.descAtmosphere },
       { name: 'craters', type: 'number', default: String(DEFAULTS.craters), description: t.descCraters },
       { name: 'stars', type: 'number', default: String(DEFAULTS.stars), description: t.descStars },
       { name: 'horizon', type: 'number', default: String(DEFAULTS.horizon), description: t.descHorizon },
@@ -149,6 +166,7 @@ export const planetDoc = (lang: Lang): ComponentDoc => {
     render: (v) => (
       <PlanetDemo
         text={v.text as string}
+        planet={v.planet as PlanetKind}
         color={v.color as string}
         terrainColor={v.terrainColor as string}
         atmosphereColor={v.atmosphereColor as string}
@@ -162,17 +180,19 @@ export const planetDoc = (lang: Lang): ComponentDoc => {
         interactive={v.interactive as boolean}
       />
     ),
-    usage: (v, codeLang) =>
-      usageExample(codeLang, {
+    usage: (v, codeLang) => {
+      const preset = PRESETS[v.planet as PlanetKind];
+      return usageExample(codeLang, {
         component: 'Planet',
         propsType: 'PlanetProps',
         name: 'Hero',
         props: {
-          color: unlessDefault(v.color, DEFAULTS.color),
-          terrainColor: unlessDefault(v.terrainColor, DEFAULTS.terrainColor),
-          atmosphereColor: unlessDefault(v.atmosphereColor, DEFAULTS.atmosphereColor),
-          atmosphere: unlessDefault(v.atmosphere, DEFAULTS.atmosphere),
-          craters: unlessDefault(v.craters, DEFAULTS.craters),
+          planet: unlessDefault(v.planet, DEFAULTS.planet),
+          color: unlessDefault(v.color, preset.color),
+          terrainColor: unlessDefault(v.terrainColor, preset.terrainColor),
+          atmosphereColor: unlessDefault(v.atmosphereColor, preset.atmosphereColor),
+          atmosphere: unlessDefault(v.atmosphere, preset.atmosphere),
+          craters: v.planet === 'mars' ? unlessDefault(v.craters, DEFAULTS.craters) : undefined,
           stars: unlessDefault(v.stars, DEFAULTS.stars),
           horizon: unlessDefault(v.horizon, DEFAULTS.horizon),
           speed: unlessDefault(v.speed, DEFAULTS.speed),
@@ -181,6 +201,7 @@ export const planetDoc = (lang: Lang): ComponentDoc => {
           interactive: v.interactive ? undefined : false,
         },
         children: `<h1>${v.text as string}</h1>`,
-      }),
+      });
+    },
   };
 };

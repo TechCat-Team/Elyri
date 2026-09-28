@@ -105,7 +105,7 @@ export function ComponentPage({ doc, prev, next }: ComponentPageProps) {
   const staticUsage = <CodeBlock title={usageTitle} code={usage} switcher={usageSwitcher} />;
 
   const handleChange = (name: string, value: ControlValue) => {
-    setValues((current) => ({ ...current, [name]: value }));
+    setValues((current) => ({ ...current, [name]: value, ...doc.linkedValues?.(name, value) }));
   };
 
   const handleReset = () => {
