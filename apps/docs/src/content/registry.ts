@@ -6,6 +6,7 @@ import { countUpDoc } from './components/count-up';
 import { dragonScalesDoc } from './components/dragon-scales';
 import { fadeInDoc } from './components/fade-in';
 import { gradientTextDoc } from './components/gradient-text';
+import { morphGridDoc } from './components/morph-grid';
 import { particleTextDoc } from './components/particle-text';
 import { pixelVortexDoc } from './components/pixel-vortex';
 import { scaleInDoc } from './components/scale-in';
@@ -36,6 +37,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => [
   silkWavesDoc(lang),
   causticsDoc(lang),
   pixelVortexDoc(lang),
+  morphGridDoc(lang),
 ];
 
 export const getCategories = (docs: ComponentDoc[]) => [...new Set(docs.map((doc) => doc.category))];

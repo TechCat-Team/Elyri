@@ -12,6 +12,7 @@ const components = {
   'dragon-scales': { folder: 'backgrounds/DragonScales', name: 'DragonScales' },
   'fade-in': { folder: 'animations/FadeIn', name: 'FadeIn' },
   'gradient-text': { folder: 'text/GradientText', name: 'GradientText' },
+  'morph-grid': { folder: 'backgrounds/MorphGrid', name: 'MorphGrid' },
   'particle-text': { folder: 'text/ParticleText', name: 'ParticleText' },
   'pixel-vortex': { folder: 'backgrounds/PixelVortex', name: 'PixelVortex' },
   'scale-in': { folder: 'animations/ScaleIn', name: 'ScaleIn' },

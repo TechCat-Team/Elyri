@@ -54,6 +54,7 @@ export function Hero() {
 | `Aurora`        | Backgrounds | WebGL aurora night sky with layered curtains and stars  |
 | `SilkWaves`     | Backgrounds | WebGL flowing silk with satin sheen                     |
 | `Caustics`      | Backgrounds | WebGL underwater caustics with pointer ripples          |
+| `MorphGrid`     | Backgrounds | WebGL grid cycling between circles, squares and crosses |
 | `GradientText`  | Text        | Applies an animated gradient to text                    |
 | `SplitReveal`   | Text        | Reveals text character by character as it enters view   |
 | `Typewriter`    | Text        | Types text out with a blinking cursor                   |
