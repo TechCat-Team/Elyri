@@ -26,6 +26,9 @@ const PACKAGE_ROOT = {
   '@elyri/blocks': fileURLToPath(new URL('../../blocks/', import.meta.url)),
 };
 
+/** Every package the registry pulls source from */
+const manifestPackages = [...new Set(Object.values(components).map((entry) => entry.pkg))];
+
 const tempDir = () => mkdtemp(join(tmpdir(), 'elyri-cli-'));
 
 /** Create a throwaway project and link the given source packages into its node_modules */
@@ -199,11 +202,10 @@ test('add honours an explicit dir', async () => {
 });
 
 test('every registered component can be copied', async () => {
-  await withProject(['@elyri/motion'], async (cwd) => {
+  await withProject(manifestPackages, async (cwd) => {
     await add({ cwd, names: Object.keys(components), registry: components, manager: 'pnpm' });
 
-    for (const { name, pkg } of Object.values(components)) {
-      assert.equal(pkg, '@elyri/motion');
+    for (const { name } of Object.values(components)) {
       const entry = await readFile(join(cwd, 'src/components/elyri', name, 'index.ts'), 'utf8');
       assert.match(entry, /^export /m);
     }

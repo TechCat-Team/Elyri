@@ -26,6 +26,20 @@
   --tok-number: #e5c07b;
   --tok-attr: #d8b38a;
   color-scheme: dark;
+
+  /* @elyri/ui 组件的中性 token 跟随站点主题（组件库只提供默认值） */
+  --elyri-ui-accent: var(--docs-accent);
+  --elyri-ui-accent-text: var(--docs-on-accent);
+  --elyri-ui-accent-soft: var(--docs-accent-soft);
+  --elyri-ui-text: var(--docs-text);
+  --elyri-ui-muted: var(--docs-muted);
+  --elyri-ui-surface: var(--docs-surface);
+  --elyri-ui-surface-muted: #1c2027;
+  --elyri-ui-border: var(--docs-border);
+  --elyri-ui-ring: 0 0 0 3px var(--docs-accent-soft);
+  --elyri-ui-danger: #e5766f;
+  --elyri-ui-success: #5cc394;
+  --elyri-ui-warning: #e0a95f;
 }
 
 :root[data-theme='light'] {
@@ -53,4 +67,18 @@
   --tok-number: #9a6700;
   --tok-attr: #8a5a1a;
   color-scheme: light;
+
+  /* @elyri/ui 组件的中性 token 跟随站点主题（组件库只提供默认值） */
+  --elyri-ui-accent: var(--docs-accent);
+  --elyri-ui-accent-text: var(--docs-on-accent);
+  --elyri-ui-accent-soft: var(--docs-accent-soft);
+  --elyri-ui-text: var(--docs-text);
+  --elyri-ui-muted: var(--docs-muted);
+  --elyri-ui-surface: var(--docs-surface);
+  --elyri-ui-surface-muted: #f4f5f7;
+  --elyri-ui-border: var(--docs-border);
+  --elyri-ui-ring: 0 0 0 3px var(--docs-accent-soft);
+  --elyri-ui-danger: #d64545;
+  --elyri-ui-success: #2f9e6b;
+  --elyri-ui-warning: #b8791a;
 }

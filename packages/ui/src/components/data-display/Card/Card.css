@@ -1,0 +1,37 @@
+.elyri-ui-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px;
+  border: 1px solid var(--elyri-ui-border);
+  border-radius: calc(var(--elyri-ui-radius) + 4px);
+  background: var(--elyri-ui-surface);
+  color: var(--elyri-ui-text);
+  box-shadow: var(--elyri-ui-shadow);
+}
+
+.elyri-ui-card__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.elyri-ui-card__description {
+  margin: 0;
+  color: var(--elyri-ui-muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.elyri-ui-card__content {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.elyri-ui-card__footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}

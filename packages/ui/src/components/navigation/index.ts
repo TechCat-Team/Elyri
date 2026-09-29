@@ -1,2 +1,2 @@
-// navigation 分类尚未动工。Accordion、Tabs、Breadcrumb 等在此导出。
-export {};
+// navigation 分类出口。Accordion、Breadcrumb 等后续在此追加。
+export * from './Tabs';

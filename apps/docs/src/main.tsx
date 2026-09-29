@@ -7,6 +7,7 @@ import { DEFAULT_LANG, href, isLang } from './lib/routes';
 import { RouterProvider } from './lib/router';
 
 import '@elyri/motion/styles.css';
+import '@elyri/ui/styles.css';
 import './styles/tokens.css';
 import './styles/base.css';
 import './styles/shell.css';

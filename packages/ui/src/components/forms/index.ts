@@ -1,2 +1,4 @@
-// forms 分类尚未动工。Button、Input、Checkbox、Radio、Switch、Select、Slider 等在此导出。
-export {};
+// forms 分类出口。Checkbox、Radio、Select、Slider 等后续在此追加。
+export * from './Button';
+export * from './Input';
+export * from './Switch';

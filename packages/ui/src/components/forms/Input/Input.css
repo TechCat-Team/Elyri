@@ -1,0 +1,64 @@
+.elyri-ui-input {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--elyri-ui-border);
+  border-radius: var(--elyri-ui-radius);
+  background: var(--elyri-ui-surface);
+  color: var(--elyri-ui-text);
+  font: inherit;
+  transition:
+    border-color var(--elyri-ui-duration) var(--elyri-ui-ease),
+    box-shadow var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-input::placeholder {
+  color: var(--elyri-ui-muted);
+}
+
+.elyri-ui-input:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--elyri-ui-border) 55%, var(--elyri-ui-text));
+}
+
+.elyri-ui-input:focus-visible {
+  outline: none;
+  border-color: var(--elyri-ui-accent);
+  box-shadow: var(--elyri-ui-ring);
+}
+
+.elyri-ui-input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.elyri-ui-input.is-invalid {
+  border-color: var(--elyri-ui-danger);
+}
+
+.elyri-ui-input.is-invalid:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--elyri-ui-danger) 35%, transparent);
+}
+
+/* 尺寸 */
+.elyri-ui-input--sm {
+  height: 32px;
+  padding: 0 10px;
+  font-size: 13px;
+}
+
+.elyri-ui-input--md {
+  height: 38px;
+  padding: 0 12px;
+  font-size: 14px;
+}
+
+.elyri-ui-input--lg {
+  height: 44px;
+  padding: 0 14px;
+  font-size: 15px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-ui-input {
+    transition: none;
+  }
+}

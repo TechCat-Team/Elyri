@@ -1,2 +1,3 @@
-// data-display 分类尚未动工。Avatar、Badge、Card 等在此导出。
-export {};
+// data-display 分类出口。Avatar 等后续在此追加。
+export * from './Badge';
+export * from './Card';

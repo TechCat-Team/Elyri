@@ -5,7 +5,9 @@
     "types": ["vite/client", "node"],
     "paths": {
       "@elyri/motion": ["../../packages/motion/src/index.ts"],
-      "@elyri/motion/styles.css": ["../../packages/motion/src/styles/index.css"]
+      "@elyri/motion/styles.css": ["../../packages/motion/src/styles/index.css"],
+      "@elyri/ui": ["../../packages/ui/src/index.ts"],
+      "@elyri/ui/styles.css": ["../../packages/ui/src/styles/index.css"]
     }
   },
   "include": ["src", "vite.config.ts"]

@@ -1,5 +1,4 @@
-import { docPkg, sections } from '../lib/sections';
-import type { SectionNavItem } from '../lib/sections';
+import { docPkg } from '../lib/sections';
 import type { ComponentDoc, Lang, Pkg } from '../lib/types';
 
 import { auroraDoc } from './components/aurora';
@@ -33,6 +32,14 @@ import { tiltDoc } from './components/tilt';
 import { typewriterDoc } from './components/typewriter';
 import { velvetDoc } from './components/velvet';
 import { waveTextDoc } from './components/wave-text';
+
+// @elyri/ui 组件文档
+import { badgeDoc } from './components/badge';
+import { buttonDoc } from './components/button';
+import { cardDoc } from './components/card';
+import { inputDoc } from './components/input';
+import { switchDoc } from './components/switch';
+import { tabsDoc } from './components/tabs';
 
 /**
  * 全部组件文档。新增组件只需在 components 下建一个文件夹，
@@ -72,6 +79,12 @@ export const getDocs = (lang: Lang): ComponentDoc[] => {
     flipTilesDoc(lang),
     haloDoc(lang),
     asciiImageDoc(lang),
+    buttonDoc(lang),
+    inputDoc(lang),
+    switchDoc(lang),
+    badgeDoc(lang),
+    cardDoc(lang),
+    tabsDoc(lang),
   ];
 
   const categoryOrder = [...new Set(docs.map((doc) => doc.category))];
@@ -84,19 +97,3 @@ export const getCategories = (docs: ComponentDoc[]) => [...new Set(docs.map((doc
 
 /** 某个分区下的全部组件 */
 export const getSectionDocs = (lang: Lang, pkg: Pkg, docs = getDocs(lang)) => docs.filter((doc) => docPkg(doc) === pkg);
-
-/**
- * 顶栏与侧栏的分区导航。分区内还没有组件时不给链接，
- * 前端据此渲染为「即将推出」的禁用项。
- */
-export const getSectionNav = (lang: Lang): SectionNavItem[] => {
-  const docs = getDocs(lang);
-  return sections.map((section) => {
-    const items = getSectionDocs(lang, section.id, docs);
-    return {
-      id: section.id,
-      labelKey: section.labelKey,
-      path: items.length ? `${section.path}/${items[0].slug}` : undefined,
-    };
-  });
-};

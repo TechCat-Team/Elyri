@@ -3,24 +3,18 @@ import type { ComponentDoc, Pkg } from './types';
 
 export interface Section {
   id: Pkg;
-  /** 站内路径前缀，不含语言段 */
+  /** 分区落地页的站内路径，不含语言段 */
   path: string;
   labelKey: MessageKey;
+  descriptionKey: MessageKey;
 }
 
 /** 顶层分区。动效沿用既有的 /components 路径（已被搜索引擎收录，不迁移）。 */
 export const sections: readonly Section[] = [
-  { id: 'motion', path: 'components', labelKey: 'section.motion' },
-  { id: 'ui', path: 'ui', labelKey: 'section.ui' },
-  { id: 'blocks', path: 'blocks', labelKey: 'section.blocks' },
+  { id: 'motion', path: 'components', labelKey: 'section.motion', descriptionKey: 'section.motion.desc' },
+  { id: 'ui', path: 'ui', labelKey: 'section.ui', descriptionKey: 'section.ui.desc' },
+  { id: 'blocks', path: 'blocks', labelKey: 'section.blocks', descriptionKey: 'section.blocks.desc' },
 ];
-
-/** 顶栏与侧栏共用的分区导航项；path 为空表示该分区尚未动工 */
-export interface SectionNavItem {
-  id: Pkg;
-  labelKey: MessageKey;
-  path?: string;
-}
 
 export const sectionById = (id: Pkg): Section => sections.find((section) => section.id === id) ?? sections[0];
 

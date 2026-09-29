@@ -33,4 +33,12 @@ export const components = {
   typewriter: { pkg: '@elyri/motion', folder: 'text/Typewriter', name: 'Typewriter' },
   velvet: { pkg: '@elyri/motion', folder: 'backgrounds/Velvet', name: 'Velvet' },
   'wave-text': { pkg: '@elyri/motion', folder: 'text/WaveText', name: 'WaveText' },
+
+  // @elyri/ui
+  badge: { pkg: '@elyri/ui', folder: 'data-display/Badge', name: 'Badge' },
+  button: { pkg: '@elyri/ui', folder: 'forms/Button', name: 'Button' },
+  card: { pkg: '@elyri/ui', folder: 'data-display/Card', name: 'Card' },
+  input: { pkg: '@elyri/ui', folder: 'forms/Input', name: 'Input' },
+  switch: { pkg: '@elyri/ui', folder: 'forms/Switch', name: 'Switch' },
+  tabs: { pkg: '@elyri/ui', folder: 'navigation/Tabs', name: 'Tabs' },
 };

@@ -3,7 +3,7 @@ import type { MouseEvent } from 'react';
 
 import { useI18n } from '../lib/i18n';
 import { Link } from '../lib/router';
-import type { SectionNavItem } from '../lib/sections';
+import type { Section } from '../lib/sections';
 import { site } from '../lib/site';
 import type { Pkg } from '../lib/types';
 
@@ -11,7 +11,7 @@ import { LangSwitch } from './LangSwitch';
 import { ThemeToggle } from './ThemeToggle';
 
 interface HeaderProps {
-  sectionNav: SectionNavItem[];
+  sections: readonly Section[];
   /** 当前页面所属分区；引导页没有分区 */
   activeSection?: Pkg;
   onToggleTheme: (event: MouseEvent<HTMLElement>) => void;
@@ -24,7 +24,7 @@ const noop = () => () => {};
 const isMacPlatform = () => navigator.platform.toUpperCase().includes('MAC');
 const serverIsMac = () => false;
 
-export function Header({ sectionNav, activeSection, onToggleTheme, onOpenSearch, onToggleMenu }: HeaderProps) {
+export function Header({ sections, activeSection, onToggleTheme, onOpenSearch, onToggleMenu }: HeaderProps) {
   const { t } = useI18n();
   const isMac = useSyncExternalStore(noop, isMacPlatform, serverIsMac);
 
@@ -43,19 +43,15 @@ export function Header({ sectionNav, activeSection, onToggleTheme, onOpenSearch,
         <span className="version-badge">v{site.version}</span>
 
         <nav className="section-tabs" aria-label={t('nav.sections')}>
-          {sectionNav.map((section) =>
+          {sections.map((section) =>
             section.id === activeSection ? (
               <span key={section.id} className="section-tab is-active" aria-current="page">
                 {t(section.labelKey)}
               </span>
-            ) : section.path ? (
+            ) : (
               <Link key={section.id} to={section.path} className="section-tab">
                 {t(section.labelKey)}
               </Link>
-            ) : (
-              <span key={section.id} className="section-tab is-disabled" title={t('section.soon')}>
-                {t(section.labelKey)}
-              </span>
             ),
           )}
         </nav>

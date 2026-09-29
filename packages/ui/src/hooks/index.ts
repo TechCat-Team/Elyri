@@ -1,2 +1,2 @@
-// UI 共享 hooks 出口。useControllableState、useFocusTrap、useOnClickOutside、useFloatingPosition 等在此导出。
-export {};
+// UI 共享 hooks 出口。useFocusTrap、useOnClickOutside、useFloatingPosition 等后续在此追加。
+export { useControllableState } from './useControllableState';

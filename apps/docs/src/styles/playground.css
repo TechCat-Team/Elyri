@@ -584,6 +584,38 @@
 :root[data-theme='light'] .demo-pill {
   border-color: transparent;
 }
+/* @elyri/ui 组件演示 */
+.demo-ui-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.demo-ui-row--start {
+  justify-content: flex-start;
+}
+.demo-ui-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+.demo-ui-label {
+  color: var(--docs-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+.demo-ui-switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 14px;
+}
+.demo-ui-tabs {
+  width: min(480px, 100%);
+}
 /* 指针倾斜演示 */
 .demo-tilt {
   display: flex;

@@ -1,0 +1,1 @@
+export { buttonDoc } from './doc';

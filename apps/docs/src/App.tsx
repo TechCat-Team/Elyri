@@ -4,14 +4,15 @@ import { Header } from './components/Header';
 import { SearchDialog } from './components/SearchDialog';
 import { Sidebar } from './components/Sidebar';
 import { guides } from './content/guides';
-import { getCategories, getDocs, getSectionNav } from './content/registry';
+import { getCategories, getDocs, getSectionDocs } from './content/registry';
 import { useDocumentHead } from './lib/hooks/useDocumentHead';
 import { useTheme } from './lib/hooks/useTheme';
 import { useI18n } from './lib/i18n';
 import { pageMeta } from './lib/meta';
 import { useRoute } from './lib/router';
-import { docPkg, sectionByPath } from './lib/sections';
+import { sectionByPath, sections } from './lib/sections';
 import { ComponentPage } from './pages/ComponentPage';
+import { SectionPage } from './pages/SectionPage';
 
 export function App() {
   const { lang, path, to } = useRoute();
@@ -21,13 +22,9 @@ export function App() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const docs = useMemo(() => getDocs(lang), [lang]);
-  const sectionNav = useMemo(() => getSectionNav(lang), [lang]);
   const section = sectionByPath(path);
   // 侧栏只列当前分区的组件；引导页不属于任何分区，展示全部
-  const sectionDocs = useMemo(
-    () => (section ? docs.filter((doc) => docPkg(doc) === section.id) : docs),
-    [docs, section],
-  );
+  const sectionDocs = useMemo(() => (section ? getSectionDocs(lang, section.id, docs) : docs), [docs, lang, section]);
   const categories = useMemo(() => getCategories(sectionDocs), [sectionDocs]);
   // 按侧边栏顺序排列，便于上一个 / 下一个导航
   const ordered = useMemo(
@@ -58,6 +55,15 @@ export function App() {
   if (index >= 0) {
     const doc = ordered[index];
     page = <ComponentPage key={doc.slug} doc={doc} prev={ordered[index - 1]} next={ordered[index + 1]} />;
+  } else if (section && path === section.path) {
+    page = (
+      <SectionPage
+        label={t(section.labelKey)}
+        description={t(section.descriptionKey)}
+        emptyLabel={t('section.soon')}
+        docs={ordered}
+      />
+    );
   } else if (guide) {
     page = <guide.Component docs={docs} />;
   } else {
@@ -75,7 +81,7 @@ export function App() {
   return (
     <div className="docs">
       <Header
-        sectionNav={sectionNav}
+        sections={sections}
         activeSection={section?.id}
         onToggleTheme={toggleTheme}
         onOpenSearch={() => setSearchOpen(true)}
@@ -86,7 +92,7 @@ export function App() {
           docs={ordered}
           categories={categories}
           guides={navItems}
-          sectionNav={sectionNav}
+          sections={sections}
           activeSection={section?.id}
           activePath={path}
           open={menuOpen}

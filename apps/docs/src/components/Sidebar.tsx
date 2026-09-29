@@ -2,14 +2,14 @@ import { useI18n } from '../lib/i18n';
 import { categoryLabel } from '../lib/messages';
 import { Link } from '../lib/router';
 import { docPath } from '../lib/sections';
-import type { SectionNavItem } from '../lib/sections';
+import type { Section } from '../lib/sections';
 import type { ComponentDoc, NavItem, Pkg } from '../lib/types';
 
 interface SidebarProps {
   docs: ComponentDoc[];
   categories: string[];
   guides: NavItem[];
-  sectionNav: SectionNavItem[];
+  sections: readonly Section[];
   activeSection?: Pkg;
   activePath: string;
   open: boolean;
@@ -20,7 +20,7 @@ export function Sidebar({
   docs,
   categories,
   guides,
-  sectionNav,
+  sections,
   activeSection,
   activePath,
   open,
@@ -36,20 +36,15 @@ export function Sidebar({
         <nav onClick={onClose}>
           <div className="sidebar-group section-nav">
             <p className="sidebar-group-title">{t('nav.sections')}</p>
-            {sectionNav.map((section) =>
+            {sections.map((section) =>
               section.id === activeSection ? (
                 <span key={section.id} className="sidebar-link is-active" aria-current="page">
                   {t(section.labelKey)}
                 </span>
-              ) : section.path ? (
-                <Link key={section.id} to={section.path} className={linkClass(section.path)}>
+              ) : (
+                <Link key={section.id} to={section.path} className="sidebar-link">
                   {t(section.labelKey)}
                 </Link>
-              ) : (
-                <span key={section.id} className="sidebar-link is-disabled" title={t('section.soon')}>
-                  {t(section.labelKey)}
-                  <span className="new-tag">{t('section.soon')}</span>
-                </span>
               ),
             )}
           </div>

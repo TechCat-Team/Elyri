@@ -1,0 +1,112 @@
+.elyri-ui-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: var(--elyri-ui-radius);
+  font: inherit;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background var(--elyri-ui-duration) var(--elyri-ui-ease),
+    border-color var(--elyri-ui-duration) var(--elyri-ui-ease),
+    color var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-button:focus-visible {
+  outline: none;
+  box-shadow: var(--elyri-ui-ring);
+}
+
+.elyri-ui-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* 尺寸 */
+.elyri-ui-button--sm {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 13px;
+}
+
+.elyri-ui-button--md {
+  height: 38px;
+  padding: 0 16px;
+  font-size: 14px;
+}
+
+.elyri-ui-button--lg {
+  height: 44px;
+  padding: 0 22px;
+  font-size: 15px;
+}
+
+/* 样式 */
+.elyri-ui-button--primary {
+  background: var(--elyri-ui-accent);
+  color: var(--elyri-ui-accent-text);
+}
+
+.elyri-ui-button--primary:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.elyri-ui-button--secondary {
+  border-color: var(--elyri-ui-border);
+  background: var(--elyri-ui-surface);
+  color: var(--elyri-ui-text);
+}
+
+.elyri-ui-button--secondary:hover:not(:disabled) {
+  border-color: var(--elyri-ui-accent);
+  color: var(--elyri-ui-accent);
+}
+
+.elyri-ui-button--ghost {
+  background: transparent;
+  color: var(--elyri-ui-text);
+}
+
+.elyri-ui-button--ghost:hover:not(:disabled) {
+  background: var(--elyri-ui-accent-soft);
+  color: var(--elyri-ui-accent);
+}
+
+.elyri-ui-button--danger {
+  background: var(--elyri-ui-danger);
+  color: #fff;
+}
+
+.elyri-ui-button--danger:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+/* 加载指示 */
+.elyri-ui-button__spinner {
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentcolor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: elyri-ui-button-spin 700ms linear infinite;
+}
+
+@keyframes elyri-ui-button-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-ui-button {
+    transition: none;
+  }
+
+  .elyri-ui-button__spinner {
+    animation-duration: 1800ms;
+  }
+}

@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
 const libraryRoot = fileURLToPath(new URL('../../packages/motion/src', import.meta.url));
+const uiLibraryRoot = fileURLToPath(new URL('../../packages/ui/src', import.meta.url));
 const workspaceRoot = fileURLToPath(new URL('../../', import.meta.url));
 
 export default defineConfig({
@@ -12,6 +13,8 @@ export default defineConfig({
     alias: [
       { find: /^@elyri\/motion\/styles\.css$/, replacement: `${libraryRoot}/styles/index.css` },
       { find: /^@elyri\/motion$/, replacement: `${libraryRoot}/index.ts` },
+      { find: /^@elyri\/ui\/styles\.css$/, replacement: `${uiLibraryRoot}/styles/index.css` },
+      { find: /^@elyri\/ui$/, replacement: `${uiLibraryRoot}/index.ts` },
     ],
   },
   server: {

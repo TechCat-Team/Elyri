@@ -1,0 +1,54 @@
+.elyri-ui-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* 尺寸 */
+.elyri-ui-badge--sm {
+  height: 20px;
+  padding: 0 8px;
+  font-size: 11px;
+}
+
+.elyri-ui-badge--md {
+  height: 24px;
+  padding: 0 10px;
+  font-size: 12px;
+}
+
+/* 样式 */
+.elyri-ui-badge--neutral {
+  border-color: var(--elyri-ui-border);
+  background: var(--elyri-ui-surface-muted);
+  color: var(--elyri-ui-muted);
+}
+
+.elyri-ui-badge--accent {
+  border-color: color-mix(in srgb, var(--elyri-ui-accent) 32%, transparent);
+  background: var(--elyri-ui-accent-soft);
+  color: var(--elyri-ui-accent);
+}
+
+.elyri-ui-badge--success {
+  border-color: color-mix(in srgb, var(--elyri-ui-success) 32%, transparent);
+  background: color-mix(in srgb, var(--elyri-ui-success) 14%, transparent);
+  color: var(--elyri-ui-success);
+}
+
+.elyri-ui-badge--warning {
+  border-color: color-mix(in srgb, var(--elyri-ui-warning) 32%, transparent);
+  background: color-mix(in srgb, var(--elyri-ui-warning) 14%, transparent);
+  color: var(--elyri-ui-warning);
+}
+
+.elyri-ui-badge--danger {
+  border-color: color-mix(in srgb, var(--elyri-ui-danger) 32%, transparent);
+  background: color-mix(in srgb, var(--elyri-ui-danger) 14%, transparent);
+  color: var(--elyri-ui-danger);
+}

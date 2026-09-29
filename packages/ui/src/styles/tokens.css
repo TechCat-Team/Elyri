@@ -1,5 +1,42 @@
+/* 中性默认值：宿主覆盖这些变量即可换肤，组件内部只引用变量、不写死颜色 */
+
 :root {
+  --elyri-ui-accent: #6d5bd0;
+  --elyri-ui-accent-text: #ffffff;
+  --elyri-ui-accent-soft: rgb(109 91 208 / 12%);
+  --elyri-ui-text: #1a1d23;
+  --elyri-ui-muted: #646b78;
+  --elyri-ui-surface: #ffffff;
+  --elyri-ui-surface-muted: #f4f5f7;
+  --elyri-ui-border: #e3e5ea;
+  --elyri-ui-danger: #d64545;
+  --elyri-ui-success: #2f9e6b;
+  --elyri-ui-warning: #b8791a;
+
   --elyri-ui-radius: 10px;
-  --elyri-ui-shadow: 0 8px 24px rgb(0 0 0 / 12%);
-  --elyri-ui-ring: 0 0 0 3px rgb(109 92 255 / 35%);
+  --elyri-ui-radius-sm: 6px;
+  --elyri-ui-shadow: 0 8px 24px rgb(20 25 38 / 8%);
+  --elyri-ui-ring: 0 0 0 3px rgb(109 91 208 / 35%);
+
+  --elyri-ui-duration: 180ms;
+  --elyri-ui-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --elyri-ui-accent: #b49bff;
+    --elyri-ui-accent-text: #14101f;
+    --elyri-ui-accent-soft: rgb(180 155 255 / 16%);
+    --elyri-ui-text: #eef0f4;
+    --elyri-ui-muted: #9ba1ad;
+    --elyri-ui-surface: #16191f;
+    --elyri-ui-surface-muted: #1c2027;
+    --elyri-ui-border: #272c34;
+    --elyri-ui-danger: #e5766f;
+    --elyri-ui-success: #5cc394;
+    --elyri-ui-warning: #e0a95f;
+
+    --elyri-ui-shadow: 0 12px 32px rgb(0 0 0 / 42%);
+    --elyri-ui-ring: 0 0 0 3px rgb(180 155 255 / 35%);
+  }
 }

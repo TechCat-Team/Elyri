@@ -1,0 +1,1 @@
+export { cardDoc } from './doc';

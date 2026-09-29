@@ -1,0 +1,1 @@
+export { tabsDoc } from './doc';
