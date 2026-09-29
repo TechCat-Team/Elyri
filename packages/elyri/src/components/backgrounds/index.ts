@@ -8,6 +8,8 @@ export { DragonScales } from './DragonScales';
 export type { DragonScalesProps } from './DragonScales';
 export { LiquidMetal } from './LiquidMetal';
 export type { LiquidMetalProps } from './LiquidMetal';
+export { MeshGradient } from './MeshGradient';
+export type { MeshGradientProps } from './MeshGradient';
 export { MorphGrid } from './MorphGrid';
 export type { MorphGridProps } from './MorphGrid';
 export { PixelVortex } from './PixelVortex';

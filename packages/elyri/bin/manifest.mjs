@@ -10,6 +10,7 @@ export const components = {
   'liquid-metal': { folder: 'backgrounds/LiquidMetal', name: 'LiquidMetal' },
   magnetic: { folder: 'animations/Magnetic', name: 'Magnetic' },
   marquee: { folder: 'text/Marquee', name: 'Marquee' },
+  'mesh-gradient': { folder: 'backgrounds/MeshGradient', name: 'MeshGradient' },
   'morph-grid': { folder: 'backgrounds/MorphGrid', name: 'MorphGrid' },
   'particle-text': { folder: 'text/ParticleText', name: 'ParticleText' },
   'pixel-vortex': { folder: 'backgrounds/PixelVortex', name: 'PixelVortex' },

@@ -772,6 +772,35 @@
   background: rgba(255, 255, 255, 0.14);
 }
 
+/* 跟随明暗主题的简约背景：浅色下演示内容切换为深色文字 */
+.demo-background--adaptive[data-scheme='light'] {
+  box-shadow: 0 20px 50px rgba(20, 20, 40, 0.12);
+}
+.demo-background--adaptive[data-scheme='light'] .demo-background-content {
+  color: #16161d;
+}
+.demo-background--adaptive[data-scheme='light'] .demo-hero-brand,
+.demo-background--adaptive[data-scheme='light'] .demo-hero-title {
+  text-shadow: none;
+}
+.demo-background--adaptive[data-scheme='light'] .demo-hero-links a {
+  color: rgba(22, 22, 29, 0.66);
+}
+.demo-background--adaptive[data-scheme='light'] .demo-hero-links a:hover {
+  color: #16161d;
+}
+.demo-background--adaptive[data-scheme='light'] .demo-hero-subtitle {
+  color: rgba(22, 22, 29, 0.68);
+}
+.demo-background--adaptive[data-scheme='light'] .demo-hero-button--ghost {
+  border-color: rgba(22, 22, 29, 0.16);
+  background: rgba(255, 255, 255, 0.55);
+  color: #16161d;
+}
+.demo-background--adaptive[data-scheme='light'] .demo-hero-button--ghost:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
 /* 演示按需加载时的占位 */
 .demo-fallback {
   width: 200px;

@@ -48,6 +48,7 @@ export function Hero() {
 | `Velvet`       | backgrounds | WebGL 垂坠丝绒，褶皱泛起绒光，指针划出渐消压痕  |
 | `BrushedMetal` | backgrounds | WebGL 拉丝金属板，各向异性光柱随指针移动        |
 | `Planet`       | backgrounds | WebGL 轨道视角星球（火星/木星），大气辉光与日出 |
+| `MeshGradient` | backgrounds | WebGL 流光渐变，彩色丝带缓缓流淌并带缎面光泽    |
 
 ## Hooks
 

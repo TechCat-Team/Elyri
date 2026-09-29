@@ -61,6 +61,7 @@ export function Hero() {
 | `BrushedMetal`  | Backgrounds | WebGL 拉丝金属板，各向异性光柱随指针移动        |
 | `Planet`        | Backgrounds | WebGL 轨道视角星球（火星/木星），大气辉光与日出 |
 | `MorphGrid`     | Backgrounds | WebGL 网格图形在圆形、方形、十字间循环变换      |
+| `MeshGradient`  | Backgrounds | WebGL 流光渐变，彩色丝带缓缓流淌并带缎面光泽    |
 | `GradientText`  | Text        | 为文字应用动态渐变                              |
 | `SplitReveal`   | Text        | 文本进入视口时逐字或逐词错峰浮现                |
 | `Typewriter`    | Text        | 打字机效果逐字输出，带闪烁光标                  |
