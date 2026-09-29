@@ -1,5 +1,6 @@
-// 组件注册表：slug → 来源包、源码目录与组件名。
-// `pkg` 决定 CLI 从哪个包的 node_modules 拷贝源码，也决定共享运行时的导入路径（<pkg>/core）。
+// Component registry: slug → source package, source folder and component name.
+// `pkg` decides which package the CLI copies from and how the shared runtime is imported (<pkg>/core).
+// An entry may declare `deps: ['other-slug']`; the CLI copies those first, recursively.
 export const components = {
   'ascii-image': { pkg: '@elyri/motion', folder: 'media/AsciiImage', name: 'AsciiImage' },
   aurora: { pkg: '@elyri/motion', folder: 'backgrounds/Aurora', name: 'Aurora' },
