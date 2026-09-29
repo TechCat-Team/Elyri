@@ -1,10 +1,12 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { test } from 'node:test';
+
+import { components } from './manifest.mjs';
 
 const cli = fileURLToPath(new URL('./elyri.mjs', import.meta.url));
 
@@ -12,33 +14,8 @@ test('add copies editable components and never overwrites them', async () => {
   const cwd = await mkdtemp(join(tmpdir(), 'elyri-cli-'));
   try {
     await writeFile(join(cwd, 'package.json'), JSON.stringify({ dependencies: { elyri: '^0.0.1' } }));
-    const added = {
-      'fade-in': 'FadeIn',
-      'gradient-text': 'GradientText',
-      marquee: 'Marquee',
-      'dragon-scales': 'DragonScales',
-      aurora: 'Aurora',
-      'silk-waves': 'SilkWaves',
-      caustics: 'Caustics',
-      'liquid-metal': 'LiquidMetal',
-      velvet: 'Velvet',
-      'brushed-metal': 'BrushedMetal',
-      planet: 'Planet',
-      'morph-grid': 'MorphGrid',
-      'ascii-image': 'AsciiImage',
-      'count-up': 'CountUp',
-      'scale-in': 'ScaleIn',
-      'particle-text': 'ParticleText',
-      'scramble-text': 'ScrambleText',
-      'scroll-marquee': 'ScrollMarquee',
-      'split-reveal': 'SplitReveal',
-      tilt: 'Tilt',
-      typewriter: 'Typewriter',
-      magnetic: 'Magnetic',
-      spotlight: 'Spotlight',
-      'rotating-text': 'RotatingText',
-      'wave-text': 'WaveText',
-    };
+    // 派生自共享清单，避免测试再抄一份组件表
+    const added = Object.fromEntries(Object.entries(components).map(([slug, { name }]) => [slug, name]));
     execFileSync(process.execPath, [cli, 'add', ...Object.keys(added)], { cwd });
 
     for (const name of Object.values(added)) {
@@ -55,6 +32,22 @@ test('add copies editable components and never overwrites them', async () => {
   } finally {
     await rm(cwd, { recursive: true, force: true });
   }
+});
+
+test('manifest registers every component on disk', async () => {
+  const componentsRoot = fileURLToPath(new URL('../src/components/', import.meta.url));
+  const onDisk = [];
+  for (const category of await readdir(componentsRoot, { withFileTypes: true })) {
+    if (!category.isDirectory()) continue;
+    for (const entry of await readdir(join(componentsRoot, category.name), { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      // 以 .tsx 判定组件目录，尚未动工的空占位目录不算组件
+      const files = await readdir(join(componentsRoot, category.name, entry.name));
+      if (files.some((file) => file.endsWith('.tsx'))) onDisk.push(`${category.name}/${entry.name}`);
+    }
+  }
+  const registered = Object.values(components).map(({ folder }) => folder);
+  assert.deepEqual(onDisk.sort(), registered.sort());
 });
 
 test('add requires the core dependency before writing files', async () => {

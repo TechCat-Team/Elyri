@@ -12,6 +12,7 @@
   "files": [
     "dist",
     "bin/elyri.mjs",
+    "bin/manifest.mjs",
     "src/components"
   ],
   "bin": {
