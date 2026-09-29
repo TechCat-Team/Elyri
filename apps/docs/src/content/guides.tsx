@@ -239,7 +239,9 @@ function ShowcaseCard({ doc }: { doc: ComponentDoc }) {
       <div className={playing ? 'showcase-preview is-playing' : 'showcase-preview'}>
         {mounted && (
           <ReducedMotionProvider reduced={systemReducedMotion || !playing}>
-            <Suspense fallback={<div className="demo-fallback" />}>{doc.render(defaultsOf(doc))}</Suspense>
+            <Suspense fallback={<div className="demo-fallback" />}>
+              {doc.render({ ...defaultsOf(doc), ...doc.showcaseValues })}
+            </Suspense>
           </ReducedMotionProvider>
         )}
       </div>

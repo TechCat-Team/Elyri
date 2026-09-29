@@ -116,6 +116,7 @@ export const planetDoc = (lang: Lang): ComponentDoc => {
     hero: true,
     isNew: true,
     dependencies: ['WebGL'],
+    showcaseValues: { stars: 0 },
     controls: [
       { type: 'text', name: 'text', label: t.textLabel, default: 'Components that come alive' },
       {
