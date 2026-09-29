@@ -4,6 +4,8 @@ export { Marquee } from './Marquee';
 export type { MarqueeDirection, MarqueeProps } from './Marquee';
 export { ParticleText } from './ParticleText';
 export type { ParticleTextProps } from './ParticleText';
+export { RotatingText } from './RotatingText';
+export type { RotatingTextProps } from './RotatingText';
 export { ScrambleText } from './ScrambleText';
 export type { ScrambleTextProps, ScrambleTextTrigger } from './ScrambleText';
 export { ScrollMarquee } from './ScrollMarquee';

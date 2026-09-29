@@ -21,6 +21,7 @@ const components = {
   'particle-text': { folder: 'text/ParticleText', name: 'ParticleText' },
   'pixel-vortex': { folder: 'backgrounds/PixelVortex', name: 'PixelVortex' },
   planet: { folder: 'backgrounds/Planet', name: 'Planet' },
+  'rotating-text': { folder: 'text/RotatingText', name: 'RotatingText' },
   'scale-in': { folder: 'animations/ScaleIn', name: 'ScaleIn' },
   'scramble-text': { folder: 'text/ScrambleText', name: 'ScrambleText' },
   'scroll-marquee': { folder: 'text/ScrollMarquee', name: 'ScrollMarquee' },

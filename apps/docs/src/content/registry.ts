@@ -15,6 +15,7 @@ import { morphGridDoc } from './components/morph-grid';
 import { particleTextDoc } from './components/particle-text';
 import { pixelVortexDoc } from './components/pixel-vortex';
 import { planetDoc } from './components/planet';
+import { rotatingTextDoc } from './components/rotating-text';
 import { scaleInDoc } from './components/scale-in';
 import { scrambleTextDoc } from './components/scramble-text';
 import { scrollMarqueeDoc } from './components/scroll-marquee';
@@ -37,6 +38,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => [
   particleTextDoc(lang),
   scrollMarqueeDoc(lang),
   marqueeDoc(lang),
+  rotatingTextDoc(lang),
   fadeInDoc(lang),
   scaleInDoc(lang),
   countUpDoc(lang),

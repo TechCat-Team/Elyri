@@ -618,6 +618,21 @@
   font: inherit;
   cursor: pointer;
 }
+/* 词语轮换演示 */
+.demo-rotating-text {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.35em;
+}
+.demo-rotating-text .elyri-rotating-text {
+  color: var(--docs-accent);
+}
+.demo-rotating-text .elyri-rotating-text--block {
+  --elyri-rotating-text-block-bg: var(--docs-accent);
+  color: #fff;
+}
 .demo-card {
   padding: 16px 20px;
   border: 1px solid var(--docs-border);

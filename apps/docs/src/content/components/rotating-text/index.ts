@@ -1,0 +1,1 @@
+export { rotatingTextDoc } from './doc';

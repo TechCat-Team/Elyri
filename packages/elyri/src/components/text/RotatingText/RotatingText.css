@@ -1,0 +1,133 @@
+.elyri-rotating-text {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  vertical-align: bottom;
+  white-space: nowrap;
+  perspective: 600px;
+  transition: width var(--elyri-rotating-text-duration, 500ms) var(--elyri-ease-in-out);
+}
+
+.elyri-rotating-text__word {
+  display: inline-block;
+  transform-style: preserve-3d;
+}
+
+.elyri-rotating-text__word--leaving {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.elyri-rotating-text__char {
+  display: inline-block;
+  animation-duration: var(--elyri-rotating-text-duration, 500ms);
+  animation-delay: calc(var(--elyri-rotating-text-index) * var(--elyri-rotating-text-stagger, 30ms));
+  animation-fill-mode: both;
+}
+
+.elyri-rotating-text__word--entering .elyri-rotating-text__char {
+  animation-name: elyri-rotating-text-in;
+  animation-timing-function: var(--elyri-ease-out);
+}
+
+.elyri-rotating-text__word--leaving .elyri-rotating-text__char {
+  animation-name: elyri-rotating-text-out;
+  animation-timing-function: var(--elyri-ease-in-out);
+}
+
+@keyframes elyri-rotating-text-in {
+  from {
+    opacity: 0;
+    transform: translateY(70%) rotateX(-90deg);
+    filter: blur(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+@keyframes elyri-rotating-text-out {
+  from {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-70%) rotateX(90deg);
+    filter: blur(6px);
+  }
+}
+
+/* 色块效果：文字包裹在圆角色块中，块宽随词平滑伸缩 */
+.elyri-rotating-text--block {
+  --elyri-rotating-text-block-bg: #7c3aed;
+  box-sizing: content-box;
+  padding: 0.00em 0.36em;
+  border-radius: 0.24em;
+  background: var(--elyri-rotating-text-block-bg);
+  color: var(--elyri-rotating-text-block-color, #fff);
+}
+
+/* 离场词与块内边距对齐，保证新旧词位置一致 */
+.elyri-rotating-text--block .elyri-rotating-text__word--leaving {
+  padding: inherit;
+}
+
+.elyri-rotating-text--block .elyri-rotating-text__word--entering .elyri-rotating-text__char {
+  animation-name: elyri-rotating-text-block-in;
+  animation-duration: calc(var(--elyri-rotating-text-duration, 500ms) * 0.65);
+  /* 让色块先开始伸缩，文字稍后再浮现 */
+  animation-delay: calc(
+    var(--elyri-rotating-text-duration, 500ms) * 0.3 + var(--elyri-rotating-text-index) *
+      var(--elyri-rotating-text-stagger, 30ms)
+  );
+}
+
+.elyri-rotating-text--block .elyri-rotating-text__word--leaving .elyri-rotating-text__char {
+  animation-name: elyri-rotating-text-block-out;
+  animation-duration: calc(var(--elyri-rotating-text-duration, 500ms) * 0.5);
+}
+
+@keyframes elyri-rotating-text-block-in {
+  from {
+    opacity: 0;
+    transform: translateY(110%) scale(0.92);
+    filter: blur(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+@keyframes elyri-rotating-text-block-out {
+  from {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-110%) scale(0.92);
+    filter: blur(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-rotating-text {
+    transition: none;
+  }
+
+  .elyri-rotating-text__char {
+    animation: none;
+  }
+}
