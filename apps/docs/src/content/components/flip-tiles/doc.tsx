@@ -67,6 +67,7 @@ export const flipTilesDoc = (lang: Lang): ComponentDoc => {
     title: 'FlipTiles',
     category: 'Backgrounds',
     description: t.description,
+    hero: true,
     isNew: true,
     dependencies: ['WebGL'],
     controls: [

@@ -63,6 +63,7 @@ export const auroraDoc = (lang: Lang): ComponentDoc => {
     title: 'Aurora',
     category: 'Backgrounds',
     description: t.description,
+    hero: true,
     dependencies: ['WebGL'],
     controls: [
       { type: 'text', name: 'text', label: t.textLabel, default: 'Components that come alive' },

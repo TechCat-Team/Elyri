@@ -90,6 +90,24 @@
   border-color: var(--docs-accent);
   color: var(--docs-accent);
 }
+/* Hero 开关：与设备切换同排，关闭后隐藏演示顶部的落地页内容 */
+.preview-hero-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--docs-border);
+  border-radius: 10px;
+  background: var(--docs-surface);
+  color: var(--docs-text);
+  font-size: 12px;
+  font-weight: 550;
+  cursor: pointer;
+}
+.preview-stage.is-hero-hidden .demo-background-content {
+  display: none;
+}
 .preview-stage {
   position: relative;
   z-index: 1;

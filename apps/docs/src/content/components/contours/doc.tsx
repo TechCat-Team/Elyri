@@ -58,6 +58,7 @@ export const contoursDoc = (lang: Lang): ComponentDoc => {
     title: 'Contours',
     category: 'Backgrounds',
     description: t.description,
+    hero: true,
     isNew: true,
     dependencies: ['WebGL'],
     controls: [

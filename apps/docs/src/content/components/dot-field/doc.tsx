@@ -58,6 +58,7 @@ export const dotFieldDoc = (lang: Lang): ComponentDoc => {
     title: 'DotField',
     category: 'Backgrounds',
     description: t.description,
+    hero: true,
     isNew: true,
     dependencies: ['WebGL'],
     controls: [

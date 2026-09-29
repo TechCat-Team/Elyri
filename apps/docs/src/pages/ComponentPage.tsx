@@ -71,6 +71,7 @@ export function ComponentPage({ doc, prev, next }: ComponentPageProps) {
   const [codeLang, setCodeLang] = useState<CodeLang>('ts');
   const [replayKey, setReplayKey] = useState(0);
   const [deviceView, setDeviceView] = useState<Device>('desktop');
+  const [heroVisible, setHeroVisible] = useState(true);
   // 在线编辑器只在客户端挂载，避免预渲染时执行浏览器内的编译器
   const mounted = useSyncExternalStore(subscribeToNothing, isClient, isServer);
   const tabsRef = useRef<HTMLDivElement>(null);
@@ -173,6 +174,22 @@ export function ComponentPage({ doc, prev, next }: ComponentPageProps) {
             </svg>
             <span className="preview-replay-label">{t('page.replay')}</span>
           </button>
+
+          {doc.hero && (
+            <div className="preview-hero-toggle">
+              <span>{t('preview.hero')}</span>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={heroVisible}
+                aria-label={t('preview.hero')}
+                className={heroVisible ? 'switch is-on' : 'switch'}
+                onClick={() => setHeroVisible((value) => !value)}
+              >
+                <span className="switch-thumb" />
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -180,7 +197,10 @@ export function ComponentPage({ doc, prev, next }: ComponentPageProps) {
         {tab === 'preview' ? (
           <>
             <div className="preview-box">
-              <div key={replayKey} className={`preview-stage is-${deviceView}`}>
+              <div
+                key={replayKey}
+                className={`preview-stage is-${deviceView}${doc.hero && !heroVisible ? ' is-hero-hidden' : ''}`}
+              >
                 <Suspense fallback={<div className="demo-fallback" />}>{doc.render(values)}</Suspense>
               </div>
             </div>

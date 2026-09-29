@@ -36,6 +36,8 @@ export interface ComponentDoc {
   category: string;
   description: string;
   isNew?: boolean;
+  /** 演示顶部带 BackgroundHero 落地页内容，预览可用开关隐藏 */
+  hero?: boolean;
   controls?: Control[];
   /** 某个控件变化时联动修改其他控件的值（例如切换预设时重置配色） */
   linkedValues?: (name: string, value: ControlValue) => ControlValues | undefined;

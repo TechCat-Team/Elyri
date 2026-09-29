@@ -192,9 +192,8 @@
   border-radius: 0;
   box-shadow: none;
 }
-.showcase-preview .demo-hero-links,
-.showcase-preview .demo-hero-subtitle,
-.showcase-preview .demo-hero-actions {
+/* 卡片缩略图只展示背景本身，始终隐藏顶部 hero 内容 */
+.showcase-preview .demo-background-content {
   display: none;
 }
 .showcase-card-body {

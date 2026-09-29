@@ -66,6 +66,7 @@ export const meshGradientDoc = (lang: Lang): ComponentDoc => {
     title: 'MeshGradient',
     category: 'Backgrounds',
     description: t.description,
+    hero: true,
     isNew: true,
     dependencies: ['WebGL'],
     controls: [
