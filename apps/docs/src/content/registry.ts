@@ -5,6 +5,7 @@ import { asciiImageDoc } from './components/ascii-image';
 import { brushedMetalDoc } from './components/brushed-metal';
 import { causticsDoc } from './components/caustics';
 import { countUpDoc } from './components/count-up';
+import { dotFieldDoc } from './components/dot-field';
 import { dragonScalesDoc } from './components/dragon-scales';
 import { fadeInDoc } from './components/fade-in';
 import { gradientTextDoc } from './components/gradient-text';
@@ -59,6 +60,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => [
   pixelVortexDoc(lang),
   morphGridDoc(lang),
   meshGradientDoc(lang),
+  dotFieldDoc(lang),
   asciiImageDoc(lang),
 ];
 

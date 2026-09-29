@@ -4,6 +4,8 @@ export { BrushedMetal } from './BrushedMetal';
 export type { BrushedMetalProps } from './BrushedMetal';
 export { Caustics } from './Caustics';
 export type { CausticsProps } from './Caustics';
+export { DotField } from './DotField';
+export type { DotFieldProps } from './DotField';
 export { DragonScales } from './DragonScales';
 export type { DragonScalesProps } from './DragonScales';
 export { LiquidMetal } from './LiquidMetal';

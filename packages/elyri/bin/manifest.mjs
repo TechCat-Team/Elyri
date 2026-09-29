@@ -4,6 +4,7 @@ export const components = {
   'brushed-metal': { folder: 'backgrounds/BrushedMetal', name: 'BrushedMetal' },
   caustics: { folder: 'backgrounds/Caustics', name: 'Caustics' },
   'count-up': { folder: 'animations/CountUp', name: 'CountUp' },
+  'dot-field': { folder: 'backgrounds/DotField', name: 'DotField' },
   'dragon-scales': { folder: 'backgrounds/DragonScales', name: 'DragonScales' },
   'fade-in': { folder: 'animations/FadeIn', name: 'FadeIn' },
   'gradient-text': { folder: 'text/GradientText', name: 'GradientText' },

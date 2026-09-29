@@ -1,0 +1,44 @@
+.elyri-dot-field {
+  --elyri-dot-field-color: #8a90a6;
+  --elyri-dot-field-gap: 22px;
+  --elyri-dot-field-bg: #0a0a0e;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  /* WebGL 不可用或尚未绘制时的底色：静态点阵 */
+  background:
+    radial-gradient(
+        circle at center,
+        color-mix(in srgb, var(--elyri-dot-field-color) 55%, transparent) 1px,
+        transparent 1.6px
+      )
+      0 0 / var(--elyri-dot-field-gap) var(--elyri-dot-field-gap),
+    var(--elyri-dot-field-bg);
+}
+
+.elyri-dot-field[data-scheme='light'] {
+  --elyri-dot-field-bg: #fafafb;
+}
+
+.elyri-dot-field__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--elyri-duration-slow) var(--elyri-ease-out);
+}
+
+.elyri-dot-field__canvas[data-ready] {
+  opacity: 1;
+}
+
+.elyri-dot-field__content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+}
