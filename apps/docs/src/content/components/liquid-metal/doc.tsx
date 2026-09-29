@@ -17,7 +17,6 @@ const copy = {
   zh: {
     description:
       'WebGL 实时渲染的液态金属：流动的铬面反射摄影棚光源，边缘泛起薄膜干涉的彩虹色，指针处液面鼓起并跟随一盏点光。',
-    textLabel: '文本',
     colorLabel: '金属色',
     iridescenceLabel: '彩虹薄膜',
     scaleLabel: '起伏尺度',
@@ -34,7 +33,6 @@ const copy = {
   en: {
     description:
       'WebGL liquid metal: flowing chrome that mirrors studio lights, an iridescent thin-film sheen on its slopes, and a surface that swells under the pointer.',
-    textLabel: 'Text',
     colorLabel: 'Metal',
     iridescenceLabel: 'Iridescence',
     scaleLabel: 'Scale',
@@ -61,7 +59,6 @@ export const liquidMetalDoc = (lang: Lang): ComponentDoc => {
     description: t.description,
     dependencies: ['WebGL'],
     controls: [
-      { type: 'text', name: 'text', label: t.textLabel, default: 'Components that come alive' },
       { type: 'color', name: 'color', label: t.colorLabel, default: DEFAULTS.color },
       {
         type: 'number',
@@ -87,7 +84,6 @@ export const liquidMetalDoc = (lang: Lang): ComponentDoc => {
     ],
     render: (v) => (
       <LiquidMetalDemo
-        text={v.text as string}
         color={v.color as string}
         iridescence={v.iridescence as number}
         scale={v.scale as number}
@@ -107,7 +103,6 @@ export const liquidMetalDoc = (lang: Lang): ComponentDoc => {
           speed: unlessDefault(v.speed, DEFAULTS.speed),
           interactive: v.interactive ? undefined : false,
         },
-        children: `<h1>${v.text as string}</h1>`,
       }),
   };
 };
