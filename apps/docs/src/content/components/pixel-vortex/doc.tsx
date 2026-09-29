@@ -72,7 +72,6 @@ export const pixelVortexDoc = (lang: Lang): ComponentDoc => {
     title: 'Pixel Vortex',
     category: 'Backgrounds',
     description: t.description,
-    isNew: true,
     dependencies: ['WebGL'],
     controls: [
       { type: 'text', name: 'videoSrc', label: t.videoSrcLabel, default: '' },

@@ -52,7 +52,6 @@ export const scaleInDoc = (lang: Lang): ComponentDoc => {
     title: 'ScaleIn',
     category: 'Animations',
     description: t.description,
-    isNew: true,
     dependencies: ['IntersectionObserver'],
     controls: [
       { type: 'number', name: 'from', label: t.fromLabel, default: DEFAULTS.from, min: 0.2, max: 1, step: 0.05 },

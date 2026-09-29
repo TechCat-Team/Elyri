@@ -64,7 +64,6 @@ export const dragonScalesDoc = (lang: Lang): ComponentDoc => {
     title: 'DragonScales',
     category: 'Backgrounds',
     description: t.description,
-    isNew: true,
     dependencies: ['WebGL'],
     controls: [
       { type: 'text', name: 'text', label: t.textLabel, default: 'Components that come alive' },

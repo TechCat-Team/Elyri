@@ -59,7 +59,6 @@ export const typewriterDoc = (lang: Lang): ComponentDoc => {
     title: 'Typewriter',
     category: 'Text',
     description: t.description,
-    isNew: true,
     controls: [
       { type: 'text', name: 'text', label: t.textLabel, default: DEFAULTS.text },
       { type: 'number', name: 'speed', label: t.speedLabel, default: DEFAULTS.speed, min: 20, max: 300, step: 10 },

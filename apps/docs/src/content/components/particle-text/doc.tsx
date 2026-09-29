@@ -65,7 +65,6 @@ export const particleTextDoc = (lang: Lang): ComponentDoc => {
     title: 'ParticleText',
     category: 'Text',
     description: t.description,
-    isNew: true,
     dependencies: ['Canvas 2D', 'IntersectionObserver', 'ResizeObserver'],
     controls: [
       { type: 'text', name: 'text', label: t.textLabel, default: DEFAULTS.text },

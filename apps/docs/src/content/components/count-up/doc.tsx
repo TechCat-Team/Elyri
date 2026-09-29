@@ -62,7 +62,6 @@ export const countUpDoc = (lang: Lang): ComponentDoc => {
     title: 'CountUp',
     category: 'Animations',
     description: t.description,
-    isNew: true,
     dependencies: ['IntersectionObserver'],
     controls: [
       { type: 'number', name: 'to', label: t.toLabel, default: DEFAULTS.to, min: 0, max: 5000, step: 1 },

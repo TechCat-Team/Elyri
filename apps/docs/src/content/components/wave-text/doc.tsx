@@ -49,7 +49,6 @@ export const waveTextDoc = (lang: Lang): ComponentDoc => {
     title: 'WaveText',
     category: 'Text',
     description: t.description,
-    isNew: true,
     controls: [
       { type: 'text', name: 'text', label: t.textLabel, default: DEFAULTS.text },
       {

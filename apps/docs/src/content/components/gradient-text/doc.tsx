@@ -54,7 +54,6 @@ export const gradientTextDoc = (lang: Lang): ComponentDoc => {
     title: 'GradientText',
     category: 'Text',
     description: t.description,
-    isNew: true,
     controls: [
       { type: 'text', name: 'text', label: t.textLabel, default: DEFAULTS.text },
       { type: 'color', name: 'color1', label: t.color1Label, default: DEFAULTS.color1 },

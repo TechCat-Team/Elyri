@@ -57,7 +57,6 @@ export const spotlightDoc = (lang: Lang): ComponentDoc => {
     title: 'Spotlight',
     category: 'Animations',
     description: t.description,
-    isNew: true,
     dependencies: ['PointerEvent'],
     controls: [
       { type: 'color', name: 'color', label: t.colorLabel, default: DEFAULTS.color },

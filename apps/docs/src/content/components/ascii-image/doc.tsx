@@ -93,7 +93,6 @@ export const asciiImageDoc = (lang: Lang): ComponentDoc => {
     title: 'AsciiImage',
     category: 'Media',
     description: t.description,
-    isNew: true,
     dependencies: ['Canvas 2D', 'IntersectionObserver', 'ResizeObserver'],
     controls: [
       { type: 'text', name: 'src', label: t.srcLabel, default: LOGO_SRC },

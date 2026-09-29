@@ -58,7 +58,6 @@ export const scrollMarqueeDoc = (lang: Lang): ComponentDoc => {
     title: 'ScrollMarquee',
     category: 'Text',
     description: t.description,
-    isNew: true,
     controls: [
       { type: 'text', name: 'text', label: t.textLabel, default: DEFAULTS.text },
       {

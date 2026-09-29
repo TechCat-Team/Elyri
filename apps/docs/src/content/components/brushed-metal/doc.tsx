@@ -54,7 +54,6 @@ export const brushedMetalDoc = (lang: Lang): ComponentDoc => {
     title: 'Brushed Metal',
     category: 'Backgrounds',
     description: t.description,
-    isNew: true,
     dependencies: ['WebGL'],
     controls: [
       { type: 'text', name: 'text', label: t.textLabel, default: 'Components that come alive' },

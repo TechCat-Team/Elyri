@@ -56,7 +56,6 @@ export const marqueeDoc = (lang: Lang): ComponentDoc => {
     title: 'Marquee',
     category: 'Text',
     description: t.description,
-    isNew: true,
     controls: [
       {
         type: 'select',

@@ -66,7 +66,6 @@ export const splitRevealDoc = (lang: Lang): ComponentDoc => {
     title: 'SplitReveal',
     category: 'Text',
     description: t.description,
-    isNew: true,
     dependencies: ['IntersectionObserver'],
     controls: [
       { type: 'text', name: 'text', label: t.textLabel, default: DEFAULTS.text },

@@ -46,7 +46,6 @@ export const tiltDoc = (lang: Lang): ComponentDoc => {
     title: 'Tilt',
     category: 'Animations',
     description: t.description,
-    isNew: true,
     dependencies: ['PointerEvent'],
     controls: [
       { type: 'number', name: 'max', label: t.maxLabel, default: DEFAULTS.max, min: 2, max: 30, step: 1 },

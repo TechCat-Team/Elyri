@@ -46,7 +46,6 @@ export const magneticDoc = (lang: Lang): ComponentDoc => {
     title: 'Magnetic',
     category: 'Animations',
     description: t.description,
-    isNew: true,
     dependencies: ['PointerEvent'],
     controls: [
       {

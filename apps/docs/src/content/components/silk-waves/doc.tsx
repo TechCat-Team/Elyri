@@ -58,7 +58,6 @@ export const silkWavesDoc = (lang: Lang): ComponentDoc => {
     title: 'SilkWaves',
     category: 'Backgrounds',
     description: t.description,
-    isNew: true,
     dependencies: ['WebGL'],
     controls: [
       { type: 'text', name: 'text', label: t.textLabel, default: 'Components that come alive' },

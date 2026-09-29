@@ -77,7 +77,6 @@ export const morphGridDoc = (lang: Lang): ComponentDoc => {
     title: 'Morph Grid',
     category: 'Backgrounds',
     description: t.description,
-    isNew: true,
     dependencies: ['WebGL'],
     controls: [
       { type: 'color', name: 'color', label: t.colorLabel, default: DEFAULTS.color },
