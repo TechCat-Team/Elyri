@@ -2,7 +2,6 @@ import type { ComponentDoc, Lang } from '../lib/types';
 
 import { auroraDoc } from './components/aurora';
 import { asciiImageDoc } from './components/ascii-image';
-import { brushedMetalDoc } from './components/brushed-metal';
 import { causticsDoc } from './components/caustics';
 import { contoursDoc } from './components/contours';
 import { countUpDoc } from './components/count-up';
@@ -60,7 +59,6 @@ export const getDocs = (lang: Lang): ComponentDoc[] => {
     causticsDoc(lang),
     liquidMetalDoc(lang),
     velvetDoc(lang),
-    brushedMetalDoc(lang),
     planetDoc(lang),
     pixelVortexDoc(lang),
     morphGridDoc(lang),

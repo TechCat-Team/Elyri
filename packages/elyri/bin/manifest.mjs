@@ -1,7 +1,6 @@
 export const components = {
   'ascii-image': { folder: 'media/AsciiImage', name: 'AsciiImage' },
   aurora: { folder: 'backgrounds/Aurora', name: 'Aurora' },
-  'brushed-metal': { folder: 'backgrounds/BrushedMetal', name: 'BrushedMetal' },
   caustics: { folder: 'backgrounds/Caustics', name: 'Caustics' },
   contours: { folder: 'backgrounds/Contours', name: 'Contours' },
   'count-up': { folder: 'animations/CountUp', name: 'CountUp' },

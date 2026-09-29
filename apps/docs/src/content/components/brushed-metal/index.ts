@@ -1,1 +1,0 @@
-export { brushedMetalDoc } from './doc';

@@ -56,7 +56,6 @@ export function Hero() {
 | `Caustics`      | Backgrounds | WebGL underwater caustics with pointer ripples                       |
 | `LiquidMetal`   | Backgrounds | WebGL liquid chrome with iridescent film and pointer bulge           |
 | `Velvet`        | Backgrounds | WebGL draped velvet with fold sheen and fading pointer trails        |
-| `BrushedMetal`  | Backgrounds | WebGL brushed metal plate with anisotropic light beams               |
 | `Planet`        | Backgrounds | WebGL orbital planet view (Mars, Jupiter or Earth) with glowing limb |
 | `MorphGrid`     | Backgrounds | WebGL grid cycling between circles, squares and crosses              |
 | `MeshGradient`  | Backgrounds | WebGL flowing gradient with streaming color ribbons and satin sheen  |

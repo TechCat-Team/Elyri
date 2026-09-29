@@ -1,7 +1,5 @@
 export { Aurora } from './Aurora';
 export type { AuroraProps } from './Aurora';
-export { BrushedMetal } from './BrushedMetal';
-export type { BrushedMetalProps } from './BrushedMetal';
 export { Caustics } from './Caustics';
 export type { CausticsProps } from './Caustics';
 export { Contours } from './Contours';
