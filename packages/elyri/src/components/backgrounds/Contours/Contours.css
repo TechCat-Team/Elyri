@@ -1,0 +1,42 @@
+.elyri-contours {
+  --elyri-contours-color: #8a90a6;
+  --elyri-contours-bg: #0a0b0f;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  /* WebGL 不可用或尚未绘制时的底色：同心细环近似等高线 */
+  background:
+    repeating-radial-gradient(
+      circle at 62% 38%,
+      transparent 0 26px,
+      color-mix(in srgb, var(--elyri-contours-color) 30%, transparent) 26px 27px
+    ),
+    var(--elyri-contours-bg);
+}
+
+.elyri-contours[data-scheme='light'] {
+  --elyri-contours-bg: #f9f9f7;
+}
+
+.elyri-contours__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--elyri-duration-slow) var(--elyri-ease-out);
+}
+
+.elyri-contours__canvas[data-ready] {
+  opacity: 1;
+}
+
+.elyri-contours__content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+}

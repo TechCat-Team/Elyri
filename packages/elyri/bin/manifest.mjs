@@ -3,6 +3,7 @@ export const components = {
   aurora: { folder: 'backgrounds/Aurora', name: 'Aurora' },
   'brushed-metal': { folder: 'backgrounds/BrushedMetal', name: 'BrushedMetal' },
   caustics: { folder: 'backgrounds/Caustics', name: 'Caustics' },
+  contours: { folder: 'backgrounds/Contours', name: 'Contours' },
   'count-up': { folder: 'animations/CountUp', name: 'CountUp' },
   'dot-field': { folder: 'backgrounds/DotField', name: 'DotField' },
   'dragon-scales': { folder: 'backgrounds/DragonScales', name: 'DragonScales' },

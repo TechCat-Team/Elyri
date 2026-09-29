@@ -63,6 +63,7 @@ export function Hero() {
 | `MorphGrid`     | Backgrounds | WebGL 网格图形在圆形、方形、十字间循环变换      |
 | `MeshGradient`  | Backgrounds | WebGL 流光渐变，彩色丝带缓缓流淌并带缎面光泽    |
 | `DotField`      | Backgrounds | WebGL 呼吸点阵，指针处形成放大透镜              |
+| `Contours`      | Backgrounds | WebGL 缓慢漂移的等高线，指针处隆起小山          |
 | `GradientText`  | Text        | 为文字应用动态渐变                              |
 | `SplitReveal`   | Text        | 文本进入视口时逐字或逐词错峰浮现                |
 | `Typewriter`    | Text        | 打字机效果逐字输出，带闪烁光标                  |

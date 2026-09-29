@@ -4,6 +4,7 @@ import { auroraDoc } from './components/aurora';
 import { asciiImageDoc } from './components/ascii-image';
 import { brushedMetalDoc } from './components/brushed-metal';
 import { causticsDoc } from './components/caustics';
+import { contoursDoc } from './components/contours';
 import { countUpDoc } from './components/count-up';
 import { dotFieldDoc } from './components/dot-field';
 import { dragonScalesDoc } from './components/dragon-scales';
@@ -61,6 +62,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => [
   morphGridDoc(lang),
   meshGradientDoc(lang),
   dotFieldDoc(lang),
+  contoursDoc(lang),
   asciiImageDoc(lang),
 ];
 

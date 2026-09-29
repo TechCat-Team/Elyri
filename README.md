@@ -61,6 +61,7 @@ export function Hero() {
 | `MorphGrid`     | Backgrounds | WebGL grid cycling between circles, squares and crosses              |
 | `MeshGradient`  | Backgrounds | WebGL flowing gradient with streaming color ribbons and satin sheen  |
 | `DotField`      | Backgrounds | WebGL breathing dot grid with a pointer lens                         |
+| `Contours`      | Backgrounds | WebGL drifting topographic contour lines that rise under the pointer |
 | `GradientText`  | Text        | Applies an animated gradient to text                                 |
 | `SplitReveal`   | Text        | Reveals text character by character as it enters view                |
 | `Typewriter`    | Text        | Types text out with a blinking cursor                                |

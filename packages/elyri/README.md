@@ -50,6 +50,7 @@ export function Hero() {
 | `Planet`       | backgrounds | WebGL 轨道视角星球（火星/木星），大气辉光与日出 |
 | `MeshGradient` | backgrounds | WebGL 流光渐变，彩色丝带缓缓流淌并带缎面光泽    |
 | `DotField`     | backgrounds | WebGL 呼吸点阵，指针处形成放大透镜              |
+| `Contours`     | backgrounds | WebGL 缓慢漂移的等高线，指针处隆起小山          |
 
 ## Hooks
 
