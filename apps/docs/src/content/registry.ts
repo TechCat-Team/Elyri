@@ -9,6 +9,7 @@ import { dragonScalesDoc } from './components/dragon-scales';
 import { fadeInDoc } from './components/fade-in';
 import { gradientTextDoc } from './components/gradient-text';
 import { liquidMetalDoc } from './components/liquid-metal';
+import { magneticDoc } from './components/magnetic';
 import { marqueeDoc } from './components/marquee';
 import { morphGridDoc } from './components/morph-grid';
 import { particleTextDoc } from './components/particle-text';
@@ -39,6 +40,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => [
   scaleInDoc(lang),
   countUpDoc(lang),
   tiltDoc(lang),
+  magneticDoc(lang),
   dragonScalesDoc(lang),
   auroraDoc(lang),
   silkWavesDoc(lang),

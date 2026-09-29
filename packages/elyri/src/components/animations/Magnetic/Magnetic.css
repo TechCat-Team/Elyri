@@ -1,0 +1,11 @@
+.elyri-magnetic {
+  display: inline-block;
+  transform: translate3d(var(--elyri-magnetic-x, 0px), var(--elyri-magnetic-y, 0px), 0);
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-magnetic {
+    transform: none;
+  }
+}

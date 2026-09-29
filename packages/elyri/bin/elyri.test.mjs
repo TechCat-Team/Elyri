@@ -34,6 +34,7 @@ test('add copies editable components and never overwrites them', async () => {
       'split-reveal': 'SplitReveal',
       tilt: 'Tilt',
       typewriter: 'Typewriter',
+      magnetic: 'Magnetic',
     };
     execFileSync(process.execPath, [cli, 'add', ...Object.keys(added)], { cwd });
 

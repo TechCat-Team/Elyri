@@ -574,6 +574,19 @@
   font-weight: 700;
   letter-spacing: 0.02em;
 }
+/* 磁吸演示 */
+.demo-magnetic-button {
+  padding: 16px 38px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(140deg, var(--docs-accent), color-mix(in srgb, var(--docs-accent) 55%, #101018));
+  color: var(--docs-on-accent);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
+}
 .demo-card {
   padding: 16px 20px;
   border: 1px solid var(--docs-border);

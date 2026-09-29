@@ -2,6 +2,8 @@ export { CountUp } from './CountUp';
 export type { CountUpProps } from './CountUp';
 export { FadeIn } from './FadeIn';
 export type { FadeInDirection, FadeInProps } from './FadeIn';
+export { Magnetic } from './Magnetic';
+export type { MagneticProps } from './Magnetic';
 export { ScaleIn } from './ScaleIn';
 export type { ScaleInProps } from './ScaleIn';
 export { Tilt } from './Tilt';
