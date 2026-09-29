@@ -10,6 +10,8 @@ export { ScrambleText } from './ScrambleText';
 export type { ScrambleTextProps, ScrambleTextTrigger } from './ScrambleText';
 export { ScrollMarquee } from './ScrollMarquee';
 export type { ScrollMarqueeDirection, ScrollMarqueeProps } from './ScrollMarquee';
+export { ScrollReveal } from './ScrollReveal';
+export type { ScrollRevealBy, ScrollRevealProps } from './ScrollReveal';
 export { SplitReveal } from './SplitReveal';
 export type { SplitRevealBy, SplitRevealProps } from './SplitReveal';
 export { Typewriter } from './Typewriter';

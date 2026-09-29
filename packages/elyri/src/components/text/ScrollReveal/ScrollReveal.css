@@ -1,0 +1,51 @@
+.elyri-scroll-reveal {
+  /* 点亮范围占全文的比例：0 为全暗、1 为全亮，默认全亮以兼容 SSR 与无 JS 场景 */
+  --elyri-scroll-reveal-progress: 1;
+  --elyri-scroll-reveal-dim: 0.15;
+  --elyri-scroll-reveal-blur: 0px;
+  --elyri-scroll-reveal-height: 280px;
+
+  display: block;
+  height: var(--elyri-scroll-reveal-height);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.elyri-scroll-reveal__content {
+  /* 保留原始空白，同时允许在空白处换行 */
+  white-space: pre-wrap;
+}
+
+/* 单词容器：整词不拆行，逐字模式下作为字符的布局外壳 */
+.elyri-scroll-reveal__word {
+  display: inline-block;
+}
+
+/* 点亮单元：逐字模式下为单字，逐词模式下为单词；亮度随滚动进度点亮 */
+.elyri-scroll-reveal__unit {
+  /* 本单元的点亮程度：点亮范围推进到第 index 个单元时从 0 过渡到 1 */
+  --elyri-scroll-reveal-lit: clamp(
+    0,
+    calc(var(--elyri-scroll-reveal-progress) * var(--elyri-scroll-reveal-count) - var(--elyri-scroll-reveal-index)),
+    1
+  );
+
+  display: inline-block;
+  white-space: pre;
+  opacity: calc(var(--elyri-scroll-reveal-dim) + (1 - var(--elyri-scroll-reveal-dim)) * var(--elyri-scroll-reveal-lit));
+}
+
+/* 开启模糊时，未点亮的单元同时带模糊 */
+.elyri-scroll-reveal--blur .elyri-scroll-reveal__unit {
+  filter: blur(calc((1 - var(--elyri-scroll-reveal-lit)) * var(--elyri-scroll-reveal-blur)));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-scroll-reveal__unit {
+    opacity: 1;
+  }
+
+  .elyri-scroll-reveal--blur .elyri-scroll-reveal__unit {
+    filter: none;
+  }
+}

@@ -542,6 +542,13 @@
   max-width: 760px;
   text-align: center;
 }
+/* 滚动点亮演示：段落左对齐，行高放宽便于阅读 */
+.demo-scroll-reveal {
+  width: min(560px, 100%);
+  font-size: 17px;
+  line-height: 1.9;
+  text-align: left;
+}
 /* ASCII 字符画演示 */
 .demo-ascii {
   width: 100%;

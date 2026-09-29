@@ -21,6 +21,7 @@ export const components = {
   'scale-in': { folder: 'animations/ScaleIn', name: 'ScaleIn' },
   'scramble-text': { folder: 'text/ScrambleText', name: 'ScrambleText' },
   'scroll-marquee': { folder: 'text/ScrollMarquee', name: 'ScrollMarquee' },
+  'scroll-reveal': { folder: 'text/ScrollReveal', name: 'ScrollReveal' },
   'silk-waves': { folder: 'backgrounds/SilkWaves', name: 'SilkWaves' },
   'split-reveal': { folder: 'text/SplitReveal', name: 'SplitReveal' },
   spotlight: { folder: 'animations/Spotlight', name: 'Spotlight' },

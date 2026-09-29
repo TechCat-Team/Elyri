@@ -1,0 +1,1 @@
+export { scrollRevealDoc } from './doc';

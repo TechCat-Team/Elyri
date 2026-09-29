@@ -22,6 +22,7 @@ import { rotatingTextDoc } from './components/rotating-text';
 import { scaleInDoc } from './components/scale-in';
 import { scrambleTextDoc } from './components/scramble-text';
 import { scrollMarqueeDoc } from './components/scroll-marquee';
+import { scrollRevealDoc } from './components/scroll-reveal';
 import { silkWavesDoc } from './components/silk-waves';
 import { splitRevealDoc } from './components/split-reveal';
 import { spotlightDoc } from './components/spotlight';
@@ -43,6 +44,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => {
     scrambleTextDoc(lang),
     particleTextDoc(lang),
     scrollMarqueeDoc(lang),
+    scrollRevealDoc(lang),
     marqueeDoc(lang),
     rotatingTextDoc(lang),
     waveTextDoc(lang),
