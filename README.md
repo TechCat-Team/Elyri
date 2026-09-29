@@ -54,7 +54,6 @@ export function Hero() {
 | `Aurora`        | Backgrounds | WebGL aurora night sky with layered curtains and stars               |
 | `SilkWaves`     | Backgrounds | WebGL flowing silk with satin sheen                                  |
 | `Caustics`      | Backgrounds | WebGL underwater caustics with pointer ripples                       |
-| `LiquidMetal`   | Backgrounds | WebGL liquid chrome with iridescent film and pointer bulge           |
 | `Velvet`        | Backgrounds | WebGL draped velvet with fold sheen and fading pointer trails        |
 | `Planet`        | Backgrounds | WebGL orbital planet view (Mars, Jupiter or Earth) with glowing limb |
 | `MorphGrid`     | Backgrounds | WebGL grid cycling between circles, squares and crosses              |

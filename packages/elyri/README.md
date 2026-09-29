@@ -44,7 +44,6 @@ export function Hero() {
 | `Aurora`       | backgrounds | WebGL 极光夜空，多层光帘与星空                  |
 | `SilkWaves`    | backgrounds | WebGL 流动丝绸，缎面光泽                        |
 | `Caustics`     | backgrounds | WebGL 水下焦散光网，指针荡开水波                |
-| `LiquidMetal`  | backgrounds | WebGL 液态铬面，彩虹薄膜，指针处液面鼓起        |
 | `Velvet`       | backgrounds | WebGL 垂坠丝绒，褶皱泛起绒光，指针划出渐消压痕  |
 | `Planet`       | backgrounds | WebGL 轨道视角星球（火星/木星），大气辉光与日出 |
 | `MeshGradient` | backgrounds | WebGL 流光渐变，彩色丝带缓缓流淌并带缎面光泽    |

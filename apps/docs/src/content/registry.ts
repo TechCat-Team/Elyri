@@ -11,7 +11,6 @@ import { fadeInDoc } from './components/fade-in';
 import { filamentsDoc } from './components/filaments';
 import { flipTilesDoc } from './components/flip-tiles';
 import { gradientTextDoc } from './components/gradient-text';
-import { liquidMetalDoc } from './components/liquid-metal';
 import { magneticDoc } from './components/magnetic';
 import { marqueeDoc } from './components/marquee';
 import { meshGradientDoc } from './components/mesh-gradient';
@@ -57,7 +56,6 @@ export const getDocs = (lang: Lang): ComponentDoc[] => {
     auroraDoc(lang),
     silkWavesDoc(lang),
     causticsDoc(lang),
-    liquidMetalDoc(lang),
     velvetDoc(lang),
     planetDoc(lang),
     pixelVortexDoc(lang),
