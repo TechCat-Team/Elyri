@@ -168,6 +168,15 @@
   max-width: 100%;
   padding: 0 12px;
 }
+/* 滚动点亮演示：卡片内四周留白，并让滚动窗口填满预览区，避免文字紧贴边缘被裁切 */
+.showcase-preview .demo-scroll-reveal {
+  width: 100%;
+  height: 100%;
+  padding: 16px 18px;
+}
+.showcase-preview .demo-scroll-reveal .elyri-scroll-reveal {
+  --elyri-scroll-reveal-height: 100%;
+}
 .showcase-preview .demo-stack {
   width: min(230px, 100%);
   gap: 8px;
