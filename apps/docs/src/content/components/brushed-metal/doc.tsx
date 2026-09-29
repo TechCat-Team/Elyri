@@ -16,7 +16,6 @@ const copy = {
   zh: {
     description:
       'WebGL 实时渲染的拉丝金属板：细密的定向划纹，点光源被各向异性反射拉成垂直于拉丝方向的光柱，随指针在板面上滑动。',
-    textLabel: '文本',
     colorLabel: '金属色',
     angleLabel: '拉丝角度',
     speedLabel: '速度',
@@ -31,7 +30,6 @@ const copy = {
   en: {
     description:
       'WebGL brushed metal plate: fine directional grain, with anisotropic reflection stretching the light into a beam across the brushing that glides with the pointer.',
-    textLabel: 'Text',
     colorLabel: 'Metal',
     angleLabel: 'Angle',
     speedLabel: 'Speed',
@@ -56,7 +54,6 @@ export const brushedMetalDoc = (lang: Lang): ComponentDoc => {
     description: t.description,
     dependencies: ['WebGL'],
     controls: [
-      { type: 'text', name: 'text', label: t.textLabel, default: 'Components that come alive' },
       { type: 'color', name: 'color', label: t.colorLabel, default: DEFAULTS.color },
       { type: 'number', name: 'angle', label: t.angleLabel, default: DEFAULTS.angle, min: -90, max: 90, step: 1 },
       { type: 'number', name: 'speed', label: t.speedLabel, default: DEFAULTS.speed, min: 0, max: 3, step: 0.1 },
@@ -72,7 +69,6 @@ export const brushedMetalDoc = (lang: Lang): ComponentDoc => {
     ],
     render: (v) => (
       <BrushedMetalDemo
-        text={v.text as string}
         color={v.color as string}
         angle={v.angle as number}
         speed={v.speed as number}
@@ -90,7 +86,6 @@ export const brushedMetalDoc = (lang: Lang): ComponentDoc => {
           speed: unlessDefault(v.speed, DEFAULTS.speed),
           interactive: v.interactive ? undefined : false,
         },
-        children: `<h1>${v.text as string}</h1>`,
       }),
   };
 };
