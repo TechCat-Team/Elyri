@@ -25,6 +25,7 @@ import { spotlightDoc } from './components/spotlight';
 import { tiltDoc } from './components/tilt';
 import { typewriterDoc } from './components/typewriter';
 import { velvetDoc } from './components/velvet';
+import { waveTextDoc } from './components/wave-text';
 
 /**
  * 全部组件文档。新增组件只需在 components 下建一个文件夹，
@@ -39,6 +40,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => [
   scrollMarqueeDoc(lang),
   marqueeDoc(lang),
   rotatingTextDoc(lang),
+  waveTextDoc(lang),
   fadeInDoc(lang),
   scaleInDoc(lang),
   countUpDoc(lang),

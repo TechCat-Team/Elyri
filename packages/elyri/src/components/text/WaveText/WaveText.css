@@ -1,0 +1,28 @@
+.elyri-wave-text__word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.elyri-wave-text__unit {
+  display: inline-block;
+  animation: elyri-wave-text-swing var(--elyri-wave-text-speed, 1200ms) var(--elyri-ease-in-out) infinite;
+  animation-delay: calc(var(--elyri-wave-text-index) * var(--elyri-wave-text-stagger, 60ms) * -1);
+  will-change: transform;
+}
+
+@keyframes elyri-wave-text-swing {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(calc(var(--elyri-wave-text-amplitude, 6px) * -1));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-wave-text__unit {
+    animation: none;
+  }
+}

@@ -37,6 +37,7 @@ test('add copies editable components and never overwrites them', async () => {
       magnetic: 'Magnetic',
       spotlight: 'Spotlight',
       'rotating-text': 'RotatingText',
+      'wave-text': 'WaveText',
     };
     execFileSync(process.execPath, [cli, 'add', ...Object.keys(added)], { cwd });
 

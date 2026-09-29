@@ -31,6 +31,7 @@ const components = {
   tilt: { folder: 'animations/Tilt', name: 'Tilt' },
   typewriter: { folder: 'text/Typewriter', name: 'Typewriter' },
   velvet: { folder: 'backgrounds/Velvet', name: 'Velvet' },
+  'wave-text': { folder: 'text/WaveText', name: 'WaveText' },
 };
 
 const available = Object.keys(components);

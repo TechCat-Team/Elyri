@@ -14,3 +14,5 @@ export { SplitReveal } from './SplitReveal';
 export type { SplitRevealBy, SplitRevealProps } from './SplitReveal';
 export { Typewriter } from './Typewriter';
 export type { TypewriterProps } from './Typewriter';
+export { WaveText } from './WaveText';
+export type { WaveTextProps } from './WaveText';
