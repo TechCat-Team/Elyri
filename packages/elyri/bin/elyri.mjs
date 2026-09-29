@@ -26,6 +26,7 @@ const components = {
   'scroll-marquee': { folder: 'text/ScrollMarquee', name: 'ScrollMarquee' },
   'silk-waves': { folder: 'backgrounds/SilkWaves', name: 'SilkWaves' },
   'split-reveal': { folder: 'text/SplitReveal', name: 'SplitReveal' },
+  spotlight: { folder: 'animations/Spotlight', name: 'Spotlight' },
   tilt: { folder: 'animations/Tilt', name: 'Tilt' },
   typewriter: { folder: 'text/Typewriter', name: 'Typewriter' },
   velvet: { folder: 'backgrounds/Velvet', name: 'Velvet' },

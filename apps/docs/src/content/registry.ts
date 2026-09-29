@@ -20,6 +20,7 @@ import { scrambleTextDoc } from './components/scramble-text';
 import { scrollMarqueeDoc } from './components/scroll-marquee';
 import { silkWavesDoc } from './components/silk-waves';
 import { splitRevealDoc } from './components/split-reveal';
+import { spotlightDoc } from './components/spotlight';
 import { tiltDoc } from './components/tilt';
 import { typewriterDoc } from './components/typewriter';
 import { velvetDoc } from './components/velvet';
@@ -41,6 +42,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => [
   countUpDoc(lang),
   tiltDoc(lang),
   magneticDoc(lang),
+  spotlightDoc(lang),
   dragonScalesDoc(lang),
   auroraDoc(lang),
   silkWavesDoc(lang),

@@ -1,0 +1,1 @@
+export { spotlightDoc } from './doc';

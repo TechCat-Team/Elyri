@@ -1,0 +1,93 @@
+.elyri-spotlight {
+  --elyri-spotlight-x: 50%;
+  --elyri-spotlight-y: 50%;
+
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--elyri-spotlight-radius, 16px);
+}
+
+/* 卡片内部的径向光斑 */
+.elyri-spotlight--glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    var(--elyri-spotlight-size, 240px) circle at var(--elyri-spotlight-x) var(--elyri-spotlight-y),
+    color-mix(in srgb, var(--elyri-spotlight-color, #7c8cff) 18%, transparent),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity var(--elyri-duration-base) var(--elyri-ease-out);
+  pointer-events: none;
+}
+
+/* 只保留 1px 边框区域的光晕：content-box 与 border-box 两层遮罩求差 */
+.elyri-spotlight--border::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(
+    calc(var(--elyri-spotlight-size, 240px) * 0.75) circle at var(--elyri-spotlight-x) var(--elyri-spotlight-y),
+    var(--elyri-spotlight-color, #7c8cff),
+    transparent 70%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity var(--elyri-duration-base) var(--elyri-ease-out);
+  pointer-events: none;
+}
+
+.elyri-spotlight--glow:hover::before,
+.elyri-spotlight--border:hover::after {
+  opacity: 1;
+}
+
+/* 内部组件的边框光晕：给需要点亮的元素加 elyri-spotlight__item 即可 */
+.elyri-spotlight__item {
+  position: relative;
+}
+
+.elyri-spotlight__item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(
+    calc(var(--elyri-spotlight-size, 240px) * 0.75) circle at var(--elyri-spotlight-x, -500px)
+      var(--elyri-spotlight-y, -500px),
+    var(--elyri-spotlight-color, #7c8cff),
+    transparent 70%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity var(--elyri-duration-base) var(--elyri-ease-out);
+  pointer-events: none;
+}
+
+.elyri-spotlight:hover .elyri-spotlight__item::after {
+  opacity: 1;
+}
+
+.elyri-spotlight__content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+}

@@ -587,6 +587,37 @@
   cursor: pointer;
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
 }
+/* 聚光卡片演示 */
+.demo-spotlight {
+  width: min(340px, 100%);
+  border: 1px solid var(--docs-border);
+  background: color-mix(in srgb, var(--docs-border) 22%, var(--docs-surface));
+}
+.demo-spotlight-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 30px 26px;
+}
+.demo-spotlight-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+.demo-spotlight-hint {
+  font-size: 14px;
+  color: var(--docs-muted);
+}
+.demo-spotlight-button {
+  align-self: flex-start;
+  margin-top: 6px;
+  padding: 8px 18px;
+  border: 1px solid var(--docs-border);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--docs-border) 34%, var(--docs-surface));
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
 .demo-card {
   padding: 16px 20px;
   border: 1px solid var(--docs-border);

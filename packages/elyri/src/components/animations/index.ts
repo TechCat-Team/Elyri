@@ -6,5 +6,7 @@ export { Magnetic } from './Magnetic';
 export type { MagneticProps } from './Magnetic';
 export { ScaleIn } from './ScaleIn';
 export type { ScaleInProps } from './ScaleIn';
+export { Spotlight } from './Spotlight';
+export type { SpotlightProps } from './Spotlight';
 export { Tilt } from './Tilt';
 export type { TiltProps } from './Tilt';
