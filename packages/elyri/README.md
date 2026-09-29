@@ -51,6 +51,7 @@ export function Hero() {
 | `MeshGradient` | backgrounds | WebGL 流光渐变，彩色丝带缓缓流淌并带缎面光泽    |
 | `DotField`     | backgrounds | WebGL 呼吸点阵，指针处形成放大透镜              |
 | `Contours`     | backgrounds | WebGL 缓慢漂移的等高线，指针处隆起小山          |
+| `Filaments`    | backgrounds | WebGL 交织光丝，如被轻拨的琴弦般起伏            |
 
 ## Hooks
 

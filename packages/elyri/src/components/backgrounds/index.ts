@@ -10,6 +10,8 @@ export { DotField } from './DotField';
 export type { DotFieldProps } from './DotField';
 export { DragonScales } from './DragonScales';
 export type { DragonScalesProps } from './DragonScales';
+export { Filaments } from './Filaments';
+export type { FilamentsProps } from './Filaments';
 export { LiquidMetal } from './LiquidMetal';
 export type { LiquidMetalProps } from './LiquidMetal';
 export { MeshGradient } from './MeshGradient';

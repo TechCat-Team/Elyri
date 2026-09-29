@@ -9,6 +9,7 @@ import { countUpDoc } from './components/count-up';
 import { dotFieldDoc } from './components/dot-field';
 import { dragonScalesDoc } from './components/dragon-scales';
 import { fadeInDoc } from './components/fade-in';
+import { filamentsDoc } from './components/filaments';
 import { gradientTextDoc } from './components/gradient-text';
 import { liquidMetalDoc } from './components/liquid-metal';
 import { magneticDoc } from './components/magnetic';
@@ -63,6 +64,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => [
   meshGradientDoc(lang),
   dotFieldDoc(lang),
   contoursDoc(lang),
+  filamentsDoc(lang),
   asciiImageDoc(lang),
 ];
 

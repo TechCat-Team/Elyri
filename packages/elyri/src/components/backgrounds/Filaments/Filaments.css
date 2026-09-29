@@ -1,0 +1,38 @@
+.elyri-filaments {
+  --elyri-filaments-color: #5b8cff;
+  --elyri-filaments-bg: #06060a;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  /* WebGL 不可用或尚未绘制时的底色：中央一道柔光 */
+  background:
+    radial-gradient(60% 14% at 50% 50%, color-mix(in srgb, var(--elyri-filaments-color) 30%, transparent), transparent),
+    var(--elyri-filaments-bg);
+}
+
+.elyri-filaments[data-scheme='light'] {
+  --elyri-filaments-bg: #f7f7fa;
+}
+
+.elyri-filaments__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--elyri-duration-slow) var(--elyri-ease-out);
+}
+
+.elyri-filaments__canvas[data-ready] {
+  opacity: 1;
+}
+
+.elyri-filaments__content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+}
