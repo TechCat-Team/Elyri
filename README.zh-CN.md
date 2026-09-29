@@ -59,6 +59,7 @@ export function Hero() {
 | `Velvet`        | Backgrounds | WebGL 垂坠丝绒，褶皱泛起绒光，指针划出渐消压痕  |
 | `Planet`        | Backgrounds | WebGL 轨道视角星球（火星/木星），大气辉光与日出 |
 | `MorphGrid`     | Backgrounds | WebGL 网格图形在圆形、方形、十字间循环变换      |
+| `Halo`          | Backgrounds | WebGL 极简细光环，高光沿圆周缓缓流动            |
 | `MeshGradient`  | Backgrounds | WebGL 流光渐变，彩色丝带缓缓流淌并带缎面光泽    |
 | `DotField`      | Backgrounds | WebGL 呼吸点阵，指针处形成放大透镜              |
 | `Contours`      | Backgrounds | WebGL 缓慢漂移的等高线，指针处隆起小山          |

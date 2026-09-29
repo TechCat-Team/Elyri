@@ -825,6 +825,10 @@
 .demo-background--adaptive[data-scheme='light'] .demo-hero-button--ghost:hover {
   background: rgba(255, 255, 255, 0.8);
 }
+/* Halo 默认强调色很浅，浅色下主按钮改用深色文字保证对比度 */
+.elyri-halo.demo-background--adaptive[data-scheme='light'] .demo-hero-button--primary {
+  color: #16161d;
+}
 
 /* 演示按需加载时的占位 */
 .demo-fallback {

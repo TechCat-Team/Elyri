@@ -11,6 +11,7 @@ import { fadeInDoc } from './components/fade-in';
 import { filamentsDoc } from './components/filaments';
 import { flipTilesDoc } from './components/flip-tiles';
 import { gradientTextDoc } from './components/gradient-text';
+import { haloDoc } from './components/halo';
 import { magneticDoc } from './components/magnetic';
 import { marqueeDoc } from './components/marquee';
 import { meshGradientDoc } from './components/mesh-gradient';
@@ -67,6 +68,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => {
     contoursDoc(lang),
     filamentsDoc(lang),
     flipTilesDoc(lang),
+    haloDoc(lang),
     asciiImageDoc(lang),
   ];
 

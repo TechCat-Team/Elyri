@@ -60,6 +60,7 @@ export function Hero() {
 | `MeshGradient`  | Backgrounds | WebGL flowing gradient with streaming color ribbons and satin sheen  |
 | `DotField`      | Backgrounds | WebGL breathing dot grid with a pointer lens                         |
 | `Contours`      | Backgrounds | WebGL drifting topographic contour lines that rise under the pointer |
+| `Halo`          | Backgrounds | WebGL minimal hairline ring with light flowing around it             |
 | `Filaments`     | Backgrounds | WebGL braided light threads flowing like a plucked waveform          |
 | `FlipTiles`     | Backgrounds | WebGL beveled cube array rolling in waves to reveal colored sides    |
 | `GradientText`  | Text        | Applies an animated gradient to text                                 |

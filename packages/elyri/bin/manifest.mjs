@@ -10,6 +10,7 @@ export const components = {
   filaments: { folder: 'backgrounds/Filaments', name: 'Filaments' },
   'flip-tiles': { folder: 'backgrounds/FlipTiles', name: 'FlipTiles' },
   'gradient-text': { folder: 'text/GradientText', name: 'GradientText' },
+  halo: { folder: 'backgrounds/Halo', name: 'Halo' },
   magnetic: { folder: 'animations/Magnetic', name: 'Magnetic' },
   marquee: { folder: 'text/Marquee', name: 'Marquee' },
   'mesh-gradient': { folder: 'backgrounds/MeshGradient', name: 'MeshGradient' },

@@ -1,0 +1,1 @@
+export { haloDoc } from './doc';

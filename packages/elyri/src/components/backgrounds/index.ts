@@ -12,6 +12,8 @@ export { Filaments } from './Filaments';
 export type { FilamentsProps } from './Filaments';
 export { FlipTiles } from './FlipTiles';
 export type { FlipTilesPattern, FlipTilesProps } from './FlipTiles';
+export { Halo } from './Halo';
+export type { HaloProps } from './Halo';
 export { MeshGradient } from './MeshGradient';
 export type { MeshGradientProps } from './MeshGradient';
 export { MorphGrid } from './MorphGrid';
