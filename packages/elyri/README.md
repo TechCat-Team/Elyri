@@ -52,6 +52,7 @@ export function Hero() {
 | `DotField`     | backgrounds | WebGL 呼吸点阵，指针处形成放大透镜              |
 | `Contours`     | backgrounds | WebGL 缓慢漂移的等高线，指针处隆起小山          |
 | `Filaments`    | backgrounds | WebGL 交织光丝，如被轻拨的琴弦般起伏            |
+| `FlipTiles`    | backgrounds | WebGL 倒角立方体阵列，成波滚动翻出强调色侧面    |
 
 ## Hooks
 

@@ -1,0 +1,44 @@
+.elyri-flip-tiles {
+  --elyri-flip-tiles-color: #4f6bff;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  /* WebGL 不可用或尚未绘制时的底色 */
+  background: radial-gradient(
+    120% 90% at 50% 30%,
+    color-mix(in srgb, var(--elyri-flip-tiles-color) 14%, #0c0c12),
+    #030305 75%
+  );
+}
+
+/* 浅色主题：兜底底色同步翻转为浅色，避免就绪前闪深色 */
+.elyri-flip-tiles[data-scheme='light'] {
+  background: radial-gradient(
+    120% 90% at 50% 30%,
+    #f4f4f7,
+    color-mix(in srgb, var(--elyri-flip-tiles-color) 10%, #dcdce3) 75%
+  );
+}
+
+.elyri-flip-tiles__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--elyri-duration-slow) var(--elyri-ease-out);
+}
+
+.elyri-flip-tiles__canvas[data-ready] {
+  opacity: 1;
+}
+
+.elyri-flip-tiles__content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+}

@@ -1,0 +1,1 @@
+export { flipTilesDoc } from './doc';

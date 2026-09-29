@@ -63,6 +63,7 @@ export function Hero() {
 | `DotField`      | Backgrounds | WebGL breathing dot grid with a pointer lens                         |
 | `Contours`      | Backgrounds | WebGL drifting topographic contour lines that rise under the pointer |
 | `Filaments`     | Backgrounds | WebGL braided light threads flowing like a plucked waveform          |
+| `FlipTiles`     | Backgrounds | WebGL beveled cube array rolling in waves to reveal colored sides    |
 | `GradientText`  | Text        | Applies an animated gradient to text                                 |
 | `SplitReveal`   | Text        | Reveals text character by character as it enters view                |
 | `Typewriter`    | Text        | Types text out with a blinking cursor                                |

@@ -34,6 +34,8 @@ export interface ShaderCanvasOptions {
   interactive?: boolean;
   /** 减弱动态效果时停留的时间点 */
   stillTime?: number;
+  /** 内部渲染分辨率上限（设备像素比），默认 2；重着色器可调低以省填充率 */
+  maxDpr?: number;
 }
 
 const compile = (gl: WebGLRenderingContext, fragmentShader: string) => {
@@ -125,7 +127,7 @@ export function useShaderCanvas(options: ShaderCanvasOptions) {
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = Math.min(window.devicePixelRatio || 1, optionsRef.current.maxDpr ?? 2);
       width = Math.max(1, Math.round(rect.width * dpr));
       height = Math.max(1, Math.round(rect.height * dpr));
       canvas.width = width;

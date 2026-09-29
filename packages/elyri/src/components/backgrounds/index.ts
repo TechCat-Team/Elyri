@@ -12,6 +12,8 @@ export { DragonScales } from './DragonScales';
 export type { DragonScalesProps } from './DragonScales';
 export { Filaments } from './Filaments';
 export type { FilamentsProps } from './Filaments';
+export { FlipTiles } from './FlipTiles';
+export type { FlipTilesPattern, FlipTilesProps } from './FlipTiles';
 export { LiquidMetal } from './LiquidMetal';
 export type { LiquidMetalProps } from './LiquidMetal';
 export { MeshGradient } from './MeshGradient';

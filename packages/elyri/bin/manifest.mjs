@@ -9,6 +9,7 @@ export const components = {
   'dragon-scales': { folder: 'backgrounds/DragonScales', name: 'DragonScales' },
   'fade-in': { folder: 'animations/FadeIn', name: 'FadeIn' },
   filaments: { folder: 'backgrounds/Filaments', name: 'Filaments' },
+  'flip-tiles': { folder: 'backgrounds/FlipTiles', name: 'FlipTiles' },
   'gradient-text': { folder: 'text/GradientText', name: 'GradientText' },
   'liquid-metal': { folder: 'backgrounds/LiquidMetal', name: 'LiquidMetal' },
   magnetic: { folder: 'animations/Magnetic', name: 'Magnetic' },
