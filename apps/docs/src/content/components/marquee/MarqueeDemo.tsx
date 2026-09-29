@@ -1,5 +1,5 @@
-import { cn, Marquee } from 'elyri';
-import type { MarqueeDirection } from 'elyri';
+import { cn, Marquee } from '@elyri/motion';
+import type { MarqueeDirection } from '@elyri/motion';
 
 export interface MarqueeDemoProps {
   text: string;

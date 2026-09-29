@@ -2,7 +2,7 @@
 
 [English](./CONTRIBUTING.md) · 简体中文
 
-Elyri 是一个 pnpm workspace，包含两个包：组件库（`packages/elyri`）与文档站（`apps/docs`）。两者彼此独立，因此组件库可以单独发布至 npm。
+Elyri 是一个 pnpm workspace，`packages/` 下包含四个包，另有文档站（`apps/docs`）。各包彼此独立，因此可以分别发布至 npm。
 
 ## 仓库结构
 
@@ -11,12 +11,15 @@ Elyri 是一个 pnpm workspace，包含两个包：组件库（`packages/elyri`�
 ├── apps/
 │   └── docs/                     # 文档站（Vite + React）
 ├── packages/
-│   └── elyri/                    # 组件库（发布至 npm）
+│   ├── cli/                      # `elyri` —— 把组件源码拷进项目
+│   ├── motion/                   # `@elyri/motion` —— 动效、背景与文字效果
+│   ├── ui/                       # `@elyri/ui` —— UI 基础组件（骨架）
+│   └── blocks/                   # `@elyri/blocks` —— 可拷走自有的页面区块（骨架）
 ├── pnpm-workspace.yaml
 └── tsconfig.base.json
 ```
 
-## packages/elyri
+## packages/motion
 
 ```
 src/
@@ -38,7 +41,7 @@ src/
 
 新增组件：
 
-1. 在 `packages/elyri/src/components/<分类>/` 下创建组件目录，例如 `GlowButton/`。
+1. 在 `packages/motion/src/components/<分类>/` 下创建组件目录，例如 `GlowButton/`。
 2. 目录内添加 `GlowButton.tsx`、`GlowButton.css` 与 `index.ts`。
 3. 在该分类的 `index.ts` 中导出组件。`components/index.ts` 会自动聚合分类，库入口无需改动。
 
@@ -74,20 +77,19 @@ src/
 
 ## 命令
 
-| 命令              | 说明                               |
-| ----------------- | ---------------------------------- |
-| `pnpm install`    | 安装全部依赖                       |
-| `pnpm dev`        | 启动文档站                         |
-| `pnpm build`      | 构建组件库到 `packages/elyri/dist` |
-| `pnpm build:docs` | 构建文档站                         |
-| `pnpm typecheck`  | 全量类型检查                       |
-| `pnpm lint`       | 用 ESLint 检查                     |
-| `pnpm format`     | 用 Prettier 格式化                 |
+| 命令              | 说明                        |
+| ----------------- | --------------------------- |
+| `pnpm install`    | 安装全部依赖                |
+| `pnpm dev`        | 启动文档站                  |
+| `pnpm build`      | 构建 `packages/` 下的所有包 |
+| `pnpm build:docs` | 构建文档站                  |
+| `pnpm typecheck`  | 全量类型检查                |
+| `pnpm lint`       | 用 ESLint 检查              |
+| `pnpm format`     | 用 Prettier 格式化          |
 
 ## 发布
 
 ```bash
 pnpm build
-cd packages/elyri
-npm publish
+pnpm -r --filter "./packages/*" publish --access public
 ```

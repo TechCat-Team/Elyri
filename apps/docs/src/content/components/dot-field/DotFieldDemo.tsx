@@ -1,5 +1,5 @@
-import { DotField } from 'elyri';
-import type { DotFieldProps } from 'elyri';
+import { DotField } from '@elyri/motion';
+import type { DotFieldProps } from '@elyri/motion';
 
 import { BackgroundHero } from '../BackgroundHero';
 

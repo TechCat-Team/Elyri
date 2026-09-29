@@ -8,6 +8,7 @@ import { I18nProvider } from './lib/i18n';
 import { pageMeta } from './lib/meta';
 import { href, LANGS, parsePath } from './lib/routes';
 import { RouterProvider } from './lib/router';
+import { docPath } from './lib/sections';
 import type { Lang } from './lib/types';
 
 export interface PrerenderRoute {
@@ -20,7 +21,7 @@ export interface PrerenderRoute {
 /** 需要预渲染的全部页面：引导页 + 每个组件、每种语言 */
 export function routes(): PrerenderRoute[] {
   return LANGS.flatMap((lang) =>
-    [...guides.map((guide) => guide.path), ...getDocs(lang).map((doc) => `components/${doc.slug}`)].map((path) => ({
+    [...guides.map((guide) => guide.path), ...getDocs(lang).map(docPath)].map((path) => ({
       lang,
       path,
       url: href(lang, path),

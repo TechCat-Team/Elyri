@@ -1,5 +1,5 @@
-import { Contours } from 'elyri';
-import type { ContoursProps } from 'elyri';
+import { Contours } from '@elyri/motion';
+import type { ContoursProps } from '@elyri/motion';
 
 import { BackgroundHero } from '../BackgroundHero';
 

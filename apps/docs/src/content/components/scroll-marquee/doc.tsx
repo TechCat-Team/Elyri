@@ -1,6 +1,6 @@
 import { lazy } from 'react';
 
-import type { ScrollMarqueeDirection } from 'elyri';
+import type { ScrollMarqueeDirection } from '@elyri/motion';
 
 import { usageExample } from '../../../lib/code';
 import type { ComponentDoc, Lang } from '../../../lib/types';

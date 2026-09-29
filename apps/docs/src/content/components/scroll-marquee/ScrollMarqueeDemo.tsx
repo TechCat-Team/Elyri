@@ -1,5 +1,5 @@
-import { ScrollMarquee } from 'elyri';
-import type { ScrollMarqueeDirection } from 'elyri';
+import { ScrollMarquee } from '@elyri/motion';
+import type { ScrollMarqueeDirection } from '@elyri/motion';
 
 export interface ScrollMarqueeDemoProps {
   text: string;

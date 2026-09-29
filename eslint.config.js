@@ -9,7 +9,7 @@ export default tseslint.config(
   js.configs.recommended,
   tseslint.configs.recommended,
   {
-    files: ['packages/elyri/bin/*.mjs', 'apps/docs/scripts/*.mjs'],
+    files: ['packages/cli/bin/*.mjs', 'apps/docs/scripts/*.mjs'],
     languageOptions: { globals: globals.node },
   },
   {

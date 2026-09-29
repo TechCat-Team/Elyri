@@ -1,4 +1,4 @@
-import { ParticleText } from 'elyri';
+import { ParticleText } from '@elyri/motion';
 
 export interface ParticleTextDemoProps {
   text: string;

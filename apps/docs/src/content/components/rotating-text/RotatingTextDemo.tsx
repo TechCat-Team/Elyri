@@ -1,4 +1,4 @@
-import { RotatingText } from 'elyri';
+import { RotatingText } from '@elyri/motion';
 
 export interface RotatingTextDemoProps {
   /** 逗号分隔的词语列表 */
@@ -18,7 +18,12 @@ export default function RotatingTextDemo({ words, interval, duration, variant }:
     <div className="demo-text">
       <div className="demo-title demo-rotating-text">
         <span>Elyri is</span>
-        <RotatingText words={list.length ? list : ['Elyri']} interval={interval} duration={duration} variant={variant} />
+        <RotatingText
+          words={list.length ? list : ['Elyri']}
+          interval={interval}
+          duration={duration}
+          variant={variant}
+        />
       </div>
     </div>
   );

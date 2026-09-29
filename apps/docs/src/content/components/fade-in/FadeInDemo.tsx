@@ -1,4 +1,4 @@
-import { FadeIn } from 'elyri';
+import { FadeIn } from '@elyri/motion';
 
 export interface FadeInDemoProps {
   direction: 'up' | 'down' | 'left' | 'right' | 'none';

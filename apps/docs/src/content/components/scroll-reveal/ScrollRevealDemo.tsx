@@ -1,5 +1,5 @@
-import { ScrollReveal } from 'elyri';
-import type { ScrollRevealBy } from 'elyri';
+import { ScrollReveal } from '@elyri/motion';
+import type { ScrollRevealBy } from '@elyri/motion';
 
 export interface ScrollRevealDemoProps {
   text: string;

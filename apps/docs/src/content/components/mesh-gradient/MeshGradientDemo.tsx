@@ -1,5 +1,5 @@
-import { MeshGradient } from 'elyri';
-import type { MeshGradientProps } from 'elyri';
+import { MeshGradient } from '@elyri/motion';
+import type { MeshGradientProps } from '@elyri/motion';
 
 import { BackgroundHero } from '../BackgroundHero';
 

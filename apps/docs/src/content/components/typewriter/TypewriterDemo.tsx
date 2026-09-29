@@ -1,4 +1,4 @@
-import { Typewriter } from 'elyri';
+import { Typewriter } from '@elyri/motion';
 
 export interface TypewriterDemoProps {
   text: string;

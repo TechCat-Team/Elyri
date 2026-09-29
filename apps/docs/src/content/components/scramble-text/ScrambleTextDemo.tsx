@@ -1,5 +1,5 @@
-import { ScrambleText } from 'elyri';
-import type { ScrambleTextTrigger } from 'elyri';
+import { ScrambleText } from '@elyri/motion';
+import type { ScrambleTextTrigger } from '@elyri/motion';
 
 export interface ScrambleTextDemoProps {
   text: string;

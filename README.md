@@ -1,11 +1,22 @@
 # Elyri
 
-[![npm version](https://img.shields.io/npm/v/elyri.svg)](https://www.npmjs.com/package/elyri)
+[![npm version](https://img.shields.io/npm/v/@elyri/motion.svg)](https://www.npmjs.com/package/@elyri/motion)
 [![license](https://img.shields.io/npm/l/elyri.svg)](./LICENSE)
 
-A set of animation components for React. Each component is lightweight, fully typed, and themed through CSS variables, so it integrates into an existing design system without introducing a runtime style engine.
+Components for React: motion effects, UI primitives and copy-and-own page blocks. Each component is lightweight, fully typed, and themed through CSS variables, so it integrates into an existing design system without introducing a runtime style engine.
 
-[docs](https://www.elyri.dev) · [npm](https://www.npmjs.com/package/elyri) · [GitHub](https://github.com/TechCat-Team/Elyri)
+[docs](https://www.elyri.dev) · [npm](https://www.npmjs.com/package/@elyri/motion) · [GitHub](https://github.com/TechCat-Team/Elyri)
+
+## Packages
+
+This repository is a pnpm workspace. Every package can be consumed by importing its build output, and motion/UI/blocks source can also be copied into your project with `pnpm dlx elyri@latest add <component>`.
+
+| Package                              | Description                                                           |
+| ------------------------------------ | --------------------------------------------------------------------- |
+| [`@elyri/motion`](./packages/motion) | Animation, background and text effects                                |
+| [`@elyri/ui`](./packages/ui)         | Dependency-free UI primitives (scaffolded, components not built yet)  |
+| [`@elyri/blocks`](./packages/blocks) | Copy-and-own page sections such as hero, pricing and CTA (scaffolded) |
+| [`elyri`](./packages/cli)            | CLI that copies component source into your project                    |
 
 ## Features
 
@@ -17,19 +28,19 @@ A set of animation components for React. Each component is lightweight, fully ty
 ## Installation
 
 ```bash
-pnpm add elyri
+pnpm add @elyri/motion
 ```
 
 Import the stylesheet once at your application entry point:
 
 ```ts
-import 'elyri/styles.css';
+import '@elyri/motion/styles.css';
 ```
 
 ## Usage
 
 ```tsx
-import { FadeIn, GradientText } from 'elyri';
+import { FadeIn, GradientText } from '@elyri/motion';
 
 export function Hero() {
   return (

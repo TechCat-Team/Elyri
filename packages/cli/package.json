@@ -1,0 +1,33 @@
+{
+  "name": "elyri",
+  "version": "0.0.1",
+  "description": "CLI that copies Elyri component source into your project.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TechCat-Team/Elyri.git",
+    "directory": "packages/cli"
+  },
+  "type": "module",
+  "files": [
+    "bin"
+  ],
+  "bin": {
+    "elyri": "bin/elyri.mjs"
+  },
+  "scripts": {
+    "test": "node --test bin/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "react",
+    "cli",
+    "component-library",
+    "css-variables"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

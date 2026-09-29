@@ -2,7 +2,7 @@
 
 English · [简体中文](./CONTRIBUTING.zh-CN.md)
 
-Elyri is a pnpm workspace containing two packages: the component library (`packages/elyri`) and the documentation site (`apps/docs`). The packages are kept separate so the library can be published to npm independently.
+Elyri is a pnpm workspace containing four packages under `packages/`, plus the documentation site (`apps/docs`). The packages are kept separate so each can be published to npm independently.
 
 ## Repository layout
 
@@ -11,12 +11,15 @@ Elyri is a pnpm workspace containing two packages: the component library (`packa
 ├── apps/
 │   └── docs/                     # documentation site (Vite + React)
 ├── packages/
-│   └── elyri/                    # component library (published to npm)
+│   ├── cli/                      # `elyri` — copies component source into a project
+│   ├── motion/                   # `@elyri/motion` — animation, background and text effects
+│   ├── ui/                       # `@elyri/ui` — UI primitives (scaffolded)
+│   └── blocks/                   # `@elyri/blocks` — copy-and-own page sections (scaffolded)
 ├── pnpm-workspace.yaml
 └── tsconfig.base.json
 ```
 
-## packages/elyri
+## packages/motion
 
 ```
 src/
@@ -38,7 +41,7 @@ Each component resides in its own directory and consists of three files: the com
 
 To add a component:
 
-1. Create a directory under `packages/elyri/src/components/<category>/`, for example `GlowButton/`.
+1. Create a directory under `packages/motion/src/components/<category>/`, for example `GlowButton/`.
 2. Add `GlowButton.tsx`, `GlowButton.css`, and `index.ts` to it.
 3. Export the component from the category's `index.ts`. `components/index.ts` picks up the category automatically, so the library entry point requires no changes.
 
@@ -74,20 +77,19 @@ Conventions:
 
 ## Commands
 
-| Command           | Description                                |
-| ----------------- | ------------------------------------------ |
-| `pnpm install`    | Install all dependencies                   |
-| `pnpm dev`        | Start the documentation site               |
-| `pnpm build`      | Build the library to `packages/elyri/dist` |
-| `pnpm build:docs` | Build the documentation site               |
-| `pnpm typecheck`  | Type-check every package                   |
-| `pnpm lint`       | Lint with ESLint                           |
-| `pnpm format`     | Format with Prettier                       |
+| Command           | Description                           |
+| ----------------- | ------------------------------------- |
+| `pnpm install`    | Install all dependencies              |
+| `pnpm dev`        | Start the documentation site          |
+| `pnpm build`      | Build every package under `packages/` |
+| `pnpm build:docs` | Build the documentation site          |
+| `pnpm typecheck`  | Type-check every package              |
+| `pnpm lint`       | Lint with ESLint                      |
+| `pnpm format`     | Format with Prettier                  |
 
 ## Publishing
 
 ```bash
 pnpm build
-cd packages/elyri
-npm publish
+pnpm -r --filter "./packages/*" publish --access public
 ```

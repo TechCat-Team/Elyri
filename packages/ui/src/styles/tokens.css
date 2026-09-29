@@ -1,0 +1,5 @@
+:root {
+  --elyri-ui-radius: 10px;
+  --elyri-ui-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+  --elyri-ui-ring: 0 0 0 3px rgb(109 92 255 / 35%);
+}

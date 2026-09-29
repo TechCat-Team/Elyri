@@ -1,5 +1,5 @@
-import { Caustics } from 'elyri';
-import type { CausticsProps } from 'elyri';
+import { Caustics } from '@elyri/motion';
+import type { CausticsProps } from '@elyri/motion';
 
 import { BackgroundHero } from '../BackgroundHero';
 

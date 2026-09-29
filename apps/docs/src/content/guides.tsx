@@ -1,12 +1,15 @@
 import { Suspense, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { ComponentType } from 'react';
-import { CountUp, ReducedMotionProvider, usePrefersReducedMotion } from 'elyri';
+import { CountUp, ReducedMotionProvider, usePrefersReducedMotion } from '@elyri/motion';
 
 import { CodeBlock } from '../components/CodeBlock';
 import { InstallSnippet } from '../components/InstallSnippet';
+import { installCommand, PACKAGE_NAMES } from '../lib/code';
+import { usePackageManager } from '../lib/hooks/usePackageManager';
 import { Link } from '../lib/router';
 import { messages, categoryLabel } from '../lib/messages';
 import type { MessageKey } from '../lib/messages';
+import { docPath, sections } from '../lib/sections';
 import { site } from '../lib/site';
 import { useI18n } from '../lib/i18n';
 import type { ComponentDoc, ControlValues, Lang, PageMeta } from '../lib/types';
@@ -31,7 +34,9 @@ const copy = {
     countSuffix: '个组件',
     quickstart: '快速开始',
     installTitle: '安装',
-    installDescription: '安装底层依赖，再将组件源码添加到项目中；添加后可以直接修改组件。',
+    installDescription: '先安装组件所属分区的包，再把组件源码添加到项目中；添加后可以直接修改组件。',
+    packagesTitle: '包',
+    packagesHint: '站点分为动效、UI 组件与页面区块三个分区，每个分区对应一个 npm 包，按需安装即可。',
     stepInstall: '1. 安装依赖并添加组件',
     stepStyles: '2. 引入公共样式',
     stepUsage: '3. 使用本地组件',
@@ -55,7 +60,11 @@ const copy = {
     countSuffix: 'COMPONENTS',
     quickstart: 'Quick start',
     installTitle: 'Installation',
-    installDescription: 'Install the core dependency, then add editable component source to your project.',
+    installDescription:
+      'Install the package for the section a component belongs to, then add its source to your project.',
+    packagesTitle: 'Packages',
+    packagesHint:
+      'The site is split into Motion, UI and Blocks. Each section maps to one npm package — install only what you need.',
     stepInstall: '1. Install and add a component',
     stepStyles: '2. Import shared styles',
     stepUsage: '3. Use the local component',
@@ -252,7 +261,7 @@ function ShowcaseCard({ doc }: { doc: ComponentDoc }) {
         </div>
         <p className="showcase-card-desc">{doc.description}</p>
       </div>
-      <Link className="showcase-card-link" to={`components/${doc.slug}`} aria-label={doc.title} />
+      <Link className="showcase-card-link" to={docPath(doc)} aria-label={doc.title} />
     </div>
   );
 }
@@ -289,8 +298,9 @@ function BrowsePage({ docs }: GuideProps) {
 }
 
 function InstallPage() {
-  const { lang } = useI18n();
+  const { lang, t: translate } = useI18n();
   const t = copy[lang];
+  const [manager] = usePackageManager();
 
   return (
     <article className="doc-page">
@@ -298,8 +308,19 @@ function InstallPage() {
       <p className="page-description">{t.installDescription}</p>
       <h2 className="section-title">{t.stepInstall}</h2>
       <InstallSnippet />
+      <h2 className="section-title">{t.packagesTitle}</h2>
+      <p className="page-description">{t.packagesHint}</p>
+      <div className="install-steps">
+        {sections.map((section) => (
+          <CodeBlock
+            key={section.id}
+            title={`${PACKAGE_NAMES[section.id]} · ${translate(section.labelKey)}`}
+            code={installCommand(manager, section.id)}
+          />
+        ))}
+      </div>
       <h2 className="section-title">{t.stepStyles}</h2>
-      <CodeBlock title="main.tsx" code={`import '${site.packageName}/styles.css';`} />
+      <CodeBlock title="main.tsx" code={`import '${PACKAGE_NAMES.motion}/styles.css';`} />
       <h2 className="section-title">{t.stepUsage}</h2>
       <CodeBlock
         title="App.tsx"

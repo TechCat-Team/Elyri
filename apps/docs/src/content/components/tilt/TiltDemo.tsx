@@ -1,4 +1,4 @@
-import { Tilt } from 'elyri';
+import { Tilt } from '@elyri/motion';
 
 export interface TiltDemoProps {
   max: number;

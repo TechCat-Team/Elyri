@@ -68,6 +68,43 @@
   line-height: 16px;
   color: var(--docs-muted);
 }
+/* 顶栏分区切换：动效 / UI / 区块；窄屏改由侧栏承载 */
+.section-tabs {
+  display: flex;
+  align-items: center;
+  flex: none;
+  gap: 2px;
+  margin-left: 4px;
+  padding: 3px;
+  border: 1px solid var(--docs-border);
+  border-radius: 999px;
+  background: var(--docs-surface);
+}
+.section-tab {
+  padding: 4px 12px;
+  border-radius: 999px;
+  color: var(--docs-muted);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+  white-space: nowrap;
+  text-decoration: none;
+  transition:
+    color 180ms,
+    background 180ms;
+}
+a.section-tab:hover {
+  color: var(--docs-text);
+  background: var(--docs-hover);
+}
+.section-tab.is-active {
+  color: var(--docs-on-accent);
+  background: var(--docs-accent);
+}
+.section-tab.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 .icon-button {
   display: inline-grid;
   place-items: center;
@@ -262,6 +299,21 @@
   background: var(--docs-accent);
   font-weight: 600;
 }
+/* 分区项在窄屏才出现在侧栏，宽屏由顶栏承载 */
+.sidebar .section-nav {
+  display: none;
+}
+.sidebar-link.is-disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.sidebar-link.is-disabled:hover {
+  color: var(--docs-muted);
+  background: none;
+}
+span.sidebar-link {
+  cursor: default;
+}
 .new-tag {
   padding: 0 7px;
   border-radius: 999px;
@@ -293,6 +345,12 @@
   }
   .menu-button {
     display: inline-grid;
+  }
+  .section-tabs {
+    display: none;
+  }
+  .sidebar .section-nav {
+    display: block;
   }
   .sidebar {
     position: fixed;

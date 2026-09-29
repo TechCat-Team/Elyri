@@ -1,5 +1,5 @@
-import { Filaments } from 'elyri';
-import type { FilamentsProps } from 'elyri';
+import { Filaments } from '@elyri/motion';
+import type { FilamentsProps } from '@elyri/motion';
 
 import { BackgroundHero } from '../BackgroundHero';
 

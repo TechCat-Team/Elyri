@@ -1,4 +1,4 @@
-import { Spotlight } from 'elyri';
+import { Spotlight } from '@elyri/motion';
 
 export interface SpotlightDemoProps {
   color: string;

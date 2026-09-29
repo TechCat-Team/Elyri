@@ -1,5 +1,5 @@
-import { Planet } from 'elyri';
-import type { PlanetProps } from 'elyri';
+import { Planet } from '@elyri/motion';
+import type { PlanetProps } from '@elyri/motion';
 
 import { BackgroundHero } from '../BackgroundHero';
 

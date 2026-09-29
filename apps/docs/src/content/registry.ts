@@ -1,4 +1,6 @@
-import type { ComponentDoc, Lang } from '../lib/types';
+import { docPkg, sections } from '../lib/sections';
+import type { SectionNavItem } from '../lib/sections';
+import type { ComponentDoc, Lang, Pkg } from '../lib/types';
 
 import { auroraDoc } from './components/aurora';
 import { asciiImageDoc } from './components/ascii-image';
@@ -79,3 +81,22 @@ export const getDocs = (lang: Lang): ComponentDoc[] => {
 };
 
 export const getCategories = (docs: ComponentDoc[]) => [...new Set(docs.map((doc) => doc.category))];
+
+/** 某个分区下的全部组件 */
+export const getSectionDocs = (lang: Lang, pkg: Pkg, docs = getDocs(lang)) => docs.filter((doc) => docPkg(doc) === pkg);
+
+/**
+ * 顶栏与侧栏的分区导航。分区内还没有组件时不给链接，
+ * 前端据此渲染为「即将推出」的禁用项。
+ */
+export const getSectionNav = (lang: Lang): SectionNavItem[] => {
+  const docs = getDocs(lang);
+  return sections.map((section) => {
+    const items = getSectionDocs(lang, section.id, docs);
+    return {
+      id: section.id,
+      labelKey: section.labelKey,
+      path: items.length ? `${section.path}/${items[0].slug}` : undefined,
+    };
+  });
+};

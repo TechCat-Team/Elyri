@@ -1,13 +1,24 @@
 # Elyri
 
-[![npm version](https://img.shields.io/npm/v/elyri.svg)](https://www.npmjs.com/package/elyri)
+[![npm version](https://img.shields.io/npm/v/@elyri/motion.svg)](https://www.npmjs.com/package/@elyri/motion)
 [![license](https://img.shields.io/npm/l/elyri.svg)](./LICENSE)
 
 [English](./README.md) · 简体中文
 
-面向 React 的动效组件集合。组件保持轻量、自带 TypeScript 类型，并通过 CSS 变量实现主题化，可接入现有设计体系，且不引入运行时样式引擎。
+面向 React 的组件集合：动效、UI 基础组件，以及可拷走自有的页面区块。组件保持轻量、自带 TypeScript 类型，并通过 CSS 变量实现主题化，可接入现有设计体系，且不引入运行时样式引擎。
 
-[文档](https://www.elyri.dev) · [npm](https://www.npmjs.com/package/elyri) · [GitHub](https://github.com/TechCat-Team/Elyri)
+[文档](https://www.elyri.dev) · [npm](https://www.npmjs.com/package/@elyri/motion) · [GitHub](https://github.com/TechCat-Team/Elyri)
+
+## 包结构
+
+本仓库是一个 pnpm workspace。每个包都可以导入编译产物使用，动效 / UI / 区块的源码也可以用 `pnpm dlx elyri@latest add <component>` 拷进项目自行修改。
+
+| 包                                   | 说明                                               |
+| ------------------------------------ | -------------------------------------------------- |
+| [`@elyri/motion`](./packages/motion) | 动效、背景与文字效果                               |
+| [`@elyri/ui`](./packages/ui)         | 零依赖 UI 基础组件（已搭好骨架，组件待实现）       |
+| [`@elyri/blocks`](./packages/blocks) | 可拷走自有的页面区块，如 hero、定价、CTA（待实现） |
+| [`elyri`](./packages/cli)            | 把组件源码拷贝进项目的 CLI                         |
 
 ## 特性
 
@@ -19,19 +30,19 @@
 ## 安装
 
 ```bash
-pnpm add elyri
+pnpm add @elyri/motion
 ```
 
 在应用入口处引入一次样式：
 
 ```ts
-import 'elyri/styles.css';
+import '@elyri/motion/styles.css';
 ```
 
 ## 使用
 
 ```tsx
-import { FadeIn, GradientText } from 'elyri';
+import { FadeIn, GradientText } from '@elyri/motion';
 
 export function Hero() {
   return (

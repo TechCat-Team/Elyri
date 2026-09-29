@@ -1,6 +1,6 @@
 import { lazy } from 'react';
 
-import type { ScrambleTextTrigger } from 'elyri';
+import type { ScrambleTextTrigger } from '@elyri/motion';
 
 import { usageExample } from '../../../lib/code';
 import type { ComponentDoc, Lang } from '../../../lib/types';

@@ -1,4 +1,4 @@
-import { GradientText } from 'elyri';
+import { GradientText } from '@elyri/motion';
 
 export interface GradientTextDemoProps {
   text: string;

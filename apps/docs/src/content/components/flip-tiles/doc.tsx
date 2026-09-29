@@ -1,6 +1,6 @@
 import { lazy } from 'react';
 
-import type { FlipTilesPattern } from 'elyri';
+import type { FlipTilesPattern } from '@elyri/motion';
 
 import { usageExample } from '../../../lib/code';
 import type { ComponentDoc, Lang } from '../../../lib/types';

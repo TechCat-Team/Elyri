@@ -1,4 +1,4 @@
-import { CountUp } from 'elyri';
+import { CountUp } from '@elyri/motion';
 
 export interface CountUpDemoProps {
   to: number;

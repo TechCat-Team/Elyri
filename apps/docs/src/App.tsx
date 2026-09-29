@@ -4,12 +4,13 @@ import { Header } from './components/Header';
 import { SearchDialog } from './components/SearchDialog';
 import { Sidebar } from './components/Sidebar';
 import { guides } from './content/guides';
-import { getCategories, getDocs } from './content/registry';
+import { getCategories, getDocs, getSectionNav } from './content/registry';
 import { useDocumentHead } from './lib/hooks/useDocumentHead';
 import { useTheme } from './lib/hooks/useTheme';
 import { useI18n } from './lib/i18n';
 import { pageMeta } from './lib/meta';
 import { useRoute } from './lib/router';
+import { docPkg, sectionByPath } from './lib/sections';
 import { ComponentPage } from './pages/ComponentPage';
 
 export function App() {
@@ -20,11 +21,18 @@ export function App() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const docs = useMemo(() => getDocs(lang), [lang]);
-  const categories = useMemo(() => getCategories(docs), [docs]);
+  const sectionNav = useMemo(() => getSectionNav(lang), [lang]);
+  const section = sectionByPath(path);
+  // 侧栏只列当前分区的组件；引导页不属于任何分区，展示全部
+  const sectionDocs = useMemo(
+    () => (section ? docs.filter((doc) => docPkg(doc) === section.id) : docs),
+    [docs, section],
+  );
+  const categories = useMemo(() => getCategories(sectionDocs), [sectionDocs]);
   // 按侧边栏顺序排列，便于上一个 / 下一个导航
   const ordered = useMemo(
-    () => categories.flatMap((category) => docs.filter((doc) => doc.category === category)),
-    [categories, docs],
+    () => categories.flatMap((category) => sectionDocs.filter((doc) => doc.category === category)),
+    [categories, sectionDocs],
   );
   const navItems = useMemo(() => guides.map((guide) => ({ path: guide.path, title: t(guide.titleKey) })), [t]);
   const meta = useMemo(() => pageMeta(lang, path), [lang, path]);
@@ -42,8 +50,8 @@ export function App() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, []);
 
-  const slug = path.startsWith('components/') ? path.slice('components/'.length) : null;
-  const index = ordered.findIndex((doc) => doc.slug === slug);
+  const slug = section && path.length > section.path.length ? path.slice(section.path.length + 1) : null;
+  const index = slug ? ordered.findIndex((doc) => doc.slug === slug) : -1;
   const guide = guides.find((item) => item.path === path);
 
   let page;
@@ -67,6 +75,8 @@ export function App() {
   return (
     <div className="docs">
       <Header
+        sectionNav={sectionNav}
+        activeSection={section?.id}
         onToggleTheme={toggleTheme}
         onOpenSearch={() => setSearchOpen(true)}
         onToggleMenu={() => setMenuOpen((open) => !open)}
@@ -76,6 +86,8 @@ export function App() {
           docs={ordered}
           categories={categories}
           guides={navItems}
+          sectionNav={sectionNav}
+          activeSection={section?.id}
           activePath={path}
           open={menuOpen}
           onClose={() => setMenuOpen(false)}

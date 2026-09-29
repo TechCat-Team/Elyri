@@ -3,15 +3,15 @@ import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
-const libraryRoot = fileURLToPath(new URL('../../packages/elyri/src', import.meta.url));
+const libraryRoot = fileURLToPath(new URL('../../packages/motion/src', import.meta.url));
 const workspaceRoot = fileURLToPath(new URL('../../', import.meta.url));
 
 export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: [
-      { find: /^elyri\/styles\.css$/, replacement: `${libraryRoot}/styles/index.css` },
-      { find: /^elyri$/, replacement: `${libraryRoot}/index.ts` },
+      { find: /^@elyri\/motion\/styles\.css$/, replacement: `${libraryRoot}/styles/index.css` },
+      { find: /^@elyri\/motion$/, replacement: `${libraryRoot}/index.ts` },
     ],
   },
   server: {

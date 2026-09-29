@@ -1,5 +1,5 @@
-import { Halo } from 'elyri';
-import type { HaloProps } from 'elyri';
+import { Halo } from '@elyri/motion';
+import type { HaloProps } from '@elyri/motion';
 
 import { BackgroundHero } from '../BackgroundHero';
 

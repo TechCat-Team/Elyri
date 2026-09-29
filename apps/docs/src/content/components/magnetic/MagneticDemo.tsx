@@ -1,4 +1,4 @@
-import { Magnetic } from 'elyri';
+import { Magnetic } from '@elyri/motion';
 
 export interface MagneticDemoProps {
   strength: number;

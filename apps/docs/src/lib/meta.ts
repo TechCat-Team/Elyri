@@ -2,6 +2,7 @@ import { getDocs } from '../content/registry';
 import { guideMeta } from '../content/guides';
 
 import { messages } from './messages';
+import { docPkg, sectionByPath } from './sections';
 import { site } from './site';
 import type { Lang, PageMeta } from './types';
 
@@ -10,9 +11,10 @@ export function pageMeta(lang: Lang, path: string): PageMeta {
   const guide = guideMeta(lang, path);
   if (guide) return guide;
 
-  if (path.startsWith('components/')) {
-    const slug = path.slice('components/'.length);
-    const doc = getDocs(lang).find((item) => item.slug === slug);
+  const section = sectionByPath(path);
+  if (section) {
+    const slug = path.slice(section.path.length + 1);
+    const doc = getDocs(lang).find((item) => docPkg(item) === section.id && item.slug === slug);
     if (doc) return { title: `${doc.title} · ${site.name}`, description: doc.description };
   }
 

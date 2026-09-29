@@ -1,5 +1,5 @@
-import { FlipTiles } from 'elyri';
-import type { FlipTilesProps } from 'elyri';
+import { FlipTiles } from '@elyri/motion';
+import type { FlipTilesProps } from '@elyri/motion';
 
 import { BackgroundHero } from '../BackgroundHero';
 

@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "elyri": "workspace:*",
+    "@elyri/motion": "workspace:*",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "react-live": "^5.0.0"

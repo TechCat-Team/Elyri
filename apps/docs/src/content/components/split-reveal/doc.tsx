@@ -1,6 +1,6 @@
 import { lazy } from 'react';
 
-import type { SplitRevealBy } from 'elyri';
+import type { SplitRevealBy } from '@elyri/motion';
 
 import { usageExample } from '../../../lib/code';
 import type { ComponentDoc, Lang } from '../../../lib/types';

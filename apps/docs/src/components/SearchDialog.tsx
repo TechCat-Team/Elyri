@@ -4,6 +4,7 @@ import type { KeyboardEvent } from 'react';
 import { useI18n } from '../lib/i18n';
 import { categoryLabel } from '../lib/messages';
 import { useRoute } from '../lib/router';
+import { docPath } from '../lib/sections';
 import type { ComponentDoc } from '../lib/types';
 
 interface SearchDialogProps {
@@ -31,7 +32,7 @@ export function SearchDialog({ docs, onClose }: SearchDialogProps) {
   }, []);
 
   const select = (doc: ComponentDoc) => {
-    push(`components/${doc.slug}`);
+    push(docPath(doc));
     onClose();
   };
 

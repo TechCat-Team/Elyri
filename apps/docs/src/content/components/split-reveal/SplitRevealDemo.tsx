@@ -1,5 +1,5 @@
-import { SplitReveal } from 'elyri';
-import type { SplitRevealBy } from 'elyri';
+import { SplitReveal } from '@elyri/motion';
+import type { SplitRevealBy } from '@elyri/motion';
 
 export interface SplitRevealDemoProps {
   text: string;

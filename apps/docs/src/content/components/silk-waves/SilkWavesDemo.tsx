@@ -1,5 +1,5 @@
-import { SilkWaves } from 'elyri';
-import type { SilkWavesProps } from 'elyri';
+import { SilkWaves } from '@elyri/motion';
+import type { SilkWavesProps } from '@elyri/motion';
 
 import { BackgroundHero } from '../BackgroundHero';
 

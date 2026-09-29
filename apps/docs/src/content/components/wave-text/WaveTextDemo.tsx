@@ -1,4 +1,4 @@
-import { WaveText } from 'elyri';
+import { WaveText } from '@elyri/motion';
 
 export interface WaveTextDemoProps {
   text: string;

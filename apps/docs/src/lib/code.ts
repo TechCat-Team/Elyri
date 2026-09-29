@@ -1,4 +1,4 @@
-import type { CodeLang, ControlValue, PackageManager } from './types';
+import type { CodeLang, ControlValue, PackageManager, Pkg } from './types';
 
 const TOKEN =
   /(\/\/.*$|\/\*[\s\S]*?\*\/)|('(?:\\.|[^'\\\n])*'|"(?:\\.|[^"\\\n])*"|`(?:\\.|[^`\\])*`)|(<\/?[A-Za-z][\w.]*)|\b(import|from|export|const|let|function|return|default|type|interface|if|else|true|false|null|undefined|new)\b|\b(\d+(?:\.\d+)?)\b|([A-Za-z_$][\w$-]*)(?==)/gm;
@@ -25,11 +25,18 @@ export function highlight(code: string) {
 
 type PropValue = ControlValue | string[] | Record<string, number> | undefined;
 
-const DEPENDENCY_COMMANDS: Record<PackageManager, string> = {
-  pnpm: 'pnpm add elyri',
-  npm: 'npm install elyri',
-  yarn: 'yarn add elyri',
-  bun: 'bun add elyri',
+/** 分区 → 对应的 npm 包名 */
+export const PACKAGE_NAMES: Record<Pkg, string> = {
+  motion: '@elyri/motion',
+  ui: '@elyri/ui',
+  blocks: '@elyri/blocks',
+};
+
+const DEPENDENCY_COMMANDS: Record<PackageManager, (pkg: Pkg) => string> = {
+  pnpm: (pkg) => `pnpm add ${PACKAGE_NAMES[pkg]}`,
+  npm: (pkg) => `npm install ${PACKAGE_NAMES[pkg]}`,
+  yarn: (pkg) => `yarn add ${PACKAGE_NAMES[pkg]}`,
+  bun: (pkg) => `bun add ${PACKAGE_NAMES[pkg]}`,
 };
 
 const ADD_COMMANDS: Record<PackageManager, (component: string) => string> = {
@@ -39,8 +46,8 @@ const ADD_COMMANDS: Record<PackageManager, (component: string) => string> = {
   bun: (component) => `bunx elyri@latest add ${component}`,
 };
 
-/** 安装核心依赖 */
-export const installCommand = (manager: PackageManager) => DEPENDENCY_COMMANDS[manager];
+/** 安装组件所属分区的包 */
+export const installCommand = (manager: PackageManager, pkg: Pkg = 'motion') => DEPENDENCY_COMMANDS[manager](pkg);
 
 /** 把组件源码添加进项目 */
 export const addCommand = (manager: PackageManager, component: string) => ADD_COMMANDS[manager](component);

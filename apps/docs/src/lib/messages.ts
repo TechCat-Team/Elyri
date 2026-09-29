@@ -2,7 +2,7 @@ import type { Lang } from './types';
 
 export const messages = {
   zh: {
-    'app.title': 'Elyri · React 动效组件库',
+    'app.title': 'Elyri · React 动效、UI 组件与页面区块',
     'menu.open': '打开菜单',
     'search.trigger': '搜索组件',
     'search.placeholder': '搜索组件...',
@@ -13,6 +13,11 @@ export const messages = {
     'color.code': '颜色代码',
     'color.codePlaceholder': '#6D3BD1 或 109,59,209',
     'nav.getStarted': '开始',
+    'nav.sections': '分区',
+    'section.motion': '动效',
+    'section.ui': 'UI 组件',
+    'section.blocks': '页面区块',
+    'section.soon': '即将推出',
     'guides.intro': '介绍',
     'guides.browse': '浏览组件',
     'guides.installation': '安装',
@@ -48,7 +53,7 @@ export const messages = {
     'table.description': '说明',
   },
   en: {
-    'app.title': 'Elyri · React animation components',
+    'app.title': 'Elyri · Motion, UI and blocks for React',
     'menu.open': 'Open menu',
     'search.trigger': 'Search components',
     'search.placeholder': 'Search components...',
@@ -59,6 +64,11 @@ export const messages = {
     'color.code': 'Color code',
     'color.codePlaceholder': '#6D3BD1 or 109,59,209',
     'nav.getStarted': 'Get Started',
+    'nav.sections': 'Sections',
+    'section.motion': 'Motion',
+    'section.ui': 'UI',
+    'section.blocks': 'Blocks',
+    'section.soon': 'Coming soon',
     'guides.intro': 'Introduction',
     'guides.browse': 'Browse components',
     'guides.installation': 'Installation',

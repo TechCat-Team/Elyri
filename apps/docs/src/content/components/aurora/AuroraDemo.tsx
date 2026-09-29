@@ -1,5 +1,5 @@
-import { Aurora } from 'elyri';
-import type { AuroraProps } from 'elyri';
+import { Aurora } from '@elyri/motion';
+import type { AuroraProps } from '@elyri/motion';
 
 import { BackgroundHero } from '../BackgroundHero';
 

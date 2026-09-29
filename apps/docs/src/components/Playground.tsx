@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { LiveContext, LiveEditor, LiveError, LivePreview, LiveProvider } from 'react-live';
-import * as elyri from 'elyri';
+import * as elyri from '@elyri/motion';
 
 import { CodeBlock } from './CodeBlock';
 import type { CodeBlockAction, CodeSwitcher } from './CodeBlock';

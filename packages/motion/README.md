@@ -1,18 +1,18 @@
-# elyri
+# @elyri/motion
 
 React 动效组件库，零运行时依赖，使用 CSS 变量做主题定制。
 
 ## 安装
 
 ```bash
-pnpm add elyri
+pnpm add @elyri/motion
 ```
 
 ## 使用
 
 ```tsx
-import { FadeIn, GradientText } from 'elyri';
-import 'elyri/styles.css';
+import { FadeIn, GradientText } from '@elyri/motion';
+import '@elyri/motion/styles.css';
 
 export function Hero() {
   return (
@@ -21,6 +21,12 @@ export function Hero() {
     </FadeIn>
   );
 }
+```
+
+也可以用 CLI 把组件源码拷进项目自行修改：
+
+```bash
+pnpm dlx elyri@latest add fade-in gradient-text
 ```
 
 ## 主题

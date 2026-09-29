@@ -1,5 +1,5 @@
-import { DragonScales } from 'elyri';
-import type { DragonScalesProps } from 'elyri';
+import { DragonScales } from '@elyri/motion';
+import type { DragonScalesProps } from '@elyri/motion';
 
 import { BackgroundHero } from '../BackgroundHero';
 

@@ -1,5 +1,5 @@
-import { Velvet } from 'elyri';
-import type { VelvetProps } from 'elyri';
+import { Velvet } from '@elyri/motion';
+import type { VelvetProps } from '@elyri/motion';
 
 import { BackgroundHero } from '../BackgroundHero';
 

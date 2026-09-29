@@ -8,6 +8,9 @@ export type CodeLang = 'ts' | 'js';
 
 export type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
 
+/** 顶层分区 / 来源包：动效、UI 基础组件、页面区块 */
+export type Pkg = 'motion' | 'ui' | 'blocks';
+
 export type ControlValue = string | number | boolean;
 export type ControlValues = Record<string, ControlValue>;
 
@@ -34,6 +37,8 @@ export interface ComponentDoc {
   slug: string;
   title: string;
   category: string;
+  /** 所属分区与来源包，省略按动效处理 */
+  pkg?: Pkg;
   description: string;
   isNew?: boolean;
   /** 演示顶部带 BackgroundHero 落地页内容，预览可用开关隐藏 */

@@ -1,4 +1,4 @@
-import { ScaleIn } from 'elyri';
+import { ScaleIn } from '@elyri/motion';
 
 export interface ScaleInDemoProps {
   from: number;

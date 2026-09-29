@@ -4,8 +4,8 @@
     "noEmit": true,
     "types": ["vite/client", "node"],
     "paths": {
-      "elyri": ["../../packages/elyri/src/index.ts"],
-      "elyri/styles.css": ["../../packages/elyri/src/styles/index.css"]
+      "@elyri/motion": ["../../packages/motion/src/index.ts"],
+      "@elyri/motion/styles.css": ["../../packages/motion/src/styles/index.css"]
     }
   },
   "include": ["src", "vite.config.ts"]

@@ -3,19 +3,18 @@
 import { existsSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 import { components } from './manifest.mjs';
 
 const available = Object.keys(components);
 
-// 组件源码里的共享运行时统一由 `elyri/core` 提供，拷贝时改写成包名导入。
+// 组件源码里的共享运行时统一由 `<pkg>/core` 提供，拷贝时改写成包名导入。
 // 用正则而非字面量匹配，避免引号或换行变化导致改写静默失效。
 const coreImport = /from\s+['"](?:\.\.\/)+core['"]/g;
 const leftoverCoreImport = /from\s+['"](?:\.\.\/)+core['"]/;
 
-const rewriteCoreImport = (source, from) => {
-  const rewritten = source.replace(coreImport, "from 'elyri/core'");
+const rewriteCoreImport = (source, pkg, from) => {
+  const rewritten = source.replace(coreImport, `from '${pkg}/core'`);
   if (leftoverCoreImport.test(rewritten)) {
     throw new Error(`Could not rewrite the shared runtime import in ${from}`);
   }
@@ -31,14 +30,20 @@ if (command !== 'add' || names.length === 0 || names.some((name) => !components[
   try {
     const cwd = process.cwd();
     const manifest = JSON.parse(await readFile(join(cwd, 'package.json'), 'utf8'));
-    if (!manifest.dependencies?.elyri && !manifest.devDependencies?.elyri) {
-      throw new Error('Install the core package first: pnpm add elyri');
+
+    const selected = [...new Set(names)].map((name) => components[name]);
+    // 拷贝后的源码从 <pkg>/core 导入运行时，对应包必须在用户项目的依赖里
+    const missing = [...new Set(selected.map(({ pkg }) => pkg))].filter(
+      (pkg) => !manifest.dependencies?.[pkg] && !manifest.devDependencies?.[pkg],
+    );
+    if (missing.length) {
+      throw new Error(`Install the source package first: pnpm add ${missing.join(' ')}`);
     }
 
-    const sourceRoot = fileURLToPath(new URL('../src/components/', import.meta.url));
-    const destinations = [...new Set(names)].flatMap((name) => {
-      const { folder, name: component } = components[name];
+    const destinations = selected.flatMap(({ pkg, folder, name: component }) => {
+      const sourceRoot = resolve(cwd, 'node_modules', pkg, 'src/components');
       return ['tsx', 'css'].map((ext) => ({
+        pkg,
         from: join(sourceRoot, folder, `${component}.${ext}`),
         to: resolve(cwd, 'src/components/elyri', `${component}.${ext}`),
       }));
@@ -49,9 +54,9 @@ if (command !== 'add' || names.length === 0 || names.some((name) => !components[
       throw new Error(`Already exists; no files were changed:\n${existing.map(({ to }) => `  ${to}`).join('\n')}`);
     }
 
-    for (const { from, to } of destinations) {
+    for (const { pkg, from, to } of destinations) {
       const source = await readFile(from, 'utf8');
-      const content = from.endsWith('.tsx') ? rewriteCoreImport(source, from) : source;
+      const content = from.endsWith('.tsx') ? rewriteCoreImport(source, pkg, from) : source;
       await mkdir(dirname(to), { recursive: true });
       await writeFile(to, content, { flag: 'wx' });
       console.log(`Added ${to}`);
