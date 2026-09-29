@@ -105,8 +105,8 @@ function IntroPage({ docs }: GuideProps) {
   const t = copy[lang];
   const componentCount = docs.length;
   const categoryCount = new Set(docs.map((doc) => doc.category)).size;
-  // 首页精选：挑三个最能代表动效能力的组件（龙鳞 / 字符画 / 水下焦散）
-  const featured = ['dragon-scales', 'ascii-image', 'caustics']
+  // 首页精选：挑三个最能代表动效能力的组件（龙鳞 / 字符画 / 流光渐变）
+  const featured = ['dragon-scales', 'ascii-image', 'mesh-gradient']
     .map((slug) => docs.find((doc) => doc.slug === slug))
     .filter((doc): doc is ComponentDoc => Boolean(doc));
 
