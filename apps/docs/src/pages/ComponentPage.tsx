@@ -7,7 +7,7 @@ import { InstallSnippet } from '../components/InstallSnippet';
 import { useI18n } from '../lib/i18n';
 import type { MessageKey } from '../lib/messages';
 import { Link } from '../lib/router';
-import { docPkg } from '../lib/sections';
+import { docPath, docPkg } from '../lib/sections';
 import type { CodeLang, ComponentDoc, ControlValue, ControlValues } from '../lib/types';
 
 // 在线编辑器依赖浏览器内的 JSX 编译器，按需加载且只在客户端挂载
@@ -131,7 +131,7 @@ export function ComponentPage({ doc, prev, next }: ComponentPageProps) {
               className={tab === key ? 'tab is-active' : 'tab'}
               onClick={() => setTab(key)}
             >
-              {key === 'preview' ? 'Preview' : 'Code'}
+              {t(key === 'preview' ? 'page.preview' : 'page.code')}
             </button>
           ))}
           <span className="tab-underline" aria-hidden="true" />
@@ -209,9 +209,9 @@ export function ComponentPage({ doc, prev, next }: ComponentPageProps) {
             {hasControls && (
               <section className="section">
                 <div className="section-head">
-                  <h2 className="section-title">Customize</h2>
+                  <h2 className="section-title">{t('page.customize')}</h2>
                   <button type="button" className="ghost-button" onClick={handleReset}>
-                    {t('page.reset')}
+                    {t('page.resetControls')}
                   </button>
                 </div>
                 <Controls controls={doc.controls ?? []} values={values} onChange={handleChange} />
@@ -235,7 +235,7 @@ export function ComponentPage({ doc, prev, next }: ComponentPageProps) {
       </div>
 
       <section className="section">
-        <h2 className="section-title">Props</h2>
+        <h2 className="section-title">{t('page.props')}</h2>
         <div className="table-wrap">
           <table className="props-table">
             <thead>
@@ -279,7 +279,7 @@ export function ComponentPage({ doc, prev, next }: ComponentPageProps) {
 
       <nav className="pager">
         {prev ? (
-          <Link to={`components/${prev.slug}`} className="pager-link">
+          <Link to={docPath(prev)} className="pager-link">
             <span>{t('page.prev')}</span>
             {prev.title}
           </Link>
@@ -287,7 +287,7 @@ export function ComponentPage({ doc, prev, next }: ComponentPageProps) {
           <span />
         )}
         {next && (
-          <Link to={`components/${next.slug}`} className="pager-link is-next">
+          <Link to={docPath(next)} className="pager-link is-next">
             <span>{t('page.next')}</span>
             {next.title}
           </Link>

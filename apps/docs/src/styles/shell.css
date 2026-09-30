@@ -77,6 +77,9 @@
   margin-left: 6px;
 }
 .section-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   color: var(--docs-muted);
   font-size: 13px;
   font-weight: 400;
@@ -91,6 +94,16 @@ a.section-tab:hover {
 .section-tab.is-active {
   color: var(--docs-text);
   font-weight: 600;
+}
+/* 分区还没有内容时的弱化标记 */
+.soon-tag {
+  padding: 0 6px;
+  border: 1px solid var(--docs-border);
+  border-radius: 999px;
+  color: var(--docs-muted);
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 15px;
 }
 .icon-button {
   display: inline-grid;
@@ -286,12 +299,46 @@ a.section-tab:hover {
   background: var(--docs-accent);
   font-weight: 600;
 }
-/* 分区项在窄屏才出现在侧栏，宽屏由顶栏承载 */
-.sidebar .section-nav {
-  display: none;
+/* 侧栏里的分区标题：点击回到分区落地页 */
+.sidebar-section-head {
+  margin-bottom: -14px;
+  color: var(--docs-text);
+  font-weight: 600;
 }
-span.sidebar-link {
-  cursor: default;
+.sidebar-count {
+  color: var(--docs-muted);
+  font-size: 11px;
+  font-weight: 500;
+}
+.sidebar-link.is-active .sidebar-count {
+  color: inherit;
+}
+/* 窄屏抽屉顶部的分区切换，宽屏由顶栏承载 */
+.sidebar-sections {
+  display: none;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--docs-border);
+  border-radius: 999px;
+  background: var(--docs-surface);
+}
+.sidebar-section {
+  flex: 1;
+  padding: 7px 4px;
+  border-radius: 999px;
+  color: var(--docs-muted);
+  font-size: 12px;
+  text-align: center;
+  white-space: nowrap;
+  text-decoration: none;
+  transition:
+    color 180ms,
+    background 180ms;
+}
+.sidebar-section.is-active {
+  background: var(--docs-accent-soft);
+  color: var(--docs-accent);
+  font-weight: 600;
 }
 .new-tag {
   padding: 0 7px;
@@ -328,8 +375,8 @@ span.sidebar-link {
   .section-tabs {
     display: none;
   }
-  .sidebar .section-nav {
-    display: block;
+  .sidebar-sections {
+    display: flex;
   }
   .sidebar {
     position: fixed;
@@ -385,9 +432,6 @@ span.sidebar-link {
     justify-content: center;
     width: 36px;
     padding: 0;
-  }
-  .lang-toggle-label {
-    display: none;
   }
   .search-trigger {
     width: 36px;

@@ -1,3 +1,4 @@
+import { useI18n } from '../lib/i18n';
 import { Link } from '../lib/router';
 import { docPath } from '../lib/sections';
 import type { ComponentDoc } from '../lib/types';
@@ -12,6 +13,7 @@ interface SectionPageProps {
 
 /** 分区落地页：列出该分区的组件；分区尚未动工时说明情况，而不是给一个死链。 */
 export function SectionPage({ label, description, emptyLabel, docs }: SectionPageProps) {
+  const { t } = useI18n();
   return (
     <article className="doc-page">
       <h1 className="page-title">{label}</h1>
@@ -27,7 +29,7 @@ export function SectionPage({ label, description, emptyLabel, docs }: SectionPag
                 <div className="showcase-card-body">
                   <div className="showcase-card-head">
                     <span className="showcase-card-title">{doc.title}</span>
-                    {doc.isNew && <span className="new-tag">New</span>}
+                    {doc.isNew && <span className="new-tag">{t('tag.new')}</span>}
                   </div>
                   <p className="showcase-card-desc">{doc.description}</p>
                 </div>

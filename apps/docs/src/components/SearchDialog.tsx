@@ -4,7 +4,7 @@ import type { KeyboardEvent } from 'react';
 import { useI18n } from '../lib/i18n';
 import { categoryLabel } from '../lib/messages';
 import { useRoute } from '../lib/router';
-import { docPath } from '../lib/sections';
+import { docPath, docPkg, sectionById } from '../lib/sections';
 import type { ComponentDoc } from '../lib/types';
 
 interface SearchDialogProps {
@@ -18,18 +18,26 @@ export function SearchDialog({ docs, onClose }: SearchDialogProps) {
   const [query, setQuery] = useState('');
   const [cursor, setCursor] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return docs;
     return docs.filter((doc) =>
-      [doc.title, doc.category, doc.description].some((text) => text.toLowerCase().includes(q)),
+      [doc.title, doc.category, categoryLabel(doc.category, t), doc.description].some((text) =>
+        text.toLowerCase().includes(q),
+      ),
     );
-  }, [docs, query]);
+  }, [docs, query, t]);
 
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
+
+  // 键盘移动光标时，让选中项保持在可视范围内
+  useEffect(() => {
+    listRef.current?.querySelector('.search-item.is-active')?.scrollIntoView({ block: 'nearest' });
+  }, [cursor]);
 
   const select = (doc: ComponentDoc) => {
     push(docPath(doc));
@@ -64,10 +72,10 @@ export function SearchDialog({ docs, onClose }: SearchDialogProps) {
           }}
           onKeyDown={handleKeyDown}
         />
-        <ul className="search-results">
+        <ul className="search-results" ref={listRef}>
           {results.length === 0 && <li className="search-empty">{t('search.empty')}</li>}
           {results.map((doc, index) => (
-            <li key={doc.slug}>
+            <li key={docPath(doc)}>
               <button
                 type="button"
                 className={index === cursor ? 'search-item is-active' : 'search-item'}
@@ -75,7 +83,9 @@ export function SearchDialog({ docs, onClose }: SearchDialogProps) {
                 onClick={() => select(doc)}
               >
                 <span>{doc.title}</span>
-                <span className="search-item-category">{categoryLabel(doc.category, t)}</span>
+                <span className="search-item-category">
+                  {t(sectionById(docPkg(doc)).labelKey)} · {categoryLabel(doc.category, t)}
+                </span>
               </button>
             </li>
           ))}

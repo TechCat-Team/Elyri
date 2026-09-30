@@ -10,6 +10,10 @@ interface SidebarProps {
   categories: string[];
   guides: NavItem[];
   sections: readonly Section[];
+  sectionCounts: Record<Pkg, number>;
+  /** 侧栏展示的分区：当前页所属分区，引导页则为上一次浏览的分区 */
+  navSection: Section;
+  /** 当前页面所属分区；引导页没有分区 */
   activeSection?: Pkg;
   activePath: string;
   open: boolean;
@@ -21,6 +25,8 @@ export function Sidebar({
   categories,
   guides,
   sections,
+  sectionCounts,
+  navSection,
   activeSection,
   activePath,
   open,
@@ -28,35 +34,41 @@ export function Sidebar({
 }: SidebarProps) {
   const { t } = useI18n();
   const linkClass = (path: string) => (path === activePath ? 'sidebar-link is-active' : 'sidebar-link');
+  const count = sectionCounts[navSection.id];
 
   return (
     <>
       <div className={open ? 'sidebar-backdrop is-open' : 'sidebar-backdrop'} onClick={onClose} />
       <aside className={open ? 'sidebar is-open' : 'sidebar'}>
-        <nav onClick={onClose}>
-          <div className="sidebar-group section-nav">
-            <p className="sidebar-group-title">{t('nav.sections')}</p>
-            {sections.map((section) =>
-              section.id === activeSection ? (
-                <span key={section.id} className="sidebar-link is-active" aria-current="page">
-                  {t(section.labelKey)}
-                </span>
-              ) : (
-                <Link key={section.id} to={section.path} className="sidebar-link">
-                  {t(section.labelKey)}
-                </Link>
-              ),
-            )}
+        <nav>
+          {/* 窄屏抽屉里的分区切换，与宽屏顶栏的分区标签对应 */}
+          <div className="sidebar-sections" role="group" aria-label={t('nav.sections')}>
+            {sections.map((section) => (
+              <Link
+                key={section.id}
+                to={section.path}
+                className={section.id === activeSection ? 'sidebar-section is-active' : 'sidebar-section'}
+                aria-current={section.id === activeSection ? 'true' : undefined}
+                onClick={onClose}
+              >
+                {t(section.labelKey)}
+              </Link>
+            ))}
           </div>
 
           <div className="sidebar-group">
             <p className="sidebar-group-title">{t('nav.getStarted')}</p>
             {guides.map((guide) => (
-              <Link key={guide.path} to={guide.path} className={linkClass(guide.path)}>
+              <Link key={guide.path} to={guide.path} className={linkClass(guide.path)} onClick={onClose}>
                 {guide.title}
               </Link>
             ))}
           </div>
+
+          <Link to={navSection.path} className={`sidebar-section-head ${linkClass(navSection.path)}`} onClick={onClose}>
+            {t(navSection.labelKey)}
+            <span className="sidebar-count">{count > 0 ? count : t('section.soon')}</span>
+          </Link>
 
           {categories.map((category) => (
             <div key={category} className="sidebar-group">
@@ -66,9 +78,9 @@ export function Sidebar({
                 .map((doc) => {
                   const path = docPath(doc);
                   return (
-                    <Link key={doc.slug} to={path} className={linkClass(path)}>
+                    <Link key={doc.slug} to={path} className={linkClass(path)} onClick={onClose}>
                       {doc.title}
-                      {doc.isNew && <span className="new-tag">New</span>}
+                      {doc.isNew && <span className="new-tag">{t('tag.new')}</span>}
                     </Link>
                   );
                 })}

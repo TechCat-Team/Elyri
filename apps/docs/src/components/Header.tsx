@@ -12,8 +12,11 @@ import { ThemeToggle } from './ThemeToggle';
 
 interface HeaderProps {
   sections: readonly Section[];
+  /** 各分区的组件数，为 0 时标记「即将推出」 */
+  sectionCounts: Record<Pkg, number>;
   /** 当前页面所属分区；引导页没有分区 */
   activeSection?: Pkg;
+  menuOpen: boolean;
   onToggleTheme: (event: MouseEvent<HTMLElement>) => void;
   onOpenSearch: () => void;
   onToggleMenu: () => void;
@@ -24,16 +27,30 @@ const noop = () => () => {};
 const isMacPlatform = () => navigator.platform.toUpperCase().includes('MAC');
 const serverIsMac = () => false;
 
-export function Header({ sections, activeSection, onToggleTheme, onOpenSearch, onToggleMenu }: HeaderProps) {
+export function Header({
+  sections,
+  sectionCounts,
+  activeSection,
+  menuOpen,
+  onToggleTheme,
+  onOpenSearch,
+  onToggleMenu,
+}: HeaderProps) {
   const { t } = useI18n();
   const isMac = useSyncExternalStore(noop, isMacPlatform, serverIsMac);
 
   return (
     <header className="topbar">
       <div className="topbar-left">
-        <button type="button" className="icon-button menu-button" aria-label={t('menu.open')} onClick={onToggleMenu}>
+        <button
+          type="button"
+          className="icon-button menu-button"
+          aria-label={t(menuOpen ? 'menu.close' : 'menu.open')}
+          aria-expanded={menuOpen}
+          onClick={onToggleMenu}
+        >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M4 6h16M4 12h16M4 18h16" />
+            <path d={menuOpen ? 'M6 6l12 12M18 6 6 18' : 'M4 6h16M4 12h16M4 18h16'} />
           </svg>
         </button>
         <Link to="" className="logo">
@@ -43,17 +60,17 @@ export function Header({ sections, activeSection, onToggleTheme, onOpenSearch, o
         <span className="version-badge">v{site.version}</span>
 
         <nav className="section-tabs" aria-label={t('nav.sections')}>
-          {sections.map((section) =>
-            section.id === activeSection ? (
-              <span key={section.id} className="section-tab is-active" aria-current="page">
-                {t(section.labelKey)}
-              </span>
-            ) : (
-              <Link key={section.id} to={section.path} className="section-tab">
-                {t(section.labelKey)}
-              </Link>
-            ),
-          )}
+          {sections.map((section) => (
+            <Link
+              key={section.id}
+              to={section.path}
+              className={section.id === activeSection ? 'section-tab is-active' : 'section-tab'}
+              aria-current={section.id === activeSection ? 'true' : undefined}
+            >
+              {t(section.labelKey)}
+              {sectionCounts[section.id] === 0 && <span className="soon-tag">{t('section.soon')}</span>}
+            </Link>
+          ))}
         </nav>
       </div>
 

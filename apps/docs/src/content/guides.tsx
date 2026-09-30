@@ -30,7 +30,7 @@ const copy = {
     introDescription: '为 React 而做的动效组件。浏览实时预览，调整参数，再把适合的代码带进项目。',
     introCta: '查看安装方式 ↗',
     browse: '浏览组件',
-    browseDescription: '浏览全部动效组件，打开任意一个即可查看实时预览、代码与参数。',
+    browseDescription: '浏览全部组件，打开任意一个即可查看实时预览、代码与参数。',
     countSuffix: '个组件',
     quickstart: '快速开始',
     installTitle: '安装',
@@ -40,7 +40,7 @@ const copy = {
     stepInstall: '1. 安装依赖并添加组件',
     stepStyles: '2. 引入公共样式',
     stepUsage: '3. 使用本地组件',
-    statComponents: '动效组件',
+    statComponents: '组件',
     statCategories: '分类',
     statDependencies: '运行时依赖',
     featuredTitle: '精选动效',
@@ -56,8 +56,8 @@ const copy = {
     introDescription: 'Animation components for React. Preview them live, tune the props, then take the code with you.',
     introCta: 'Read the installation guide ↗',
     browse: 'Browse components',
-    browseDescription: 'Browse every animation component. Open any one to see its live preview, code, and props.',
-    countSuffix: 'COMPONENTS',
+    browseDescription: 'Browse every component. Open any one to see its live preview, code, and props.',
+    countSuffix: 'components',
     quickstart: 'Quick start',
     installTitle: 'Installation',
     installDescription:
@@ -205,6 +205,7 @@ const defaultsOf = (doc: ComponentDoc): ControlValues =>
  * 静止由组件库的 ReducedMotionProvider 强制，空闲时不会跑 RAF。
  */
 function ShowcaseCard({ doc }: { doc: ComponentDoc }) {
+  const { t } = useI18n();
   const ref = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState(false);
   const [inView, setInView] = useState(false);
@@ -257,7 +258,7 @@ function ShowcaseCard({ doc }: { doc: ComponentDoc }) {
       <div className="showcase-card-body">
         <div className="showcase-card-head">
           <span className="showcase-card-title">{doc.title}</span>
-          {doc.isNew && <span className="new-tag">New</span>}
+          {doc.isNew && <span className="new-tag">{t('tag.new')}</span>}
         </div>
         <p className="showcase-card-desc">{doc.description}</p>
       </div>
