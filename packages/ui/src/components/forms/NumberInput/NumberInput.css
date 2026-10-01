@@ -1,0 +1,131 @@
+/* 数字输入：外壳统一边框与焦点环，内部为原生 number 字段 + 自绘步进按钮 */
+.elyri-ui-number-input {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  border: 1px solid var(--elyri-ui-border);
+  border-radius: var(--elyri-ui-radius);
+  background: var(--elyri-ui-surface);
+  color: var(--elyri-ui-text);
+  overflow: hidden;
+  transition:
+    border-color var(--elyri-ui-duration) var(--elyri-ui-ease),
+    box-shadow var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-number-input:hover:not([data-disabled]) {
+  border-color: color-mix(in srgb, var(--elyri-ui-border) 55%, var(--elyri-ui-text));
+}
+
+.elyri-ui-number-input:focus-within {
+  border-color: var(--elyri-ui-accent);
+  box-shadow: var(--elyri-ui-ring);
+}
+
+.elyri-ui-number-input.is-invalid {
+  border-color: var(--elyri-ui-danger);
+}
+
+.elyri-ui-number-input.is-invalid:focus-within {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--elyri-ui-danger) 35%, transparent);
+}
+
+.elyri-ui-number-input__field {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  outline: none;
+  /* 隐藏原生步进箭头，改用自绘按钮 */
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.elyri-ui-number-input__field::-webkit-outer-spin-button,
+.elyri-ui-number-input__field::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+.elyri-ui-number-input__field::placeholder {
+  color: var(--elyri-ui-muted);
+}
+
+.elyri-ui-number-input__field:disabled {
+  color: var(--elyri-ui-muted);
+  cursor: not-allowed;
+}
+
+.elyri-ui-number-input__steppers {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  border-left: 1px solid var(--elyri-ui-border);
+}
+
+.elyri-ui-number-input__button {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--elyri-ui-muted);
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.elyri-ui-number-input__button svg {
+  width: 12px;
+  height: 12px;
+}
+
+.elyri-ui-number-input__button:hover:not(:disabled) {
+  background: var(--elyri-ui-surface-muted);
+  color: var(--elyri-ui-text);
+}
+
+.elyri-ui-number-input__button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.elyri-ui-number-input__button:focus-visible {
+  outline: none;
+  box-shadow: inset var(--elyri-ui-ring);
+}
+
+/* 尺寸 */
+.elyri-ui-number-input--sm .elyri-ui-number-input__field {
+  height: 32px;
+  padding: 0 10px;
+  font-size: 13px;
+}
+
+.elyri-ui-number-input--md .elyri-ui-number-input__field {
+  height: 38px;
+  padding: 0 12px;
+  font-size: 14px;
+}
+
+.elyri-ui-number-input--lg .elyri-ui-number-input__field {
+  height: 44px;
+  padding: 0 14px;
+  font-size: 15px;
+}
+
+/* 禁用 */
+.elyri-ui-number-input[data-disabled] {
+  opacity: 0.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-ui-number-input,
+  .elyri-ui-number-input__button {
+    transition: none;
+  }
+}

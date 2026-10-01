@@ -1,0 +1,102 @@
+/* 根容器：左右留出滑块半径，避免端点被裁切 */
+.elyri-ui-slider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 9px;
+}
+
+.elyri-ui-slider__track {
+  position: relative;
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--elyri-ui-surface-muted);
+  cursor: pointer;
+  touch-action: none;
+}
+
+.elyri-ui-slider__fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 999px;
+  background: var(--elyri-ui-accent);
+}
+
+.elyri-ui-slider__thumb {
+  position: absolute;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--elyri-ui-accent);
+  border-radius: 50%;
+  background: var(--elyri-ui-surface);
+  box-shadow: var(--elyri-ui-shadow);
+  cursor: grab;
+  transition: box-shadow var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-slider__thumb:active {
+  cursor: grabbing;
+}
+
+.elyri-ui-slider__thumb:focus-visible {
+  outline: none;
+  box-shadow: var(--elyri-ui-ring);
+}
+
+/* 尺寸 */
+.elyri-ui-slider--sm .elyri-ui-slider__track {
+  height: 4px;
+}
+
+.elyri-ui-slider--sm .elyri-ui-slider__thumb {
+  width: 14px;
+  height: 14px;
+}
+
+.elyri-ui-slider--lg .elyri-ui-slider__track {
+  height: 8px;
+}
+
+.elyri-ui-slider--lg .elyri-ui-slider__thumb {
+  width: 22px;
+  height: 22px;
+}
+
+.elyri-ui-slider--lg {
+  padding: 0 11px;
+}
+
+/* 禁用 */
+.elyri-ui-slider[data-disabled] {
+  opacity: 0.55;
+}
+
+.elyri-ui-slider[data-disabled] .elyri-ui-slider__track {
+  cursor: not-allowed;
+}
+
+.elyri-ui-slider[data-disabled] .elyri-ui-slider__thumb {
+  cursor: not-allowed;
+}
+
+/* 校验失败 */
+.elyri-ui-slider[data-invalid] .elyri-ui-slider__fill {
+  background: var(--elyri-ui-danger);
+}
+
+.elyri-ui-slider[data-invalid] .elyri-ui-slider__thumb {
+  border-color: var(--elyri-ui-danger);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-ui-slider__thumb {
+    transition: none;
+  }
+}
