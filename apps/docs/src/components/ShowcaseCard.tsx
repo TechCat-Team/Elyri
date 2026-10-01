@@ -60,7 +60,9 @@ export function ShowcaseCard({ doc }: { doc: ComponentDoc }) {
         {mounted && (
           <ReducedMotionProvider reduced={systemReducedMotion || !playing}>
             <Suspense fallback={<div className="demo-fallback" />}>
-              {doc.render({ ...defaultsOf(doc), ...doc.showcaseValues })}
+              {doc.examples?.length
+                ? doc.examples[0].render()
+                : doc.render?.({ ...defaultsOf(doc), ...doc.showcaseValues })}
             </Suspense>
           </ReducedMotionProvider>
         )}

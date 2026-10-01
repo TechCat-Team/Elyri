@@ -33,6 +33,19 @@ export interface PropDoc {
   description: string;
 }
 
+/** UI 组件的单个示例：标题 + 预览 + 对应代码 */
+export interface ComponentExample {
+  /** 示例标题，如「全部变体」「尺寸」「状态」 */
+  title: string;
+  /** 可选说明 */
+  description?: string;
+  render: () => ReactNode;
+  /** 与该示例一一对应的代码 */
+  code: string;
+  /** 需要更宽画布时开启（Tabs、Toast、Progress 等） */
+  wide?: boolean;
+}
+
 export interface ComponentDoc {
   slug: string;
   title: string;
@@ -50,8 +63,10 @@ export interface ComponentDoc {
   showcaseValues?: ControlValues;
   props: PropDoc[];
   dependencies?: string[];
-  render: (values: ControlValues) => ReactNode;
-  usage: (values: ControlValues, codeLang: CodeLang) => string;
+  /** UI 基础组件的多示例画廊；设置后组件页改用画廊布局 */
+  examples?: ComponentExample[];
+  render?: (values: ControlValues) => ReactNode;
+  usage?: (values: ControlValues, codeLang: CodeLang) => string;
 }
 
 /** 文档（指南）页 */

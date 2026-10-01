@@ -603,13 +603,6 @@
   width: min(540px, 100%);
   text-align: left;
 }
-/* 对话框演示底部的操作区 */
-.demo-ui-dialog-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 18px;
-}
 /* 弹出层演示文字 */
 .demo-ui-popover-title {
   margin-bottom: 6px;
@@ -977,4 +970,278 @@
   color: #ff7a7a;
   font-size: 12px;
   white-space: pre-wrap;
+}
+
+/* 组件页 + 右侧锚点目录（仅 UI 组件页有目录；复用 .guide-toc 样式） */
+.component-layout.has-toc {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.component-layout.has-toc .doc-page {
+  max-width: none;
+  margin: 0;
+  min-width: 0;
+}
+@media (min-width: 1240px) {
+  .component-layout.has-toc {
+    grid-template-columns: minmax(0, 1fr) 190px;
+  }
+  /* 宽屏有右侧目录时，正文中的示例标签条就不再需要 */
+  .component-layout.has-toc .ui-gallery-index {
+    display: none;
+  }
+}
+.ui-anchor {
+  scroll-margin-top: calc(var(--topbar-h) + 16px);
+}
+/* 组件页目录不要竖直分割线 */
+.component-toc {
+  border-left: 0;
+  padding-left: 0;
+}
+.component-toc .guide-toc-link.is-sub {
+  position: relative;
+  padding-left: 12px;
+  font-size: 11.5px;
+}
+.component-toc .guide-toc-link.is-sub::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.45;
+  transform: translateY(-50%);
+}
+/* 子项高亮时，父级「示例」只做弱高亮 */
+.component-toc .guide-toc-link.is-parent-active {
+  color: var(--docs-text);
+}
+
+/* UI 组件示例画廊：安装 + 示例目录 + 逐条「标题 / 预览卡片（含代码）」 */
+.ui-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-top: 26px;
+}
+.ui-gallery-examples {
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+}
+.ui-gallery-head {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.ui-gallery-head .section-title {
+  margin: 0;
+}
+.ui-gallery-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ui-gallery-chip {
+  padding: 5px 12px;
+  border: 1px solid var(--docs-border);
+  border-radius: 999px;
+  background: var(--docs-surface);
+  color: var(--docs-muted);
+  font-size: 12px;
+  font-weight: 560;
+  text-decoration: none;
+  transition:
+    color 160ms,
+    border-color 160ms,
+    background-color 160ms;
+}
+.ui-gallery-chip:hover {
+  border-color: var(--docs-accent);
+  background: var(--docs-accent-soft);
+  color: var(--docs-accent);
+}
+
+.ui-example {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  scroll-margin-top: 88px;
+}
+.ui-example-head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ui-example-title {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.4;
+  font-weight: 660;
+}
+.ui-example-anchor {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--docs-text);
+  text-decoration: none;
+}
+.ui-example-anchor span {
+  color: var(--docs-accent);
+  font-weight: 500;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition:
+    opacity 160ms,
+    transform 160ms;
+}
+.ui-example-anchor:hover span,
+.ui-example-anchor:focus-visible span {
+  opacity: 1;
+  transform: none;
+}
+.ui-example-desc {
+  margin: 0;
+  color: var(--docs-muted);
+  font-size: 13.5px;
+  line-height: 1.65;
+}
+
+/* 预览 + 工具栏 + 代码合为一张卡片 */
+.ui-example-card {
+  border: 1px solid var(--docs-border);
+  border-radius: 14px;
+  background: var(--docs-surface);
+  overflow: hidden;
+  transition:
+    border-color 200ms,
+    box-shadow 200ms;
+}
+.ui-example-card:hover,
+.ui-example-card.is-open {
+  border-color: var(--docs-rule);
+}
+.ui-example-card.is-open {
+  box-shadow: 0 12px 32px -18px rgba(0, 0, 0, 0.35);
+}
+.ui-example-preview {
+  position: relative;
+  display: grid;
+  place-items: center;
+  /* 高度随内容自适应，小组件不再被大画布包着 */
+  min-height: 120px;
+  padding: 32px 24px;
+  background-color: var(--docs-preview);
+  background-image: radial-gradient(var(--docs-dot) 0.8px, transparent 0.8px);
+  background-size: 18px 18px;
+  background-position: center;
+}
+/* 宽画布示例（Tabs、Toast、Progress 等）让内容撑满 */
+.ui-example-preview.is-wide {
+  place-items: center stretch;
+  padding: 32px clamp(20px, 6%, 56px);
+}
+
+.ui-example-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 8px;
+  border-top: 1px solid var(--docs-border);
+  background: var(--docs-surface);
+}
+.ui-example-toggle,
+.ui-example-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 30px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--docs-muted);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 580;
+  cursor: pointer;
+  transition:
+    color 160ms,
+    background-color 160ms;
+}
+.ui-example-toggle:hover,
+.ui-example-copy:hover {
+  background: var(--docs-hover);
+  color: var(--docs-text);
+}
+.ui-example-toggle:focus-visible,
+.ui-example-copy:focus-visible {
+  outline: 2px solid var(--docs-accent);
+  outline-offset: 1px;
+}
+.ui-example-card.is-open .ui-example-toggle {
+  color: var(--docs-accent);
+}
+.ui-example-caret {
+  transition: transform 220ms ease;
+}
+.ui-example-card.is-open .ui-example-caret {
+  transform: rotate(180deg);
+}
+.ui-example-copy.is-copied {
+  color: var(--docs-accent);
+}
+
+/* 代码面板：grid 行高 0fr → 1fr 实现平滑展开 */
+.ui-example-code {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.ui-example-card.is-open .ui-example-code {
+  grid-template-rows: 1fr;
+}
+.ui-example-code-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+.ui-example-code .code-block {
+  border: 0;
+  border-top: 1px solid var(--docs-border);
+  border-radius: 0;
+}
+/* 卡片底栏已有复制按钮，代码块自带的头部隐藏，避免重复 */
+.ui-example-code .code-block-head {
+  display: none;
+}
+.ui-example-code .code-block pre {
+  max-height: 420px;
+  overflow: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-example-code,
+  .ui-example-caret,
+  .ui-example-anchor span {
+    transition: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .ui-example-preview,
+  .ui-example-preview.is-wide {
+    min-height: 104px;
+    padding: 24px 16px;
+  }
+  .ui-example-copy span {
+    display: none;
+  }
 }
