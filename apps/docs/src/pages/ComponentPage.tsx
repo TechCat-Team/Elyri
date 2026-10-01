@@ -4,9 +4,9 @@ import type { ReactNode } from 'react';
 import { CodeBlock } from '../components/CodeBlock';
 import { Controls } from '../components/Controls';
 import { InstallSnippet } from '../components/InstallSnippet';
+import { Pager } from '../components/Pager';
 import { useI18n } from '../lib/i18n';
 import type { MessageKey } from '../lib/messages';
-import { Link } from '../lib/router';
 import { docPath, docPkg } from '../lib/sections';
 import type { CodeLang, ComponentDoc, ControlValue, ControlValues } from '../lib/types';
 
@@ -277,22 +277,10 @@ export function ComponentPage({ doc, prev, next }: ComponentPageProps) {
         </section>
       )}
 
-      <nav className="pager">
-        {prev ? (
-          <Link to={docPath(prev)} className="pager-link">
-            <span>{t('page.prev')}</span>
-            {prev.title}
-          </Link>
-        ) : (
-          <span />
-        )}
-        {next && (
-          <Link to={docPath(next)} className="pager-link is-next">
-            <span>{t('page.next')}</span>
-            {next.title}
-          </Link>
-        )}
-      </nav>
+      <Pager
+        prev={prev && { path: docPath(prev), title: prev.title }}
+        next={next && { path: docPath(next), title: next.title }}
+      />
     </article>
   );
 }
