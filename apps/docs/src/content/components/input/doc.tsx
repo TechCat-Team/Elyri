@@ -1,31 +1,32 @@
-import { lazy } from 'react';
+import { Input } from '@elyri/ui';
 
-import { usageExample } from '../../../lib/code';
 import type { ComponentDoc, Lang } from '../../../lib/types';
-
-const InputDemo = lazy(() => import('./InputDemo'));
-
-const DEFAULTS = {
-  placeholder: 'you@example.com',
-  size: 'md',
-  invalid: false,
-};
 
 const copy = {
   zh: {
     description: '输入框：三档尺寸，支持校验失败态，其余属性透传给原生 input。',
-    placeholderLabel: '占位文案',
-    sizeLabel: '尺寸',
-    invalidLabel: '校验失败',
+    exBasic: '基础用法',
+    exBasicDesc: '默认的输入框，仅需一个 placeholder。',
+    exSizes: '尺寸',
+    exSizesDesc: '三档尺寸：sm / md / lg。',
+    exInvalid: '校验失败',
+    exInvalidDesc: '红框提示并标记 aria-invalid。',
+    exDisabled: '禁用',
+    exDisabledDesc: '原生 disabled 状态，不可输入。',
     descSize: '控件尺寸：sm / md / lg',
     descInvalid: '校验失败态：红框并标记 aria-invalid',
     descRest: '其余属性透传给原生 input',
   },
   en: {
     description: 'Text inputs with three sizes and an invalid state, forwarding everything else to the native input.',
-    placeholderLabel: 'Placeholder',
-    sizeLabel: 'Size',
-    invalidLabel: 'Invalid',
+    exBasic: 'Basic',
+    exBasicDesc: 'The default input, just a placeholder.',
+    exSizes: 'Sizes',
+    exSizesDesc: 'Three sizes: sm / md / lg.',
+    exInvalid: 'Invalid',
+    exInvalidDesc: 'Red border plus aria-invalid.',
+    exDisabled: 'Disabled',
+    exDisabledDesc: 'The native disabled state.',
     descSize: 'Control size: sm / md / lg',
     descInvalid: 'Invalid state: red border plus aria-invalid',
     descRest: 'Remaining props are forwarded to the native input',
@@ -42,33 +43,87 @@ export const inputDoc = (lang: Lang): ComponentDoc => {
     pkg: 'ui',
     description: t.description,
     isNew: true,
-    controls: [
-      { type: 'text', name: 'placeholder', label: t.placeholderLabel, default: DEFAULTS.placeholder },
-      { type: 'select', name: 'size', label: t.sizeLabel, default: DEFAULTS.size, options: ['sm', 'md', 'lg'] },
-      { type: 'boolean', name: 'invalid', label: t.invalidLabel, default: DEFAULTS.invalid },
-    ],
     props: [
-      { name: 'size', type: "'sm' | 'md' | 'lg'", default: `'${DEFAULTS.size}'`, description: t.descSize },
+      { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: t.descSize },
       { name: 'invalid', type: 'boolean', default: 'false', description: t.descInvalid },
       { name: '...rest', type: 'InputHTMLAttributes', description: t.descRest },
     ],
-    render: (v) => (
-      <InputDemo
-        placeholder={v.placeholder as string}
-        size={v.size as 'sm' | 'md' | 'lg'}
-        invalid={v.invalid as boolean}
-      />
-    ),
-    usage: (v, codeLang) =>
-      usageExample(codeLang, {
-        component: 'Input',
-        propsType: 'InputProps',
-        name: 'Example',
-        props: {
-          size: v.size === DEFAULTS.size ? undefined : (v.size as string),
-          invalid: v.invalid ? true : undefined,
-          placeholder: v.placeholder as string,
-        },
-      }),
+    examples: [
+      {
+        title: t.exBasic,
+        description: t.exBasicDesc,
+        render: () => (
+          <div className="demo-ui-row">
+            <Input placeholder="you@example.com" />
+          </div>
+        ),
+        code: `import { Input } from './components/elyri/Input';
+
+export function Example() {
+  return <Input placeholder="you@example.com" />;
+}`,
+      },
+      {
+        title: t.exSizes,
+        description: t.exSizesDesc,
+        render: () => (
+          <div className="demo-ui-row">
+            <Input size="sm" placeholder="Small" />
+            <Input size="md" placeholder="Medium" />
+            <Input size="lg" placeholder="Large" />
+          </div>
+        ),
+        code: `import { Input } from './components/elyri/Input';
+
+export function Example() {
+  return (
+    <div className="demo-ui-row">
+      <Input size="sm" placeholder="Small" />
+      <Input size="md" placeholder="Medium" />
+      <Input size="lg" placeholder="Large" />
+    </div>
+  );
+}`,
+      },
+      {
+        title: t.exInvalid,
+        description: t.exInvalidDesc,
+        render: () => (
+          <div className="demo-stack">
+            <label className="demo-ui-field">
+              <span className="demo-ui-label">Email · invalid</span>
+              <Input invalid placeholder="you@example.com" defaultValue="hello@elyri.dev" />
+            </label>
+          </div>
+        ),
+        code: `import { Input } from './components/elyri/Input';
+
+export function Example() {
+  return (
+    <label className="demo-ui-field">
+      <span className="demo-ui-label">Email · invalid</span>
+      <Input invalid placeholder="you@example.com" defaultValue="hello@elyri.dev" />
+    </label>
+  );
+}`,
+      },
+      {
+        title: t.exDisabled,
+        description: t.exDisabledDesc,
+        render: () => (
+          <div className="demo-stack">
+            <label className="demo-ui-field">
+              <span className="demo-ui-label">Disabled</span>
+              <Input placeholder="Not available" disabled />
+            </label>
+          </div>
+        ),
+        code: `import { Input } from './components/elyri/Input';
+
+export function Example() {
+  return <Input placeholder="Not available" disabled />;
+}`,
+      },
+    ],
   };
 };

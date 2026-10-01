@@ -1,19 +1,40 @@
-import { lazy } from 'react';
+import { useState } from 'react';
+
+import { DropdownMenu } from '@elyri/ui';
 
 import type { ComponentDoc, Lang } from '../../../lib/types';
-
-const DropdownMenuDemo = lazy(() => import('./DropdownMenuDemo'));
 
 const DEFAULTS = {
   placement: 'bottom',
   align: 'start',
 };
 
+function DropdownMenuBasicExample() {
+  const [selected, setSelected] = useState('Nothing yet');
+
+  return (
+    <div className="demo-ui-row">
+      <DropdownMenu>
+        <DropdownMenu.Trigger>Actions</DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.Label>Edit</DropdownMenu.Label>
+          <DropdownMenu.Item onSelect={() => setSelected('Duplicate')}>Duplicate</DropdownMenu.Item>
+          <DropdownMenu.Item onSelect={() => setSelected('Rename')}>Rename</DropdownMenu.Item>
+          <DropdownMenu.Separator />
+          <DropdownMenu.Item onSelect={() => setSelected('Archive')}>Archive</DropdownMenu.Item>
+          <DropdownMenu.Item disabled>Delete</DropdownMenu.Item>
+        </DropdownMenu.Content>
+      </DropdownMenu>
+      <span className="demo-ui-label">Selected: {selected}</span>
+    </div>
+  );
+}
+
 const copy = {
   zh: {
     description: '下拉菜单：menu / menuitem 语义，方向键与 Home / End 导航，开合时管理焦点，选中后自动关闭。',
-    placementLabel: '方向',
-    alignLabel: '对齐',
+    exBasic: '基础用法',
+    exBasicDesc: '包含分组标题、可选菜单项、分隔线与禁用项，选中项显示在下方。',
     descOpen: '受控开关',
     descDefaultOpen: '非受控初始开关',
     descOnOpenChange: '开关变化回调',
@@ -30,8 +51,8 @@ const copy = {
   },
   en: {
     description: 'Dropdown menus with menu / menuitem semantics, arrow-key navigation and managed focus.',
-    placementLabel: 'Placement',
-    alignLabel: 'Align',
+    exBasic: 'Basic',
+    exBasicDesc: 'A group label, selectable items, a separator and a disabled item; the selection shows below.',
     descOpen: 'Controlled open state',
     descDefaultOpen: 'Initial open state when uncontrolled',
     descOnOpenChange: 'Called whenever the open state changes',
@@ -58,22 +79,6 @@ export const dropdownMenuDoc = (lang: Lang): ComponentDoc => {
     pkg: 'ui',
     description: t.description,
     isNew: true,
-    controls: [
-      {
-        type: 'select',
-        name: 'placement',
-        label: t.placementLabel,
-        default: DEFAULTS.placement,
-        options: ['top', 'bottom', 'left', 'right'],
-      },
-      {
-        type: 'select',
-        name: 'align',
-        label: t.alignLabel,
-        default: DEFAULTS.align,
-        options: ['start', 'center', 'end'],
-      },
-    ],
     props: [
       { name: 'open', type: 'boolean', description: t.descOpen },
       { name: 'defaultOpen', type: 'boolean', default: 'false', description: t.descDefaultOpen },
@@ -94,26 +99,36 @@ export const dropdownMenuDoc = (lang: Lang): ComponentDoc => {
       { name: 'DropdownMenu.Label', type: 'HTMLAttributes', description: t.descLabel },
       { name: 'DropdownMenu.Separator', type: 'HTMLAttributes', description: t.descSeparator },
     ],
-    render: (v) => (
-      <DropdownMenuDemo
-        placement={v.placement as 'top' | 'bottom' | 'left' | 'right'}
-        align={v.align as 'start' | 'center' | 'end'}
-      />
-    ),
-    usage: (v) => `import { DropdownMenu } from './components/elyri/DropdownMenu';
+    examples: [
+      {
+        title: t.exBasic,
+        description: t.exBasicDesc,
+        render: () => <DropdownMenuBasicExample />,
+        code: `import { useState } from 'react';
+
+import { DropdownMenu } from './components/elyri/DropdownMenu';
 
 export function Example() {
+  const [selected, setSelected] = useState('Nothing yet');
+
   return (
-    <DropdownMenu placement="${v.placement}" align="${v.align}">
-      <DropdownMenu.Trigger>Actions</DropdownMenu.Trigger>
-      <DropdownMenu.Content>
-        <DropdownMenu.Item onSelect={() => {}}>Duplicate</DropdownMenu.Item>
-        <DropdownMenu.Item onSelect={() => {}}>Rename</DropdownMenu.Item>
-        <DropdownMenu.Separator />
-        <DropdownMenu.Item disabled>Delete</DropdownMenu.Item>
-      </DropdownMenu.Content>
-    </DropdownMenu>
+    <div className="demo-ui-row">
+      <DropdownMenu>
+        <DropdownMenu.Trigger>Actions</DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.Label>Edit</DropdownMenu.Label>
+          <DropdownMenu.Item onSelect={() => setSelected('Duplicate')}>Duplicate</DropdownMenu.Item>
+          <DropdownMenu.Item onSelect={() => setSelected('Rename')}>Rename</DropdownMenu.Item>
+          <DropdownMenu.Separator />
+          <DropdownMenu.Item onSelect={() => setSelected('Archive')}>Archive</DropdownMenu.Item>
+          <DropdownMenu.Item disabled>Delete</DropdownMenu.Item>
+        </DropdownMenu.Content>
+      </DropdownMenu>
+      <span className="demo-ui-label">Selected: {selected}</span>
+    </div>
   );
 }`,
+      },
+    ],
   };
 };

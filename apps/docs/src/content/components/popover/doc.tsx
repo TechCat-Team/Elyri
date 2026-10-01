@@ -1,19 +1,16 @@
-import { lazy } from 'react';
+import { Popover } from '@elyri/ui';
 
 import type { ComponentDoc, Lang } from '../../../lib/types';
 
-const PopoverDemo = lazy(() => import('./PopoverDemo'));
-
 const DEFAULTS = {
   placement: 'bottom',
-  title: 'Popover title',
 };
 
 const copy = {
   zh: {
     description: '弹出层：点击触发，内容可交互，自动定位并支持翻转，外部点击或 Escape 关闭后把焦点还给触发元素。',
-    placementLabel: '方向',
-    titleLabel: '标题',
+    exBasic: '基础用法',
+    exBasicDesc: '点击触发，浮层内可放置标题与说明等可交互内容。',
     descOpen: '受控开关',
     descDefaultOpen: '非受控初始开关',
     descOnOpenChange: '开关变化回调',
@@ -28,8 +25,8 @@ const copy = {
   en: {
     description:
       'Click-triggered popovers with interactive content that position themselves and restore focus on close.',
-    placementLabel: 'Placement',
-    titleLabel: 'Title',
+    exBasic: 'Basic',
+    exBasicDesc: 'Click the trigger to open interactive content such as a title and body text.',
     descOpen: 'Controlled open state',
     descDefaultOpen: 'Initial open state when uncontrolled',
     descOnOpenChange: 'Called whenever the open state changes',
@@ -53,16 +50,6 @@ export const popoverDoc = (lang: Lang): ComponentDoc => {
     pkg: 'ui',
     description: t.description,
     isNew: true,
-    controls: [
-      {
-        type: 'select',
-        name: 'placement',
-        label: t.placementLabel,
-        default: DEFAULTS.placement,
-        options: ['top', 'bottom', 'left', 'right'],
-      },
-      { type: 'text', name: 'title', label: t.titleLabel, default: DEFAULTS.title },
-    ],
     props: [
       { name: 'open', type: 'boolean', description: t.descOpen },
       { name: 'defaultOpen', type: 'boolean', default: 'false', description: t.descDefaultOpen },
@@ -80,18 +67,37 @@ export const popoverDoc = (lang: Lang): ComponentDoc => {
       { name: 'closeOnInteractOutside', type: 'boolean', default: 'true', description: t.descOutside },
       { name: 'closeOnEscape', type: 'boolean', default: 'true', description: t.descEscape },
     ],
-    render: (v) => (
-      <PopoverDemo placement={v.placement as 'top' | 'bottom' | 'left' | 'right'} title={v.title as string} />
-    ),
-    usage: (v) => `import { Popover } from './components/elyri/Popover';
+    examples: [
+      {
+        title: t.exBasic,
+        description: t.exBasicDesc,
+        render: () => (
+          <Popover>
+            <Popover.Trigger>Open popover</Popover.Trigger>
+            <Popover.Content>
+              <div className="demo-ui-popover-title">Popover title</div>
+              <p className="demo-ui-popover-text">
+                Popovers hold interactive content, move focus inside and return it to the trigger on close.
+              </p>
+            </Popover.Content>
+          </Popover>
+        ),
+        code: `import { Popover } from './components/elyri/Popover';
 
 export function Example() {
   return (
-    <Popover placement="${v.placement}">
+    <Popover>
       <Popover.Trigger>Open popover</Popover.Trigger>
-      <Popover.Content>${v.title}</Popover.Content>
+      <Popover.Content>
+        <div className="demo-ui-popover-title">Popover title</div>
+        <p className="demo-ui-popover-text">
+          Popovers hold interactive content, move focus inside and return it to the trigger on close.
+        </p>
+      </Popover.Content>
     </Popover>
   );
 }`,
+      },
+    ],
   };
 };

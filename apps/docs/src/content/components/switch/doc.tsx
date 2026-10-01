@@ -1,22 +1,16 @@
-import { lazy } from 'react';
+import { Switch } from '@elyri/ui';
 
-import { usageExample } from '../../../lib/code';
 import type { ComponentDoc, Lang } from '../../../lib/types';
-
-const SwitchDemo = lazy(() => import('./SwitchDemo'));
-
-const DEFAULTS = {
-  size: 'md',
-  checked: true,
-  disabled: false,
-};
 
 const copy = {
   zh: {
     description: '开关：受控 / 非受控双支持，role="switch" 语义，空格与回车键切换。',
-    sizeLabel: '尺寸',
-    checkedLabel: '默认开启',
-    disabledLabel: '禁用',
+    exBasic: '基础用法',
+    exBasicDesc: '两个带标签的开关，其中一个默认开启。',
+    exSizes: '尺寸',
+    exSizesDesc: '两档尺寸：sm / md。',
+    exDisabled: '禁用',
+    exDisabledDesc: '开启与关闭两种禁用状态。',
     descChecked: '受控选中状态；不传则为非受控',
     descDefaultChecked: '非受控初始状态',
     descOnCheckedChange: '选中状态变化回调，受控与非受控都会触发',
@@ -26,9 +20,12 @@ const copy = {
   },
   en: {
     description: 'A switch with controlled and uncontrolled modes, role="switch" semantics and Space / Enter toggling.',
-    sizeLabel: 'Size',
-    checkedLabel: 'Default on',
-    disabledLabel: 'Disabled',
+    exBasic: 'Basic',
+    exBasicDesc: 'Two labelled switches, one of them on by default.',
+    exSizes: 'Sizes',
+    exSizesDesc: 'Two sizes: sm / md.',
+    exDisabled: 'Disabled',
+    exDisabledDesc: 'Both the on and off disabled states.',
     descChecked: 'Controlled value; omit it to run uncontrolled',
     descDefaultChecked: 'Initial value when uncontrolled',
     descOnCheckedChange: 'Called on every change, controlled or not',
@@ -48,32 +45,111 @@ export const switchDoc = (lang: Lang): ComponentDoc => {
     pkg: 'ui',
     description: t.description,
     isNew: true,
-    controls: [
-      { type: 'select', name: 'size', label: t.sizeLabel, default: DEFAULTS.size, options: ['sm', 'md'] },
-      { type: 'boolean', name: 'checked', label: t.checkedLabel, default: DEFAULTS.checked },
-      { type: 'boolean', name: 'disabled', label: t.disabledLabel, default: DEFAULTS.disabled },
-    ],
     props: [
       { name: 'checked', type: 'boolean', description: t.descChecked },
       { name: 'defaultChecked', type: 'boolean', default: 'false', description: t.descDefaultChecked },
       { name: 'onCheckedChange', type: '(checked: boolean) => void', description: t.descOnCheckedChange },
-      { name: 'size', type: "'sm' | 'md'", default: `'${DEFAULTS.size}'`, description: t.descSize },
+      { name: 'size', type: "'sm' | 'md'", default: "'md'", description: t.descSize },
       { name: 'disabled', type: 'boolean', default: 'false', description: t.descDisabled },
       { name: '...rest', type: 'ButtonHTMLAttributes', description: t.descRest },
     ],
-    render: (v) => (
-      <SwitchDemo size={v.size as 'sm' | 'md'} checked={v.checked as boolean} disabled={v.disabled as boolean} />
-    ),
-    usage: (v, codeLang) =>
-      usageExample(codeLang, {
-        component: 'Switch',
-        propsType: 'SwitchProps',
-        name: 'Example',
-        props: {
-          size: v.size === DEFAULTS.size ? undefined : (v.size as string),
-          defaultChecked: v.checked ? true : undefined,
-          disabled: v.disabled ? true : undefined,
-        },
-      }),
+    examples: [
+      {
+        title: t.exBasic,
+        description: t.exBasicDesc,
+        render: () => (
+          <div className="demo-stack">
+            <div className="demo-ui-switch-row">
+              <span>Email notifications</span>
+              <Switch defaultChecked aria-label="Email notifications" />
+            </div>
+            <div className="demo-ui-switch-row">
+              <span>Product updates</span>
+              <Switch aria-label="Product updates" />
+            </div>
+          </div>
+        ),
+        code: `import { Switch } from './components/elyri/Switch';
+
+export function Example() {
+  return (
+    <div className="demo-stack">
+      <div className="demo-ui-switch-row">
+        <span>Email notifications</span>
+        <Switch defaultChecked aria-label="Email notifications" />
+      </div>
+      <div className="demo-ui-switch-row">
+        <span>Product updates</span>
+        <Switch aria-label="Product updates" />
+      </div>
+    </div>
+  );
+}`,
+      },
+      {
+        title: t.exSizes,
+        description: t.exSizesDesc,
+        render: () => (
+          <div className="demo-stack">
+            <div className="demo-ui-switch-row">
+              <span>Small</span>
+              <Switch size="sm" defaultChecked aria-label="Small" />
+            </div>
+            <div className="demo-ui-switch-row">
+              <span>Medium</span>
+              <Switch size="md" defaultChecked aria-label="Medium" />
+            </div>
+          </div>
+        ),
+        code: `import { Switch } from './components/elyri/Switch';
+
+export function Example() {
+  return (
+    <div className="demo-stack">
+      <div className="demo-ui-switch-row">
+        <span>Small</span>
+        <Switch size="sm" defaultChecked aria-label="Small" />
+      </div>
+      <div className="demo-ui-switch-row">
+        <span>Medium</span>
+        <Switch size="md" defaultChecked aria-label="Medium" />
+      </div>
+    </div>
+  );
+}`,
+      },
+      {
+        title: t.exDisabled,
+        description: t.exDisabledDesc,
+        render: () => (
+          <div className="demo-stack">
+            <div className="demo-ui-switch-row">
+              <span>On</span>
+              <Switch defaultChecked disabled aria-label="On" />
+            </div>
+            <div className="demo-ui-switch-row">
+              <span>Off</span>
+              <Switch disabled aria-label="Off" />
+            </div>
+          </div>
+        ),
+        code: `import { Switch } from './components/elyri/Switch';
+
+export function Example() {
+  return (
+    <div className="demo-stack">
+      <div className="demo-ui-switch-row">
+        <span>On</span>
+        <Switch defaultChecked disabled aria-label="On" />
+      </div>
+      <div className="demo-ui-switch-row">
+        <span>Off</span>
+        <Switch disabled aria-label="Off" />
+      </div>
+    </div>
+  );
+}`,
+      },
+    ],
   };
 };

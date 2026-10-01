@@ -1,19 +1,16 @@
-import { lazy } from 'react';
+import { Tooltip } from '@elyri/ui';
 
 import type { ComponentDoc, Lang } from '../../../lib/types';
 
-const TooltipDemo = lazy(() => import('./TooltipDemo'));
-
 const DEFAULTS = {
   placement: 'top',
-  text: 'Short, non-interactive hint',
 };
 
 const copy = {
   zh: {
     description: '工具提示：悬停或聚焦触发，自动测量定位并在空间不足时翻转，只承载不可交互的短文案。',
-    placementLabel: '方向',
-    textLabel: '提示文案',
+    exPlacements: '四个方向',
+    exPlacementsDesc: 'top / bottom / left / right 四种摆放方向。',
     descOpen: '受控开关',
     descDefaultOpen: '非受控初始开关',
     descOnOpenChange: '开关变化回调',
@@ -26,8 +23,8 @@ const copy = {
   },
   en: {
     description: 'Tooltips that follow hover or focus, position themselves automatically and flip when space runs out.',
-    placementLabel: 'Placement',
-    textLabel: 'Hint text',
+    exPlacements: 'Placements',
+    exPlacementsDesc: 'The four preferred sides: top / bottom / left / right.',
     descOpen: 'Controlled open state',
     descDefaultOpen: 'Initial open state when uncontrolled',
     descOnOpenChange: 'Called whenever the open state changes',
@@ -50,16 +47,6 @@ export const tooltipDoc = (lang: Lang): ComponentDoc => {
     pkg: 'ui',
     description: t.description,
     isNew: true,
-    controls: [
-      {
-        type: 'select',
-        name: 'placement',
-        label: t.placementLabel,
-        default: DEFAULTS.placement,
-        options: ['top', 'bottom', 'left', 'right'],
-      },
-      { type: 'text', name: 'text', label: t.textLabel, default: DEFAULTS.text },
-    ],
     props: [
       { name: 'open', type: 'boolean', description: t.descOpen },
       { name: 'defaultOpen', type: 'boolean', default: 'false', description: t.descDefaultOpen },
@@ -76,18 +63,55 @@ export const tooltipDoc = (lang: Lang): ComponentDoc => {
       { name: 'Tooltip.Trigger', type: 'ButtonHTMLAttributes', description: t.descTrigger },
       { name: 'Tooltip.Content', type: 'HTMLAttributes', description: t.descContent },
     ],
-    render: (v) => (
-      <TooltipDemo placement={v.placement as 'top' | 'bottom' | 'left' | 'right'} text={v.text as string} />
-    ),
-    usage: (v) => `import { Tooltip } from './components/elyri/Tooltip';
+    examples: [
+      {
+        title: t.exPlacements,
+        description: t.exPlacementsDesc,
+        render: () => (
+          <div className="demo-ui-row">
+            <Tooltip placement="top">
+              <Tooltip.Trigger>top</Tooltip.Trigger>
+              <Tooltip.Content>Short, non-interactive hint</Tooltip.Content>
+            </Tooltip>
+            <Tooltip placement="bottom">
+              <Tooltip.Trigger>bottom</Tooltip.Trigger>
+              <Tooltip.Content>Short, non-interactive hint</Tooltip.Content>
+            </Tooltip>
+            <Tooltip placement="left">
+              <Tooltip.Trigger>left</Tooltip.Trigger>
+              <Tooltip.Content>Short, non-interactive hint</Tooltip.Content>
+            </Tooltip>
+            <Tooltip placement="right">
+              <Tooltip.Trigger>right</Tooltip.Trigger>
+              <Tooltip.Content>Short, non-interactive hint</Tooltip.Content>
+            </Tooltip>
+          </div>
+        ),
+        code: `import { Tooltip } from './components/elyri/Tooltip';
 
 export function Example() {
   return (
-    <Tooltip placement="${v.placement}">
-      <Tooltip.Trigger>Hover me</Tooltip.Trigger>
-      <Tooltip.Content>${v.text}</Tooltip.Content>
-    </Tooltip>
+    <div className="demo-ui-row">
+      <Tooltip placement="top">
+        <Tooltip.Trigger>top</Tooltip.Trigger>
+        <Tooltip.Content>Short, non-interactive hint</Tooltip.Content>
+      </Tooltip>
+      <Tooltip placement="bottom">
+        <Tooltip.Trigger>bottom</Tooltip.Trigger>
+        <Tooltip.Content>Short, non-interactive hint</Tooltip.Content>
+      </Tooltip>
+      <Tooltip placement="left">
+        <Tooltip.Trigger>left</Tooltip.Trigger>
+        <Tooltip.Content>Short, non-interactive hint</Tooltip.Content>
+      </Tooltip>
+      <Tooltip placement="right">
+        <Tooltip.Trigger>right</Tooltip.Trigger>
+        <Tooltip.Content>Short, non-interactive hint</Tooltip.Content>
+      </Tooltip>
+    </div>
   );
 }`,
+      },
+    ],
   };
 };

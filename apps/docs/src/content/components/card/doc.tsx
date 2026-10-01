@@ -1,19 +1,14 @@
-import { lazy } from 'react';
+import { Badge, Button, Card } from '@elyri/ui';
 
 import type { ComponentDoc, Lang } from '../../../lib/types';
-
-const CardDemo = lazy(() => import('./CardDemo'));
-
-const DEFAULTS = {
-  title: 'Ship faster',
-  description: 'A neutral card that inherits the host theme through CSS variables.',
-};
 
 const copy = {
   zh: {
     description: '卡片：容器与标题 / 描述 / 内容 / 底栏四段，可组合使用也可单独取用子组件。',
-    titleLabel: '标题',
-    descriptionLabel: '描述',
+    exBasic: '基础用法',
+    exBasicDesc: '标题、描述、内容与底栏四段组合成完整卡片。',
+    exMinimal: '精简卡片',
+    exMinimalDesc: '只取用标题与描述两个区块。',
     descTitle: '标题区块',
     descDescription: '描述区块',
     descContent: '任意内容区',
@@ -23,8 +18,10 @@ const copy = {
   en: {
     description:
       'A card container with title, description, content and footer slots you can compose or use standalone.',
-    titleLabel: 'Title',
-    descriptionLabel: 'Description',
+    exBasic: 'Basic',
+    exBasicDesc: 'Title, description, content and footer composed into a full card.',
+    exMinimal: 'Minimal',
+    exMinimalDesc: 'Only the title and description slots.',
     descTitle: 'Title slot',
     descDescription: 'Description slot',
     descContent: 'Free-form content area',
@@ -43,10 +40,6 @@ export const cardDoc = (lang: Lang): ComponentDoc => {
     pkg: 'ui',
     description: t.description,
     isNew: true,
-    controls: [
-      { type: 'text', name: 'title', label: t.titleLabel, default: DEFAULTS.title },
-      { type: 'text', name: 'description', label: t.descriptionLabel, default: DEFAULTS.description },
-    ],
     props: [
       { name: 'Card.Title', type: 'HTMLAttributes<HTMLHeadingElement>', description: t.descTitle },
       { name: 'Card.Description', type: 'HTMLAttributes<HTMLParagraphElement>', description: t.descDescription },
@@ -54,22 +47,79 @@ export const cardDoc = (lang: Lang): ComponentDoc => {
       { name: 'Card.Footer', type: 'HTMLAttributes<HTMLDivElement>', description: t.descFooter },
       { name: '...rest', type: 'HTMLAttributes', description: t.descRest },
     ],
-    render: (v) => <CardDemo title={v.title as string} description={v.description as string} />,
-    usage: (v) =>
-      `import { Button } from './components/elyri/Button';
+    examples: [
+      {
+        title: t.exBasic,
+        description: t.exBasicDesc,
+        render: () => (
+          <div className="demo-stack">
+            <Card>
+              <Card.Title>Ship faster</Card.Title>
+              <Card.Description>A neutral card that inherits the host theme through CSS variables.</Card.Description>
+              <Card.Content>
+                <div className="demo-ui-row demo-ui-row--start">
+                  <Badge variant="accent">v0.0.1</Badge>
+                  <Badge variant="success">Stable</Badge>
+                  <Badge>Zero deps</Badge>
+                </div>
+              </Card.Content>
+              <Card.Footer>
+                <Button size="sm">Get started</Button>
+                <Button size="sm" variant="ghost">
+                  Dismiss
+                </Button>
+              </Card.Footer>
+            </Card>
+          </div>
+        ),
+        code: `import { Badge } from './components/elyri/Badge';
+import { Button } from './components/elyri/Button';
 import { Card } from './components/elyri/Card';
 
 export function Example() {
   return (
     <Card>
-      <Card.Title>${v.title}</Card.Title>
-      <Card.Description>${v.description}</Card.Description>
-      <Card.Content>Anything you like.</Card.Content>
+      <Card.Title>Ship faster</Card.Title>
+      <Card.Description>A neutral card that inherits the host theme through CSS variables.</Card.Description>
+      <Card.Content>
+        <div className="demo-ui-row demo-ui-row--start">
+          <Badge variant="accent">v0.0.1</Badge>
+          <Badge variant="success">Stable</Badge>
+          <Badge>Zero deps</Badge>
+        </div>
+      </Card.Content>
       <Card.Footer>
         <Button size="sm">Get started</Button>
+        <Button size="sm" variant="ghost">
+          Dismiss
+        </Button>
       </Card.Footer>
     </Card>
   );
 }`,
+      },
+      {
+        title: t.exMinimal,
+        description: t.exMinimalDesc,
+        render: () => (
+          <div className="demo-stack">
+            <Card>
+              <Card.Title>Zero config</Card.Title>
+              <Card.Description>Sensible defaults, no setup required.</Card.Description>
+            </Card>
+          </div>
+        ),
+        code: `import { Card } from './components/elyri/Card';
+
+export function Example() {
+  return (
+    <Card>
+      <Card.Title>Zero config</Card.Title>
+      <Card.Description>Sensible defaults, no setup required.</Card.Description>
+    </Card>
+  );
+}`,
+      },
+    ],
   };
 };

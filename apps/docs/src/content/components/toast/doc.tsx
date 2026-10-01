@@ -1,29 +1,20 @@
-import { lazy } from 'react';
-
-import type { ToastVariant } from '@elyri/ui';
+import { Button, ToastProvider, useToast } from '@elyri/ui';
 
 import type { ComponentDoc, Lang } from '../../../lib/types';
-
-const ToastDemo = lazy(() => import('./ToastDemo'));
-
-const DEFAULTS = {
-  title: 'Saved',
-  variant: 'success',
-  duration: 4000,
-  position: 'top',
-  description: true,
-};
-
-const POSITIONS = ['top-left', 'top', 'top-right', 'bottom-left', 'bottom', 'bottom-right'] as const;
 
 const copy = {
   zh: {
     description: '轻提示：用 ToastProvider 承载 useToast，浮层堆叠、自动关闭、悬停暂停，兼容受控与非受控。',
-    titleLabel: '标题',
-    variantLabel: '语义',
-    durationLabel: '自动关闭（毫秒）',
-    descriptionLabel: '描述文字',
-    positionLabel: '停靠位置',
+    exBasic: '基础用法',
+    exBasicDesc: '调用 toast({ title, description, variant }) 弹出一条提示。',
+    exVariants: '全部变体',
+    exVariantsDesc: '四种语义：info / success / warning / danger。',
+    exLoading: '加载到成功',
+    exLoadingDesc: '先弹出 loading 提示，再用 update(id, options) 就地改成 success。',
+    exPromise: 'Promise',
+    exPromiseDesc: 'promise(p, messages) 自动跟随 promise 切换 loading / success / error。',
+    exPersistent: '常驻',
+    exPersistentDesc: 'persistent: true 的提示不会自动关闭，只能由程序调用 dismiss(id) 关闭。',
     descDuration: 'Provider 默认自动关闭毫秒数，0 表示不自动关闭',
     descLimit: '同时最多显示的条数',
     descPosition: '视口停靠方向，支持六个方向，默认 top',
@@ -41,11 +32,16 @@ const copy = {
   },
   en: {
     description: 'Toasts driven by ToastProvider and useToast: a stacking portal, auto-dismiss, hover pause.',
-    titleLabel: 'Title',
-    variantLabel: 'Variant',
-    durationLabel: 'Auto-dismiss (ms)',
-    descriptionLabel: 'Description',
-    positionLabel: 'Position',
+    exBasic: 'Basic',
+    exBasicDesc: 'Call toast({ title, description, variant }) to push a toast.',
+    exVariants: 'Variants',
+    exVariantsDesc: 'Four variants: info / success / warning / danger.',
+    exLoading: 'Loading → Success',
+    exLoadingDesc: 'Push a loading toast, then update it in place to success with update(id, options).',
+    exPromise: 'Promise',
+    exPromiseDesc: 'promise(p, messages) follows a promise and switches loading / success / error.',
+    exPersistent: 'Persistent',
+    exPersistentDesc: 'A persistent: true toast never auto-dismisses; close it with dismiss(id).',
     descDuration: 'Default auto-dismiss delay, 0 keeps the toast until dismissed',
     descLimit: 'Maximum number of toasts shown at once',
     descPosition: 'Viewport docking direction, six options, defaults to top',
@@ -64,6 +60,95 @@ const copy = {
   },
 };
 
+function ToastBasicExample() {
+  const { toast } = useToast();
+
+  return (
+    <div className="demo-ui-row">
+      <Button onClick={() => toast({ title: 'Saved', description: 'Saved to your workspace.', variant: 'success' })}>
+        Show toast
+      </Button>
+    </div>
+  );
+}
+
+function ToastVariantsExample() {
+  const { toast } = useToast();
+
+  return (
+    <div className="demo-ui-row">
+      <Button onClick={() => toast({ title: 'Heads up', description: 'A neutral update.', variant: 'info' })}>
+        Info
+      </Button>
+      <Button onClick={() => toast({ title: 'Saved', description: 'Saved to your workspace.', variant: 'success' })}>
+        Success
+      </Button>
+      <Button onClick={() => toast({ title: 'Careful', description: 'This is irreversible.', variant: 'warning' })}>
+        Warning
+      </Button>
+      <Button onClick={() => toast({ title: 'Error', description: 'Something went wrong.', variant: 'danger' })}>
+        Danger
+      </Button>
+    </div>
+  );
+}
+
+function ToastLoadingExample() {
+  const { toast, update } = useToast();
+
+  const showLoading = () => {
+    const id = toast({ title: 'Uploading file', description: 'Please wait…', variant: 'loading' });
+    setTimeout(
+      () => update(id, { title: 'Upload complete', description: 'Saved to your workspace.', variant: 'success' }),
+      1500,
+    );
+  };
+
+  return (
+    <div className="demo-ui-row">
+      <Button onClick={showLoading}>Upload file</Button>
+    </div>
+  );
+}
+
+function ToastPromiseExample() {
+  const { promise } = useToast();
+
+  const showPromise = () => {
+    promise(new Promise((resolve) => setTimeout(resolve, 1500)), {
+      loading: { title: 'Submitting', description: 'Hang tight…' },
+      success: { title: 'Submitted', description: 'Saved to your workspace.' },
+      error: { title: 'Submit failed', description: 'Please try again.' },
+    });
+  };
+
+  return (
+    <div className="demo-ui-row">
+      <Button onClick={showPromise}>Submit</Button>
+    </div>
+  );
+}
+
+function ToastPersistentExample() {
+  const { toast, dismiss } = useToast();
+
+  const showPersistent = () => {
+    const id = toast({
+      title: 'Syncing',
+      description: 'Closed by the app when the task finishes.',
+      variant: 'loading',
+      persistent: true,
+    });
+    setTimeout(() => dismiss(id), 3000);
+  };
+
+  return (
+    <div className="demo-ui-row">
+      <Button onClick={showPersistent}>Start sync</Button>
+    </div>
+  );
+}
+
 export const toastDoc = (lang: Lang): ComponentDoc => {
   const t = copy[lang];
 
@@ -74,33 +159,6 @@ export const toastDoc = (lang: Lang): ComponentDoc => {
     pkg: 'ui',
     description: t.description,
     isNew: true,
-    controls: [
-      { type: 'text', name: 'title', label: t.titleLabel, default: DEFAULTS.title },
-      {
-        type: 'select',
-        name: 'variant',
-        label: t.variantLabel,
-        default: DEFAULTS.variant,
-        options: ['info', 'success', 'warning', 'danger', 'loading'],
-      },
-      {
-        type: 'number',
-        name: 'duration',
-        label: t.durationLabel,
-        default: DEFAULTS.duration,
-        min: 0,
-        max: 10000,
-        step: 500,
-      },
-      {
-        type: 'select',
-        name: 'position',
-        label: t.positionLabel,
-        default: DEFAULTS.position,
-        options: [...POSITIONS],
-      },
-      { type: 'boolean', name: 'description', label: t.descriptionLabel, default: DEFAULTS.description },
-    ],
     props: [
       { name: 'ToastProvider.duration', type: 'number', default: '4000', description: t.descDuration },
       { name: 'ToastProvider.limit', type: 'number', default: '4', description: t.descLimit },
@@ -117,28 +175,26 @@ export const toastDoc = (lang: Lang): ComponentDoc => {
       { name: 'options.dismissible', type: 'boolean', default: 'true', description: t.descDismissible },
       { name: 'children', type: 'ReactNode', description: t.descChildren },
     ],
-    render: (v) => (
-      <ToastDemo
-        title={v.title as string}
-        variant={v.variant as ToastVariant}
-        duration={v.duration as number}
-        position={v.position as (typeof POSITIONS)[number]}
-        showDescription={v.description as boolean}
-      />
-    ),
-    usage: (v) => {
-      const variant = v.variant === DEFAULTS.variant ? '' : `, variant: '${v.variant}'`;
-      const description = v.description ? `, description: 'Saved to your workspace.'` : '';
-      const position = v.position === DEFAULTS.position ? '' : ` position="${v.position}"`;
-
-      return `import { ToastProvider, useToast } from './components/elyri/Toast';
+    examples: [
+      {
+        title: t.exBasic,
+        description: t.exBasicDesc,
+        wide: true,
+        render: () => (
+          <ToastProvider>
+            <ToastBasicExample />
+          </ToastProvider>
+        ),
+        code: `import { ToastProvider, useToast } from './components/elyri/Toast';
 import { Button } from './components/elyri/Button';
 
 function Trigger() {
   const { toast } = useToast();
 
   return (
-    <Button onClick={() => toast({ title: '${v.title}'${description}${variant} })}>
+    <Button
+      onClick={() => toast({ title: 'Saved', description: 'Saved to your workspace.', variant: 'success' })}
+    >
       Show toast
     </Button>
   );
@@ -146,11 +202,157 @@ function Trigger() {
 
 export function Example() {
   return (
-    <ToastProvider${position}>
+    <ToastProvider>
       <Trigger />
     </ToastProvider>
   );
-}`;
-    },
+}`,
+      },
+      {
+        title: t.exVariants,
+        description: t.exVariantsDesc,
+        wide: true,
+        render: () => (
+          <ToastProvider>
+            <ToastVariantsExample />
+          </ToastProvider>
+        ),
+        code: `import { ToastProvider, useToast } from './components/elyri/Toast';
+import { Button } from './components/elyri/Button';
+
+function Trigger() {
+  const { toast } = useToast();
+
+  return (
+    <div className="demo-ui-row">
+      <Button onClick={() => toast({ title: 'Heads up', description: 'A neutral update.', variant: 'info' })}>
+        Info
+      </Button>
+      <Button onClick={() => toast({ title: 'Saved', description: 'Saved to your workspace.', variant: 'success' })}>
+        Success
+      </Button>
+      <Button onClick={() => toast({ title: 'Careful', description: 'This is irreversible.', variant: 'warning' })}>
+        Warning
+      </Button>
+      <Button onClick={() => toast({ title: 'Error', description: 'Something went wrong.', variant: 'danger' })}>
+        Danger
+      </Button>
+    </div>
+  );
+}
+
+export function Example() {
+  return (
+    <ToastProvider>
+      <Trigger />
+    </ToastProvider>
+  );
+}`,
+      },
+      {
+        title: t.exLoading,
+        description: t.exLoadingDesc,
+        wide: true,
+        render: () => (
+          <ToastProvider>
+            <ToastLoadingExample />
+          </ToastProvider>
+        ),
+        code: `import { ToastProvider, useToast } from './components/elyri/Toast';
+import { Button } from './components/elyri/Button';
+
+function Trigger() {
+  const { toast, update } = useToast();
+
+  const showLoading = () => {
+    const id = toast({ title: 'Uploading file', description: 'Please wait…', variant: 'loading' });
+    setTimeout(
+      () => update(id, { title: 'Upload complete', description: 'Saved to your workspace.', variant: 'success' }),
+      1500,
+    );
+  };
+
+  return <Button onClick={showLoading}>Upload file</Button>;
+}
+
+export function Example() {
+  return (
+    <ToastProvider>
+      <Trigger />
+    </ToastProvider>
+  );
+}`,
+      },
+      {
+        title: t.exPromise,
+        description: t.exPromiseDesc,
+        wide: true,
+        render: () => (
+          <ToastProvider>
+            <ToastPromiseExample />
+          </ToastProvider>
+        ),
+        code: `import { ToastProvider, useToast } from './components/elyri/Toast';
+import { Button } from './components/elyri/Button';
+
+function Trigger() {
+  const { promise } = useToast();
+
+  const showPromise = () => {
+    promise(new Promise((resolve) => setTimeout(resolve, 1500)), {
+      loading: { title: 'Submitting', description: 'Hang tight…' },
+      success: { title: 'Submitted', description: 'Saved to your workspace.' },
+      error: { title: 'Submit failed', description: 'Please try again.' },
+    });
+  };
+
+  return <Button onClick={showPromise}>Submit</Button>;
+}
+
+export function Example() {
+  return (
+    <ToastProvider>
+      <Trigger />
+    </ToastProvider>
+  );
+}`,
+      },
+      {
+        title: t.exPersistent,
+        description: t.exPersistentDesc,
+        wide: true,
+        render: () => (
+          <ToastProvider>
+            <ToastPersistentExample />
+          </ToastProvider>
+        ),
+        code: `import { ToastProvider, useToast } from './components/elyri/Toast';
+import { Button } from './components/elyri/Button';
+
+function Trigger() {
+  const { toast, dismiss } = useToast();
+
+  const showPersistent = () => {
+    const id = toast({
+      title: 'Syncing',
+      description: 'Closed by the app when the task finishes.',
+      variant: 'loading',
+      persistent: true,
+    });
+    setTimeout(() => dismiss(id), 3000);
+  };
+
+  return <Button onClick={showPersistent}>Start sync</Button>;
+}
+
+export function Example() {
+  return (
+    <ToastProvider>
+      <Trigger />
+    </ToastProvider>
+  );
+}`,
+      },
+    ],
   };
 };
