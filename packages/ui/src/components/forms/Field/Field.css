@@ -1,0 +1,42 @@
+/* 表单域纵向堆叠：label / 控件 / 描述 / 错误信息共用统一间距 */
+.elyri-ui-field {
+  display: grid;
+  gap: 6px;
+}
+
+.elyri-ui-field__label {
+  color: var(--elyri-ui-text);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* Field required 时的必填星号 */
+.elyri-ui-field__required {
+  margin-left: 2px;
+  color: var(--elyri-ui-danger);
+}
+
+.elyri-ui-field__description {
+  margin: 0;
+  color: var(--elyri-ui-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.elyri-ui-field__message {
+  margin: 0;
+  color: var(--elyri-ui-danger);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.elyri-ui-field[data-disabled] .elyri-ui-field__label,
+.elyri-ui-field[data-disabled] .elyri-ui-field__description {
+  color: var(--elyri-ui-muted);
+}
+
+.elyri-ui-field[data-disabled] .elyri-ui-field__label {
+  opacity: 0.7;
+}

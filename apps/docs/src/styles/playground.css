@@ -615,12 +615,6 @@
   font-size: 13px;
   line-height: 1.55;
 }
-.demo-ui-field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  width: 100%;
-}
 .demo-ui-label {
   color: var(--docs-muted);
   font-size: 12px;

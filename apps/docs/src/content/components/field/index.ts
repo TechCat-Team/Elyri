@@ -1,0 +1,1 @@
+export { fieldDoc } from './doc';

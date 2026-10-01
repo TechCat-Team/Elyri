@@ -1,4 +1,4 @@
-import { Input } from '@elyri/ui';
+import { Field, Input } from '@elyri/ui';
 
 import type { ComponentDoc, Lang } from '../../../lib/types';
 
@@ -10,9 +10,9 @@ const copy = {
     exSizes: '尺寸',
     exSizesDesc: '三档尺寸：sm / md / lg。',
     exInvalid: '校验失败',
-    exInvalidDesc: '红框提示并标记 aria-invalid。',
+    exInvalidDesc: 'Field 的 invalid 驱动红框，Message 展示错误文案。',
     exDisabled: '禁用',
-    exDisabledDesc: '原生 disabled 状态，不可输入。',
+    exDisabledDesc: 'Field 的 disabled 下发给控件，标签同步变灰。',
     descSize: '控件尺寸：sm / md / lg',
     descInvalid: '校验失败态：红框并标记 aria-invalid',
     descRest: '其余属性透传给原生 input',
@@ -24,9 +24,9 @@ const copy = {
     exSizes: 'Sizes',
     exSizesDesc: 'Three sizes: sm / md / lg.',
     exInvalid: 'Invalid',
-    exInvalidDesc: 'Red border plus aria-invalid.',
+    exInvalidDesc: 'Field invalid drives the red border; Message shows the error.',
     exDisabled: 'Disabled',
-    exDisabledDesc: 'The native disabled state.',
+    exDisabledDesc: 'Field disabled propagates to the control and greys the label.',
     descSize: 'Control size: sm / md / lg',
     descInvalid: 'Invalid state: red border plus aria-invalid',
     descRest: 'Remaining props are forwarded to the native input',
@@ -90,20 +90,23 @@ export function Example() {
         description: t.exInvalidDesc,
         render: () => (
           <div className="demo-stack">
-            <label className="demo-ui-field">
-              <span className="demo-ui-label">Email · invalid</span>
-              <Input invalid placeholder="you@example.com" defaultValue="hello@elyri.dev" />
-            </label>
+            <Field invalid>
+              <Field.Label>Email</Field.Label>
+              <Input placeholder="you@example.com" defaultValue="hello@elyri.dev" />
+              <Field.Message>Enter a valid email address.</Field.Message>
+            </Field>
           </div>
         ),
-        code: `import { Input } from './components/elyri/Input';
+        code: `import { Field } from './components/elyri/Field';
+import { Input } from './components/elyri/Input';
 
 export function Example() {
   return (
-    <label className="demo-ui-field">
-      <span className="demo-ui-label">Email · invalid</span>
-      <Input invalid placeholder="you@example.com" defaultValue="hello@elyri.dev" />
-    </label>
+    <Field invalid>
+      <Field.Label>Email</Field.Label>
+      <Input placeholder="you@example.com" defaultValue="hello@elyri.dev" />
+      <Field.Message>Enter a valid email address.</Field.Message>
+    </Field>
   );
 }`,
       },
@@ -112,16 +115,22 @@ export function Example() {
         description: t.exDisabledDesc,
         render: () => (
           <div className="demo-stack">
-            <label className="demo-ui-field">
-              <span className="demo-ui-label">Disabled</span>
-              <Input placeholder="Not available" disabled />
-            </label>
+            <Field disabled>
+              <Field.Label>Email</Field.Label>
+              <Input placeholder="Not available" />
+            </Field>
           </div>
         ),
-        code: `import { Input } from './components/elyri/Input';
+        code: `import { Field } from './components/elyri/Field';
+import { Input } from './components/elyri/Input';
 
 export function Example() {
-  return <Input placeholder="Not available" disabled />;
+  return (
+    <Field disabled>
+      <Field.Label>Email</Field.Label>
+      <Input placeholder="Not available" />
+    </Field>
+  );
 }`,
       },
     ],
