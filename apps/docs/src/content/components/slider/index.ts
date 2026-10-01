@@ -1,0 +1,1 @@
+export { sliderDoc } from './doc';

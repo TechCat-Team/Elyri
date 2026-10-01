@@ -1,0 +1,1 @@
+export { numberInputDoc } from './doc';

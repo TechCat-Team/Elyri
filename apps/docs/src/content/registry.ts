@@ -38,13 +38,20 @@ import { alertDoc } from './components/alert';
 import { badgeDoc } from './components/badge';
 import { buttonDoc } from './components/button';
 import { cardDoc } from './components/card';
+import { checkboxDoc } from './components/checkbox';
 import { dialogDoc } from './components/dialog';
 import { dropdownMenuDoc } from './components/dropdown-menu';
+import { fieldDoc } from './components/field';
 import { inputDoc } from './components/input';
+import { numberInputDoc } from './components/number-input';
 import { popoverDoc } from './components/popover';
 import { progressDoc } from './components/progress';
+import { radioDoc } from './components/radio';
+import { selectDoc } from './components/select';
+import { sliderDoc } from './components/slider';
 import { switchDoc } from './components/switch';
 import { tabsDoc } from './components/tabs';
+import { textareaDoc } from './components/textarea';
 import { toastDoc } from './components/toast';
 import { tooltipDoc } from './components/tooltip';
 
@@ -88,7 +95,14 @@ export const getDocs = (lang: Lang): ComponentDoc[] => {
     asciiImageDoc(lang),
     buttonDoc(lang),
     inputDoc(lang),
+    numberInputDoc(lang),
     switchDoc(lang),
+    checkboxDoc(lang),
+    radioDoc(lang),
+    selectDoc(lang),
+    sliderDoc(lang),
+    textareaDoc(lang),
+    fieldDoc(lang),
     badgeDoc(lang),
     cardDoc(lang),
     tabsDoc(lang),

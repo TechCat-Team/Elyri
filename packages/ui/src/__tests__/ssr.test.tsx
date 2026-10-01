@@ -7,6 +7,11 @@ import { describe, expect, it, vi } from 'vitest';
 import { Alert } from '../components/feedback/Alert';
 import { ToastProvider } from '../components/feedback/Toast';
 import { Button } from '../components/forms/Button';
+import { Checkbox } from '../components/forms/Checkbox';
+import { Field } from '../components/forms/Field';
+import { Input } from '../components/forms/Input';
+import { RadioGroup } from '../components/forms/Radio';
+import { Select } from '../components/forms/Select';
 import { Tabs } from '../components/navigation/Tabs';
 import { Dialog } from '../components/overlays/Dialog';
 
@@ -14,6 +19,21 @@ function App() {
   return (
     <div>
       <Button>Save</Button>
+      <Field>
+        <Field.Label>Email</Field.Label>
+        <Input placeholder="you@example.com" />
+        <Field.Description>Hint</Field.Description>
+      </Field>
+      <Checkbox defaultChecked>Remember me</Checkbox>
+      <RadioGroup defaultValue="apple">
+        <RadioGroup.Radio value="apple">Apple</RadioGroup.Radio>
+      </RadioGroup>
+      <Select placeholder="Pick a fruit" defaultValue="apple">
+        <Select.Trigger />
+        <Select.Content>
+          <Select.Item value="apple">Apple</Select.Item>
+        </Select.Content>
+      </Select>
       <Alert variant="info" title="Note">
         Body
       </Alert>
