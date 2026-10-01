@@ -13,6 +13,15 @@
   min-width: 0;
   padding: 26px clamp(24px, 5vw, 88px) 96px;
 }
+/* 首页等没有侧栏内容的页面：宽屏铺满，侧栏只在窄屏抽屉里出现 */
+@media (min-width: 901px) {
+  .docs-body.is-full {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .docs-body.is-full .sidebar {
+    display: none;
+  }
+}
 
 /* 顶栏 */
 .topbar {
@@ -104,6 +113,90 @@ a.section-tab:hover {
   font-size: 10px;
   font-weight: 500;
   line-height: 15px;
+}
+/* 顶栏「组件」下拉：悬停或键盘聚焦展开，纯 CSS 驱动 */
+.nav-dropdown {
+  position: relative;
+  display: inline-flex;
+}
+button.section-tab {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.nav-dropdown:hover .nav-dropdown-trigger,
+.nav-dropdown:focus-within .nav-dropdown-trigger {
+  color: var(--docs-text);
+}
+.nav-dropdown-chevron {
+  transition: transform 180ms;
+}
+.nav-dropdown:hover .nav-dropdown-chevron,
+.nav-dropdown:focus-within .nav-dropdown-chevron {
+  transform: rotate(180deg);
+}
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 172px;
+  padding: 6px;
+  border: 1px solid var(--docs-border);
+  border-radius: 14px;
+  background: var(--docs-surface);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 6px);
+  transition:
+    opacity 160ms,
+    transform 160ms,
+    visibility 160ms;
+}
+/* 触发器与菜单之间补一块透明热区，鼠标移动过程不掉出 hover */
+.nav-dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  right: 0;
+  left: 0;
+  height: 10px;
+}
+.nav-dropdown:hover .nav-dropdown-menu,
+.nav-dropdown:focus-within .nav-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+.nav-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 9px 12px;
+  border-radius: 9px;
+  color: var(--docs-text);
+  font-size: 13px;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.nav-dropdown-item:hover {
+  background: var(--docs-bg);
+}
+.nav-dropdown-item.is-active {
+  color: var(--docs-accent);
+  font-weight: 600;
+}
+.nav-dropdown-count {
+  color: var(--docs-muted);
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-size: 11px;
+  font-weight: 400;
 }
 .icon-button {
   display: inline-grid;

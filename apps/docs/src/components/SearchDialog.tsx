@@ -2,17 +2,23 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
 
 import { useI18n } from '../lib/i18n';
-import { categoryLabel } from '../lib/messages';
 import { useRoute } from '../lib/router';
-import { docPath, docPkg, sectionById } from '../lib/sections';
-import type { ComponentDoc } from '../lib/types';
+
+export interface SearchItem {
+  path: string;
+  title: string;
+  /** 右侧的归属说明，例如「文档」「动效 · 背景」 */
+  meta: string;
+  /** 额外参与匹配的文本（描述、分类原名等） */
+  keywords: string;
+}
 
 interface SearchDialogProps {
-  docs: ComponentDoc[];
+  items: SearchItem[];
   onClose: () => void;
 }
 
-export function SearchDialog({ docs, onClose }: SearchDialogProps) {
+export function SearchDialog({ items, onClose }: SearchDialogProps) {
   const { t } = useI18n();
   const { push } = useRoute();
   const [query, setQuery] = useState('');
@@ -22,13 +28,14 @@ export function SearchDialog({ docs, onClose }: SearchDialogProps) {
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return docs;
-    return docs.filter((doc) =>
-      [doc.title, doc.category, categoryLabel(doc.category, t), doc.description].some((text) =>
-        text.toLowerCase().includes(q),
-      ),
+    if (!q) return items;
+    // 标题命中排在描述命中之前
+    const byTitle = items.filter((item) => item.title.toLowerCase().includes(q));
+    const byOther = items.filter(
+      (item) => !byTitle.includes(item) && `${item.meta} ${item.keywords}`.toLowerCase().includes(q),
     );
-  }, [docs, query, t]);
+    return [...byTitle, ...byOther];
+  }, [items, query]);
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -39,8 +46,8 @@ export function SearchDialog({ docs, onClose }: SearchDialogProps) {
     listRef.current?.querySelector('.search-item.is-active')?.scrollIntoView({ block: 'nearest' });
   }, [cursor]);
 
-  const select = (doc: ComponentDoc) => {
-    push(docPath(doc));
+  const select = (item: SearchItem) => {
+    push(item.path);
     onClose();
   };
 
@@ -60,11 +67,12 @@ export function SearchDialog({ docs, onClose }: SearchDialogProps) {
 
   return (
     <div className="search-overlay" onMouseDown={onClose}>
-      <div className="search-dialog" onMouseDown={(e) => e.stopPropagation()}>
+      <div className="search-dialog" role="dialog" aria-modal="true" onMouseDown={(e) => e.stopPropagation()}>
         <input
           ref={inputRef}
           className="search-input"
           placeholder={t('search.placeholder')}
+          aria-label={t('search.placeholder')}
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
@@ -74,18 +82,16 @@ export function SearchDialog({ docs, onClose }: SearchDialogProps) {
         />
         <ul className="search-results" ref={listRef}>
           {results.length === 0 && <li className="search-empty">{t('search.empty')}</li>}
-          {results.map((doc, index) => (
-            <li key={docPath(doc)}>
+          {results.map((item, index) => (
+            <li key={item.path}>
               <button
                 type="button"
                 className={index === cursor ? 'search-item is-active' : 'search-item'}
                 onMouseEnter={() => setCursor(index)}
-                onClick={() => select(doc)}
+                onClick={() => select(item)}
               >
-                <span>{doc.title}</span>
-                <span className="search-item-category">
-                  {t(sectionById(docPkg(doc)).labelKey)} · {categoryLabel(doc.category, t)}
-                </span>
+                <span>{item.title}</span>
+                <span className="search-item-category">{item.meta}</span>
               </button>
             </li>
           ))}

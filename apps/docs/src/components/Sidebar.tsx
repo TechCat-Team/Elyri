@@ -1,89 +1,83 @@
+import type { ReactNode } from 'react';
+
 import { useI18n } from '../lib/i18n';
-import { categoryLabel } from '../lib/messages';
 import { Link } from '../lib/router';
-import { docPath } from '../lib/sections';
-import type { Section } from '../lib/sections';
-import type { ComponentDoc, NavItem, Pkg } from '../lib/types';
+
+export interface SidebarLink {
+  path: string;
+  title: string;
+  badge?: ReactNode;
+}
+
+export interface SidebarGroup {
+  title?: string;
+  items: SidebarLink[];
+}
+
+/** 顶层导航（文档 + 各组件分区），窄屏抽屉顶部用它切换 */
+export interface SidebarTab {
+  key: string;
+  path: string;
+  label: string;
+}
 
 interface SidebarProps {
-  docs: ComponentDoc[];
-  categories: string[];
-  guides: NavItem[];
-  sections: readonly Section[];
-  sectionCounts: Record<Pkg, number>;
-  /** 侧栏展示的分区：当前页所属分区，引导页则为上一次浏览的分区 */
-  navSection: Section;
-  /** 当前页面所属分区；引导页没有分区 */
-  activeSection?: Pkg;
+  tabs: SidebarTab[];
+  activeTab?: string;
+  /** 分组标题之上的总标题，例如分区名，点击回到分区落地页 */
+  head?: SidebarLink;
+  groups: SidebarGroup[];
   activePath: string;
   open: boolean;
   onClose: () => void;
 }
 
-export function Sidebar({
-  docs,
-  categories,
-  guides,
-  sections,
-  sectionCounts,
-  navSection,
-  activeSection,
-  activePath,
-  open,
-  onClose,
-}: SidebarProps) {
+export function Sidebar({ tabs, activeTab, head, groups, activePath, open, onClose }: SidebarProps) {
   const { t } = useI18n();
   const linkClass = (path: string) => (path === activePath ? 'sidebar-link is-active' : 'sidebar-link');
-  const count = sectionCounts[navSection.id];
 
   return (
     <>
       <div className={open ? 'sidebar-backdrop is-open' : 'sidebar-backdrop'} onClick={onClose} />
       <aside className={open ? 'sidebar is-open' : 'sidebar'}>
         <nav>
-          {/* 窄屏抽屉里的分区切换，与宽屏顶栏的分区标签对应 */}
+          {/* 窄屏抽屉里的顶层切换，与宽屏顶栏的导航对应 */}
           <div className="sidebar-sections" role="group" aria-label={t('nav.sections')}>
-            {sections.map((section) => (
+            {tabs.map((tab) => (
               <Link
-                key={section.id}
-                to={section.path}
-                className={section.id === activeSection ? 'sidebar-section is-active' : 'sidebar-section'}
-                aria-current={section.id === activeSection ? 'true' : undefined}
+                key={tab.key}
+                to={tab.path}
+                className={tab.key === activeTab ? 'sidebar-section is-active' : 'sidebar-section'}
+                aria-current={tab.key === activeTab ? 'true' : undefined}
                 onClick={onClose}
               >
-                {t(section.labelKey)}
+                {tab.label}
               </Link>
             ))}
           </div>
 
-          <div className="sidebar-group">
-            <p className="sidebar-group-title">{t('nav.getStarted')}</p>
-            {guides.map((guide) => (
-              <Link key={guide.path} to={guide.path} className={linkClass(guide.path)} onClick={onClose}>
-                {guide.title}
-              </Link>
-            ))}
-          </div>
+          {head && (
+            <Link to={head.path} className={`sidebar-section-head ${linkClass(head.path)}`} onClick={onClose}>
+              {head.title}
+              {head.badge}
+            </Link>
+          )}
 
-          <Link to={navSection.path} className={`sidebar-section-head ${linkClass(navSection.path)}`} onClick={onClose}>
-            {t(navSection.labelKey)}
-            <span className="sidebar-count">{count > 0 ? count : t('section.soon')}</span>
-          </Link>
-
-          {categories.map((category) => (
-            <div key={category} className="sidebar-group">
-              <p className="sidebar-group-title">{categoryLabel(category, t)}</p>
-              {docs
-                .filter((doc) => doc.category === category)
-                .map((doc) => {
-                  const path = docPath(doc);
-                  return (
-                    <Link key={doc.slug} to={path} className={linkClass(path)} onClick={onClose}>
-                      {doc.title}
-                      {doc.isNew && <span className="new-tag">{t('tag.new')}</span>}
-                    </Link>
-                  );
-                })}
+          {groups.map((group, index) => (
+            <div key={group.title ?? index} className="sidebar-group">
+              {group.title && <p className="sidebar-group-title">{group.title}</p>}
+              {group.items.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={linkClass(item.path)}
+                  aria-current={item.path === activePath ? 'page' : undefined}
+                  onClick={onClose}
+                >
+                  {item.title}
+                  {item.badge}
+                </Link>
+              ))}
             </div>
           ))}
         </nav>

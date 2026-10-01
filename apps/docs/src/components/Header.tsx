@@ -14,8 +14,8 @@ interface HeaderProps {
   sections: readonly Section[];
   /** 各分区的组件数，为 0 时标记「即将推出」 */
   sectionCounts: Record<Pkg, number>;
-  /** 当前页面所属分区；引导页没有分区 */
-  activeSection?: Pkg;
+  /** 当前所在的顶层导航：'docs' 或某个分区；首页没有 */
+  activeTab?: string;
   menuOpen: boolean;
   onToggleTheme: (event: MouseEvent<HTMLElement>) => void;
   onOpenSearch: () => void;
@@ -30,7 +30,7 @@ const serverIsMac = () => false;
 export function Header({
   sections,
   sectionCounts,
-  activeSection,
+  activeTab,
   menuOpen,
   onToggleTheme,
   onOpenSearch,
@@ -38,6 +38,7 @@ export function Header({
 }: HeaderProps) {
   const { t } = useI18n();
   const isMac = useSyncExternalStore(noop, isMacPlatform, serverIsMac);
+  const activeSection = sections.find((section) => section.id === activeTab)?.id;
 
   return (
     <header className="topbar">
@@ -60,17 +61,55 @@ export function Header({
         <span className="version-badge">v{site.version}</span>
 
         <nav className="section-tabs" aria-label={t('nav.sections')}>
-          {sections.map((section) => (
-            <Link
-              key={section.id}
-              to={section.path}
-              className={section.id === activeSection ? 'section-tab is-active' : 'section-tab'}
-              aria-current={section.id === activeSection ? 'true' : undefined}
+          <Link
+            to="docs"
+            className={activeTab === 'docs' ? 'section-tab is-active' : 'section-tab'}
+            aria-current={activeTab === 'docs' ? 'true' : undefined}
+          >
+            {t('nav.docs')}
+          </Link>
+          {/* 悬停/聚焦展开的下拉；键盘聚焦到菜单项后点击导航会失焦收起 */}
+          <div className="nav-dropdown">
+            <button
+              type="button"
+              className={activeSection ? 'section-tab nav-dropdown-trigger is-active' : 'section-tab nav-dropdown-trigger'}
+              aria-haspopup="true"
             >
-              {t(section.labelKey)}
-              {sectionCounts[section.id] === 0 && <span className="soon-tag">{t('section.soon')}</span>}
-            </Link>
-          ))}
+              {t('nav.components')}
+              <svg
+                className="nav-dropdown-chevron"
+                width="10"
+                height="10"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </button>
+            <div className="nav-dropdown-menu">
+              {sections.map((section) => (
+                <Link
+                  key={section.id}
+                  to={section.path}
+                  className={section.id === activeSection ? 'nav-dropdown-item is-active' : 'nav-dropdown-item'}
+                  aria-current={section.id === activeSection ? 'true' : undefined}
+                  onClick={(event) => event.currentTarget.blur()}
+                >
+                  <span>{t(section.labelKey)}</span>
+                  {sectionCounts[section.id] === 0 ? (
+                    <span className="soon-tag">{t('section.soon')}</span>
+                  ) : (
+                    <span className="nav-dropdown-count">{sectionCounts[section.id]}</span>
+                  )}
+                </Link>
+              ))}
+            </div>
+          </div>
         </nav>
       </div>
 
