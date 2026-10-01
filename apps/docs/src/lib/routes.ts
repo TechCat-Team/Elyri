@@ -16,16 +16,24 @@ export interface Route {
   path: string;
 }
 
+/** 已迁移的旧路径 → 新路径。旧链接可能已被收录，继续可访问并跳到新地址 */
+export const LEGACY_PATHS: Record<string, string> = {
+  installation: 'docs/installation',
+  browse: 'components',
+};
+
 /**
  * 把 URL 路径拆成语言与站内路径。
  * /zh/components/aurora/ → { lang: 'zh', path: 'components/aurora' }
- * 缺少语言段时按默认语言处理，交给调用方决定是否改写 URL。
+ * 缺少语言段时按默认语言处理；旧路径直接换成新路径。是否改写 URL 交给调用方决定。
  */
-export function parsePath(pathname: string): { route: Route; hasLang: boolean } {
+export function parsePath(pathname: string): { route: Route; canonical: boolean } {
   const segments = pathname.split('/').filter(Boolean);
   const [first, ...rest] = segments;
-  if (isLang(first)) return { route: { lang: first, path: rest.join('/') }, hasLang: true };
-  return { route: { lang: DEFAULT_LANG, path: segments.join('/') }, hasLang: false };
+  const hasLang = isLang(first);
+  const raw = hasLang ? rest.join('/') : segments.join('/');
+  const path = LEGACY_PATHS[raw] ?? raw;
+  return { route: { lang: hasLang ? first : DEFAULT_LANG, path }, canonical: hasLang && path === raw };
 }
 
 /** 站内路径（不含语言段）→ 站内链接，统一带尾斜杠 */

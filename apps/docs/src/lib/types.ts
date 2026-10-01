@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 
 /** 文档语言 */
 export type Lang = 'zh' | 'en';
@@ -54,10 +54,14 @@ export interface ComponentDoc {
   usage: (values: ControlValues, codeLang: CodeLang) => string;
 }
 
-/** 侧栏导航项 */
-export interface NavItem {
-  path: string;
-  title: string;
+/** 文档（指南）页 */
+export interface DocPage {
+  /** /docs 下的子路径，文档首页为空串 */
+  slug: string;
+  group: 'start' | 'guides';
+  title: Record<Lang, string>;
+  description: Record<Lang, string>;
+  Component: ComponentType;
 }
 
 /** 单个页面的 SEO 信息，预渲染与服务端都从这里取 */

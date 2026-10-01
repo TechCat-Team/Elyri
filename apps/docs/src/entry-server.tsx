@@ -2,11 +2,11 @@ import { StrictMode } from 'react';
 import { renderToReadableStream } from 'react-dom/server';
 
 import { App } from './App';
-import { guides } from './content/guides';
+import { docPagePath, docPages } from './content/docs';
 import { getDocs } from './content/registry';
 import { I18nProvider } from './lib/i18n';
 import { pageMeta } from './lib/meta';
-import { href, LANGS, parsePath } from './lib/routes';
+import { href, LANGS, LEGACY_PATHS, parsePath } from './lib/routes';
 import { RouterProvider } from './lib/router';
 import { docPath, sections } from './lib/sections';
 import type { Lang } from './lib/types';
@@ -18,11 +18,12 @@ export interface PrerenderRoute {
   url: string;
 }
 
-/** 需要预渲染的全部页面：引导页 + 每个分区落地页 + 每个组件，每种语言 */
+/** 需要预渲染的全部页面：首页 + 文档页 + 每个分区落地页 + 每个组件，每种语言 */
 export function routes(): PrerenderRoute[] {
   return LANGS.flatMap((lang) =>
     [
-      ...guides.map((guide) => guide.path),
+      '',
+      ...docPages.map(docPagePath),
       ...sections.map((section) => section.path),
       ...getDocs(lang).map(docPath),
     ].map((path) => ({
@@ -30,6 +31,13 @@ export function routes(): PrerenderRoute[] {
       path,
       url: href(lang, path),
     })),
+  );
+}
+
+/** 旧地址 → 新地址，预渲染为跳转页，保证已收录的链接仍可访问 */
+export function redirects(): { from: string; to: string }[] {
+  return LANGS.flatMap((lang) =>
+    Object.entries(LEGACY_PATHS).map(([from, to]) => ({ from: href(lang, from), to: href(lang, to) })),
   );
 }
 

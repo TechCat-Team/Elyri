@@ -36,16 +36,21 @@ export function RouterProvider({ url, children }: { url: string; children: React
     [route.lang, route.path],
   );
 
-  // 缺少语言段（旧链接、直接落在根路径）时改写为规范 URL
+  // 缺少语言段或命中旧路径时改写为规范 URL
   useEffect(() => {
     const current = parsePath(window.location.pathname);
-    if (!current.hasLang) {
-      window.history.replaceState(null, '', href(current.route.lang, current.route.path));
+    if (!current.canonical) {
+      window.history.replaceState(
+        null,
+        '',
+        href(current.route.lang, current.route.path) + window.location.search + window.location.hash,
+      );
     }
 
     const onPopState = () => {
       setRoute(parsePath(window.location.pathname).route);
-      window.scrollTo({ top: 0 });
+      // 页内锚点跳转也会触发 popstate，交给浏览器定位，不要拉回顶部
+      if (!window.location.hash) window.scrollTo({ top: 0 });
     };
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);

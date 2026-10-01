@@ -97,7 +97,23 @@ const NOT_FOUND_PAGE = `<!doctype html>
 </html>
 `;
 
-const { render, routes } = await import(pathToFileURL(ssrEntry).href);
+const redirectPage = (to) => `<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirecting…</title>
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href="${absolute(to)}" />
+    <meta http-equiv="refresh" content="0; url=${to}" />
+    <script>location.replace(${JSON.stringify(to)} + location.hash);</script>
+  </head>
+  <body>
+    <p>Moved to <a href="${to}">${to}</a></p>
+  </body>
+</html>
+`;
+
+const { render, routes, redirects } = await import(pathToFileURL(ssrEntry).href);
 const template = await readFile(join(dist, 'index.html'), 'utf8');
 
 const all = routes();
@@ -112,6 +128,12 @@ for (const route of all) {
   const file = join(dist, routeUrl(lang, path), 'index.html');
   await mkdir(dirname(file), { recursive: true });
   await writeFile(file, page);
+}
+
+for (const { from, to } of redirects()) {
+  const file = join(dist, from, 'index.html');
+  await mkdir(dirname(file), { recursive: true });
+  await writeFile(file, redirectPage(to));
 }
 
 await writeFile(join(dist, 'index.html'), REDIRECT_PAGE);

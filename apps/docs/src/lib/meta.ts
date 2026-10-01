@@ -1,5 +1,6 @@
+import { docPageMeta } from '../content/docs';
+import { homeMeta } from '../content/home';
 import { getDocs } from '../content/registry';
-import { guideMeta } from '../content/guides';
 
 import { messages } from './messages';
 import { docPkg, sectionByPath } from './sections';
@@ -8,7 +9,8 @@ import type { Lang, PageMeta } from './types';
 
 /** 按语言与站内路径解析页面标题与描述 */
 export function pageMeta(lang: Lang, path: string): PageMeta {
-  const guide = guideMeta(lang, path);
+  if (path === '') return homeMeta(lang);
+  const guide = docPageMeta(lang, path);
   if (guide) return guide;
 
   const section = sectionByPath(path);
