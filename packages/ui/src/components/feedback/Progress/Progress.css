@@ -1,0 +1,93 @@
+.elyri-ui-progress {
+  --progress-color: var(--elyri-ui-accent);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.elyri-ui-progress--success {
+  --progress-color: var(--elyri-ui-success);
+}
+
+.elyri-ui-progress--warning {
+  --progress-color: var(--elyri-ui-warning);
+}
+
+.elyri-ui-progress--danger {
+  --progress-color: var(--elyri-ui-danger);
+}
+
+.elyri-ui-progress__track {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--progress-color) 14%, var(--elyri-ui-surface-muted));
+}
+
+.elyri-ui-progress--sm .elyri-ui-progress__track {
+  height: 4px;
+}
+
+.elyri-ui-progress--md .elyri-ui-progress__track {
+  height: 6px;
+}
+
+.elyri-ui-progress__bar {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--progress-color);
+  transition:
+    width 480ms var(--elyri-ui-ease),
+    background-color var(--elyri-ui-duration) ease;
+}
+
+/* 不确定进度：一段伸缩的进度条循环滑过轨道 */
+.elyri-ui-progress__track.is-indeterminate .elyri-ui-progress__bar {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 40%;
+  animation: elyri-ui-progress-indeterminate 1.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  will-change: transform;
+}
+
+.elyri-ui-progress__value {
+  min-width: 36px;
+  color: var(--elyri-ui-muted);
+  font-size: 12px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+@keyframes elyri-ui-progress-indeterminate {
+  0% {
+    transform: translateX(-100%) scaleX(0.6);
+  }
+
+  50% {
+    transform: translateX(80%) scaleX(1);
+  }
+
+  100% {
+    transform: translateX(250%) scaleX(0.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-ui-progress__bar {
+    transition: none;
+  }
+
+  .elyri-ui-progress__track.is-indeterminate .elyri-ui-progress__bar {
+    width: 100%;
+    animation: elyri-ui-progress-pulse 2s ease-in-out infinite;
+  }
+}
+
+@keyframes elyri-ui-progress-pulse {
+  50% {
+    opacity: 0.4;
+  }
+}

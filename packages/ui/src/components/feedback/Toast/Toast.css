@@ -1,0 +1,349 @@
+.elyri-ui-toast-viewport {
+  position: fixed;
+  z-index: var(--elyri-ui-z-toast);
+  display: flex;
+  flex-direction: column;
+  width: min(360px, calc(100vw - 32px));
+  pointer-events: none;
+  /* 进场起点/离场终点与缩放原点，随停靠方向变化 */
+  --toast-origin: bottom center;
+  --toast-from-y: 20px;
+}
+
+/* 停靠位置：六个方向 */
+.elyri-ui-toast-viewport[data-position='top-left'] {
+  top: 16px;
+  left: 16px;
+}
+
+.elyri-ui-toast-viewport[data-position='top'] {
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.elyri-ui-toast-viewport[data-position='top-right'] {
+  top: 16px;
+  right: 16px;
+}
+
+/* 顶部停靠时新提示出现在顶部，并从上方滑入 */
+.elyri-ui-toast-viewport[data-position^='top'] {
+  flex-direction: column-reverse;
+  --toast-origin: top center;
+  --toast-from-y: -20px;
+}
+
+.elyri-ui-toast-viewport[data-position='bottom-left'] {
+  bottom: 16px;
+  left: 16px;
+}
+
+.elyri-ui-toast-viewport[data-position='bottom'] {
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.elyri-ui-toast-viewport[data-position='bottom-right'] {
+  bottom: 16px;
+  right: 16px;
+}
+
+/* 外层用 grid 行高 0fr <-> 1fr 过渡，让其余提示平滑地让位/补位 */
+.elyri-ui-toast-item {
+  display: grid;
+  grid-template-rows: 1fr;
+  animation: elyri-ui-toast-expand 420ms var(--elyri-ui-ease);
+}
+
+.elyri-ui-toast-item__inner {
+  min-height: 0;
+}
+
+.elyri-ui-toast-item__inner > .elyri-ui-toast {
+  margin-top: 10px;
+  animation: elyri-ui-toast-in 420ms var(--elyri-ui-ease);
+}
+
+.elyri-ui-toast-item[data-state='closed'] {
+  grid-template-rows: 0fr;
+  pointer-events: none;
+  animation: elyri-ui-toast-collapse 320ms var(--elyri-ui-ease);
+}
+
+.elyri-ui-toast-item[data-state='closed'] .elyri-ui-toast {
+  opacity: 0;
+  transform: translateY(var(--toast-from-y, 20px)) scale(0.98);
+  animation: elyri-ui-toast-out 200ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+.elyri-ui-toast {
+  --toast-accent: var(--elyri-ui-info);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 12px 12px 14px;
+  border: 1px solid var(--elyri-ui-border);
+  border-radius: 12px;
+  background: var(--elyri-ui-surface);
+  color: var(--elyri-ui-text);
+  box-shadow:
+    0 1px 2px rgb(20 25 38 / 4%),
+    var(--elyri-ui-shadow);
+  pointer-events: auto;
+  transform-origin: var(--toast-origin, bottom center);
+  will-change: transform, opacity;
+}
+
+.elyri-ui-toast--success {
+  --toast-accent: var(--elyri-ui-success);
+}
+
+.elyri-ui-toast--warning {
+  --toast-accent: var(--elyri-ui-warning);
+}
+
+.elyri-ui-toast--danger {
+  --toast-accent: var(--elyri-ui-danger);
+}
+
+.elyri-ui-toast--loading {
+  --toast-accent: var(--elyri-ui-accent);
+}
+
+/* 只有一行标题时收紧内边距，图标与文字垂直居中，形如单行提示 */
+.elyri-ui-toast[data-single-line] {
+  align-items: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.elyri-ui-toast[data-single-line] .elyri-ui-toast__icon {
+  margin-top: 0;
+}
+
+.elyri-ui-toast[data-single-line] .elyri-ui-toast__body {
+  padding-top: 0;
+}
+
+.elyri-ui-toast__icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  color: var(--toast-accent);
+  transition: color 300ms var(--elyri-ui-ease);
+}
+
+.elyri-ui-toast__status {
+  overflow: visible;
+}
+
+/* 旋转放在外层 g 上，内层 path 自身的 transform 留给 warning 的收起动画 */
+.elyri-ui-toast__status-spin,
+.elyri-ui-toast__status-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.elyri-ui-toast__status[data-spinning] .elyri-ui-toast__status-spin {
+  animation: elyri-ui-toast-spin 700ms linear infinite;
+}
+
+/* pathLength=1：loading 时只露出约四分之一的弧，其余状态补满成整圆 */
+.elyri-ui-toast__status-ring {
+  stroke-dasharray: 1 0;
+  transition:
+    stroke-dasharray 360ms var(--elyri-ui-ease),
+    opacity 240ms var(--elyri-ui-ease),
+    transform 320ms var(--elyri-ui-ease);
+}
+
+.elyri-ui-toast__status[data-variant='loading'] .elyri-ui-toast__status-ring {
+  stroke-dasharray: 0.28 1;
+}
+
+/* warning 的外框是三角：圆环收起，三角描出 */
+.elyri-ui-toast__status[data-variant='warning'] .elyri-ui-toast__status-ring {
+  opacity: 0;
+  transform: scale(0.4);
+}
+
+.elyri-ui-toast__status[data-morph] .elyri-ui-toast__status-shape {
+  stroke-dasharray: 1 1;
+  animation: elyri-ui-toast-draw 420ms var(--elyri-ui-ease) 60ms both;
+}
+
+/* 外框就位后再描出内部符号 */
+.elyri-ui-toast__status[data-morph] .elyri-ui-toast__status-glyph {
+  stroke-dasharray: 1 1;
+  animation: elyri-ui-toast-draw 320ms var(--elyri-ui-ease) 260ms both;
+}
+
+.elyri-ui-toast__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding-top: 1px;
+}
+
+.elyri-ui-toast__title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.elyri-ui-toast__description {
+  color: var(--elyri-ui-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.elyri-ui-toast__action {
+  flex: none;
+  align-self: center;
+}
+
+.elyri-ui-toast__close {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--elyri-ui-radius-sm);
+  background: none;
+  color: var(--elyri-ui-muted);
+  cursor: pointer;
+  opacity: 0.6;
+  transition:
+    opacity var(--elyri-ui-duration) var(--elyri-ui-ease),
+    background var(--elyri-ui-duration) var(--elyri-ui-ease),
+    color var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-toast:hover .elyri-ui-toast__close,
+.elyri-ui-toast__close:focus-visible {
+  opacity: 1;
+}
+
+.elyri-ui-toast__close:hover {
+  background: var(--elyri-ui-surface-muted);
+  color: var(--elyri-ui-text);
+}
+
+.elyri-ui-toast__close:focus-visible {
+  outline: none;
+  box-shadow: var(--elyri-ui-ring);
+}
+
+@keyframes elyri-ui-toast-expand {
+  from {
+    grid-template-rows: 0fr;
+  }
+
+  to {
+    grid-template-rows: 1fr;
+  }
+}
+
+@keyframes elyri-ui-toast-collapse {
+  from {
+    grid-template-rows: 1fr;
+  }
+
+  to {
+    grid-template-rows: 0fr;
+  }
+}
+
+@keyframes elyri-ui-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--toast-from-y, 20px)) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes elyri-ui-toast-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(var(--toast-from-y, 20px)) scale(0.98);
+  }
+}
+
+@keyframes elyri-ui-toast-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@keyframes elyri-ui-toast-draw {
+  from {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-ui-toast-item,
+  .elyri-ui-toast-item[data-state='closed'] {
+    animation: none;
+  }
+
+  .elyri-ui-toast-item__inner > .elyri-ui-toast {
+    animation-name: elyri-ui-toast-fade-in;
+  }
+
+  .elyri-ui-toast-item[data-state='closed'] .elyri-ui-toast {
+    transform: none;
+    animation-name: elyri-ui-toast-fade-out;
+  }
+
+  .elyri-ui-toast__status[data-spinning] .elyri-ui-toast__status-spin {
+    animation-duration: 1800ms;
+  }
+
+  .elyri-ui-toast__status[data-morph] .elyri-ui-toast__status-shape,
+  .elyri-ui-toast__status[data-morph] .elyri-ui-toast__status-glyph {
+    animation-name: elyri-ui-toast-fade-in;
+    animation-delay: 0ms;
+  }
+}
+
+@keyframes elyri-ui-toast-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes elyri-ui-toast-fade-out {
+  from {
+    opacity: 1;
+  }
+}

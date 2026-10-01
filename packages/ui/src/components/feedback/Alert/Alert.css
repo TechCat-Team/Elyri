@@ -1,0 +1,99 @@
+.elyri-ui-alert {
+  --alert-accent: var(--elyri-ui-info);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 12px 12px 14px;
+  border: 1px solid color-mix(in srgb, var(--alert-accent) 22%, var(--elyri-ui-border));
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--alert-accent) 6%, var(--elyri-ui-surface));
+  color: var(--elyri-ui-text);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.elyri-ui-alert--success {
+  --alert-accent: var(--elyri-ui-success);
+}
+
+.elyri-ui-alert--warning {
+  --alert-accent: var(--elyri-ui-warning);
+}
+
+.elyri-ui-alert--danger {
+  --alert-accent: var(--elyri-ui-danger);
+}
+
+/* 关闭强调色：图标转中性色，背景不染色，边框回落为普通描边 */
+.elyri-ui-alert[data-accent='false'] {
+  --alert-accent: var(--elyri-ui-muted);
+  border-color: var(--elyri-ui-border);
+  background: var(--elyri-ui-surface);
+}
+
+/* 隐藏边框 */
+.elyri-ui-alert[data-bordered='false'] {
+  border-color: transparent;
+}
+
+.elyri-ui-alert__icon {
+  display: inline-flex;
+  flex: none;
+  margin-top: 1px;
+  color: var(--alert-accent);
+}
+
+.elyri-ui-alert__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.elyri-ui-alert__title {
+  font-weight: 600;
+}
+
+.elyri-ui-alert__message {
+  color: var(--elyri-ui-muted);
+  font-size: 13px;
+}
+
+/* 没有标题时，正文即主信息 */
+.elyri-ui-alert__message:only-child {
+  color: var(--elyri-ui-text);
+  font-size: 14px;
+}
+
+.elyri-ui-alert__action {
+  flex: none;
+  align-self: center;
+}
+
+.elyri-ui-alert__close {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--elyri-ui-radius-sm);
+  background: none;
+  color: var(--elyri-ui-muted);
+  cursor: pointer;
+  transition:
+    background var(--elyri-ui-duration) var(--elyri-ui-ease),
+    color var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-alert__close:hover {
+  background: color-mix(in srgb, var(--alert-accent) 12%, transparent);
+  color: var(--elyri-ui-text);
+}
+
+.elyri-ui-alert__close:focus-visible {
+  outline: none;
+  box-shadow: var(--elyri-ui-ring);
+}
