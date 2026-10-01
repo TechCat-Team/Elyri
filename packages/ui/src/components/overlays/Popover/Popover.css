@@ -1,0 +1,120 @@
+.elyri-ui-popover__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border: 1px solid var(--elyri-ui-border);
+  border-radius: var(--elyri-ui-radius);
+  background: var(--elyri-ui-surface);
+  color: var(--elyri-ui-text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color var(--elyri-ui-duration) var(--elyri-ui-ease),
+    color var(--elyri-ui-duration) var(--elyri-ui-ease),
+    transform var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-popover__trigger:hover,
+.elyri-ui-popover__trigger[aria-expanded='true'] {
+  border-color: var(--elyri-ui-accent);
+  color: var(--elyri-ui-accent);
+}
+
+.elyri-ui-popover__trigger:active {
+  transform: scale(0.98);
+}
+
+.elyri-ui-popover__trigger:focus-visible {
+  outline: none;
+  box-shadow: var(--elyri-ui-ring);
+}
+
+.elyri-ui-popover__content {
+  --popover-shift-x: 0;
+  --popover-shift-y: -4px;
+  position: fixed;
+  z-index: var(--elyri-ui-z-floating);
+  width: max-content;
+  min-width: 180px;
+  max-width: min(320px, calc(100vw - 24px));
+  padding: 14px 16px;
+  border: 1px solid var(--elyri-ui-border);
+  border-radius: 12px;
+  background: var(--elyri-ui-surface);
+  color: var(--elyri-ui-text);
+  font-size: 14px;
+  line-height: 1.5;
+  box-shadow:
+    0 1px 2px rgb(20 25 38 / 4%),
+    0 12px 32px -8px rgb(20 25 38 / 16%);
+  outline: none;
+  transform-origin: top center;
+  animation: elyri-ui-popover-in 200ms var(--elyri-ui-ease);
+}
+
+/* 位移方向始终“从触发元素一侧展开” */
+.elyri-ui-popover__content[data-placement='top'] {
+  --popover-shift-y: 4px;
+  transform-origin: bottom center;
+}
+
+.elyri-ui-popover__content[data-placement='left'] {
+  --popover-shift-x: 4px;
+  --popover-shift-y: 0;
+  transform-origin: center right;
+}
+
+.elyri-ui-popover__content[data-placement='right'] {
+  --popover-shift-x: -4px;
+  --popover-shift-y: 0;
+  transform-origin: center left;
+}
+
+.elyri-ui-popover__content[data-state='closed'] {
+  opacity: 0;
+  pointer-events: none;
+  animation: elyri-ui-popover-out 120ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+@keyframes elyri-ui-popover-in {
+  from {
+    opacity: 0;
+    transform: translate(var(--popover-shift-x), var(--popover-shift-y)) scale(0.96);
+  }
+}
+
+@keyframes elyri-ui-popover-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-ui-popover__content {
+    animation-name: elyri-ui-popover-fade-in;
+  }
+
+  .elyri-ui-popover__content[data-state='closed'] {
+    animation-name: elyri-ui-popover-fade-out;
+  }
+}
+
+@keyframes elyri-ui-popover-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes elyri-ui-popover-fade-out {
+  from {
+    opacity: 1;
+  }
+}

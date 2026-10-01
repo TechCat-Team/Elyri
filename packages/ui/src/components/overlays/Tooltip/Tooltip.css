@@ -1,0 +1,100 @@
+.elyri-ui-tooltip__trigger {
+  padding: 0;
+  border: 0;
+  border-bottom: 1px dashed var(--elyri-ui-muted);
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.elyri-ui-tooltip__trigger:focus-visible {
+  outline: none;
+  border-radius: 2px;
+  box-shadow: var(--elyri-ui-ring);
+}
+
+.elyri-ui-tooltip__content {
+  --tooltip-shift-x: 0;
+  --tooltip-shift-y: 4px;
+  position: fixed;
+  z-index: var(--elyri-ui-z-tooltip);
+  max-width: 260px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--elyri-ui-tooltip-bg);
+  color: var(--elyri-ui-tooltip-text);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.45;
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 8%),
+    0 6px 16px rgb(0 0 0 / 12%);
+  pointer-events: none;
+  transform-origin: bottom center;
+  animation: elyri-ui-tooltip-in 160ms var(--elyri-ui-ease);
+  will-change: transform, opacity;
+}
+
+/* 位移方向始终“从触发元素一侧滑出” */
+.elyri-ui-tooltip__content[data-placement='bottom'] {
+  --tooltip-shift-y: -4px;
+  transform-origin: top center;
+}
+
+.elyri-ui-tooltip__content[data-placement='left'] {
+  --tooltip-shift-x: 4px;
+  --tooltip-shift-y: 0;
+  transform-origin: center right;
+}
+
+.elyri-ui-tooltip__content[data-placement='right'] {
+  --tooltip-shift-x: -4px;
+  --tooltip-shift-y: 0;
+  transform-origin: center left;
+}
+
+.elyri-ui-tooltip__content[data-state='closed'] {
+  opacity: 0;
+  animation: elyri-ui-tooltip-out 100ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+@keyframes elyri-ui-tooltip-in {
+  from {
+    opacity: 0;
+    transform: translate(var(--tooltip-shift-x), var(--tooltip-shift-y)) scale(0.96);
+  }
+}
+
+@keyframes elyri-ui-tooltip-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-ui-tooltip__content {
+    animation-name: elyri-ui-tooltip-fade-in;
+  }
+
+  .elyri-ui-tooltip__content[data-state='closed'] {
+    animation-name: elyri-ui-tooltip-fade-out;
+  }
+}
+
+@keyframes elyri-ui-tooltip-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes elyri-ui-tooltip-fade-out {
+  from {
+    opacity: 1;
+  }
+}
