@@ -40,4 +40,22 @@ describe('Switch', () => {
     expect(onCheckedChange).not.toHaveBeenCalled();
     expect(screen.getByRole('switch').getAttribute('aria-checked')).toBe('true');
   });
+
+  it('mirrors its state into a hidden input for native form submission', () => {
+    render(<Switch name="notifications" value="on" defaultChecked aria-label="Notifications" />);
+    const submit = document.querySelector('input[name="notifications"]') as HTMLInputElement;
+
+    expect(submit).toBeTruthy();
+    expect(submit.type).toBe('checkbox');
+    expect(submit.value).toBe('on');
+    expect(submit.checked).toBe(true);
+
+    fireEvent.click(screen.getByRole('switch'));
+    expect(submit.checked).toBe(false);
+  });
+
+  it('renders no hidden input without a name', () => {
+    const { container } = render(<Switch aria-label="Notifications" />);
+    expect(container.querySelector('input')).toBeNull();
+  });
 });

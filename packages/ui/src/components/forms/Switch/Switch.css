@@ -62,6 +62,14 @@
   box-shadow: var(--elyri-ui-ring);
 }
 
+.elyri-ui-switch.is-invalid {
+  border-color: var(--elyri-ui-danger);
+}
+
+.elyri-ui-switch.is-invalid:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--elyri-ui-danger) 35%, transparent);
+}
+
 .elyri-ui-switch:disabled {
   opacity: 0.55;
   cursor: not-allowed;
