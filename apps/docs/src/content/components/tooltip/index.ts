@@ -1,0 +1,1 @@
+export { tooltipDoc } from './doc';

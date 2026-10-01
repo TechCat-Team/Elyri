@@ -1,0 +1,1 @@
+export { dropdownMenuDoc } from './doc';

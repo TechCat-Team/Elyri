@@ -1,0 +1,1 @@
+export { dialogDoc } from './doc';

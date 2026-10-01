@@ -595,6 +595,33 @@
 .demo-ui-row--start {
   justify-content: flex-start;
 }
+/* 反馈类演示：占满可用宽度、纵向堆叠 */
+.demo-ui-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(540px, 100%);
+  text-align: left;
+}
+/* 对话框演示底部的操作区 */
+.demo-ui-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 18px;
+}
+/* 弹出层演示文字 */
+.demo-ui-popover-title {
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 650;
+}
+.demo-ui-popover-text {
+  margin: 0;
+  color: var(--docs-muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
 .demo-ui-field {
   display: flex;
   flex-direction: column;

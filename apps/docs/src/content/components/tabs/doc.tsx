@@ -6,6 +6,7 @@ const TabsDemo = lazy(() => import('./TabsDemo'));
 
 const DEFAULTS = {
   orientation: 'horizontal',
+  variant: 'segmented',
   content: 'Tabs keep every panel mounted and only hide the inactive ones.',
 };
 
@@ -13,11 +14,13 @@ const copy = {
   zh: {
     description: '标签页：受控 / 非受控双支持，方向键与 Home / End 导航，符合 WAI-ARIA 标签页模式。',
     orientationLabel: '排列方向',
+    variantLabel: '外观样式',
     contentLabel: '面板内容',
     descValue: '受控选中值',
     descDefaultValue: '非受控初始值',
     descOnValueChange: '选中值变化回调，受控与非受控都会触发',
     descOrientation: '排列方向：horizontal / vertical',
+    descVariant: '外观样式：segmented（分段胶囊）/ underline（文字加下划线），滑块带切换动画',
     descList: '标签栏，承接方向键导航',
     descTrigger: '单个标签，value 与面板对应',
     descPanel: '面板，始终留在 DOM 中，仅隐藏未选中的',
@@ -26,11 +29,13 @@ const copy = {
   en: {
     description: 'Tabs with controlled and uncontrolled modes, arrow-key navigation and the WAI-ARIA tabs pattern.',
     orientationLabel: 'Orientation',
+    variantLabel: 'Variant',
     contentLabel: 'Panel content',
     descValue: 'Controlled selected value',
     descDefaultValue: 'Initial value when uncontrolled',
     descOnValueChange: 'Called on every change, controlled or not',
     descOrientation: 'Layout direction: horizontal / vertical',
+    descVariant: 'Appearance: segmented (pill) or underline (text with an underline); the indicator animates',
     descList: 'The tab strip that handles arrow-key navigation',
     descTrigger: 'A single tab; its value maps to a panel',
     descPanel: 'Panel kept in the DOM, only the inactive ones are hidden',
@@ -56,6 +61,13 @@ export const tabsDoc = (lang: Lang): ComponentDoc => {
         default: DEFAULTS.orientation,
         options: ['horizontal', 'vertical'],
       },
+      {
+        type: 'select',
+        name: 'variant',
+        label: t.variantLabel,
+        default: DEFAULTS.variant,
+        options: ['segmented', 'underline'],
+      },
       { type: 'text', name: 'content', label: t.contentLabel, default: DEFAULTS.content },
     ],
     props: [
@@ -68,20 +80,33 @@ export const tabsDoc = (lang: Lang): ComponentDoc => {
         default: `'${DEFAULTS.orientation}'`,
         description: t.descOrientation,
       },
+      {
+        name: 'variant',
+        type: "'segmented' | 'underline'",
+        default: `'${DEFAULTS.variant}'`,
+        description: t.descVariant,
+      },
       { name: 'Tabs.List', type: 'HTMLAttributes<HTMLDivElement>', description: t.descList },
       { name: 'Tabs.Trigger', type: '{ value: string } & ButtonHTMLAttributes', description: t.descTrigger },
       { name: 'Tabs.Panel', type: '{ value: string } & HTMLAttributes', description: t.descPanel },
       { name: '...rest', type: 'HTMLAttributes', description: t.descRest },
     ],
-    render: (v) => <TabsDemo orientation={v.orientation as 'horizontal' | 'vertical'} content={v.content as string} />,
+    render: (v) => (
+      <TabsDemo
+        orientation={v.orientation as 'horizontal' | 'vertical'}
+        variant={v.variant as 'segmented' | 'underline'}
+        content={v.content as string}
+      />
+    ),
     usage: (v) => {
       const orientation = v.orientation === DEFAULTS.orientation ? '' : ` orientation="${v.orientation}"`;
+      const variant = v.variant === DEFAULTS.variant ? '' : ` variant="${v.variant}"`;
 
       return `import { Tabs } from './components/elyri/Tabs';
 
 export function Example() {
   return (
-    <Tabs defaultValue="overview"${orientation}>
+    <Tabs defaultValue="overview"${orientation}${variant}>
       <Tabs.List>
         <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
         <Tabs.Trigger value="activity">Activity</Tabs.Trigger>

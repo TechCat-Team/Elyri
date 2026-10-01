@@ -1,0 +1,1 @@
+export { alertDoc } from './doc';

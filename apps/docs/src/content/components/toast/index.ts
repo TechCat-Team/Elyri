@@ -1,0 +1,1 @@
+export { toastDoc } from './doc';

@@ -34,12 +34,19 @@ import { velvetDoc } from './components/velvet';
 import { waveTextDoc } from './components/wave-text';
 
 // @elyri/ui 组件文档
+import { alertDoc } from './components/alert';
 import { badgeDoc } from './components/badge';
 import { buttonDoc } from './components/button';
 import { cardDoc } from './components/card';
+import { dialogDoc } from './components/dialog';
+import { dropdownMenuDoc } from './components/dropdown-menu';
 import { inputDoc } from './components/input';
+import { popoverDoc } from './components/popover';
+import { progressDoc } from './components/progress';
 import { switchDoc } from './components/switch';
 import { tabsDoc } from './components/tabs';
+import { toastDoc } from './components/toast';
+import { tooltipDoc } from './components/tooltip';
 
 /**
  * 全部组件文档。新增组件只需在 components 下建一个文件夹，
@@ -85,6 +92,13 @@ export const getDocs = (lang: Lang): ComponentDoc[] => {
     badgeDoc(lang),
     cardDoc(lang),
     tabsDoc(lang),
+    alertDoc(lang),
+    progressDoc(lang),
+    toastDoc(lang),
+    dialogDoc(lang),
+    tooltipDoc(lang),
+    popoverDoc(lang),
+    dropdownMenuDoc(lang),
   ];
 
   const categoryOrder = [...new Set(docs.map((doc) => doc.category))];
