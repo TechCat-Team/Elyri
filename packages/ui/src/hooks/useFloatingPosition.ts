@@ -9,6 +9,8 @@ export interface FloatingPosition {
   left: number;
   /** 实际采用的方向，可能与期望的不同（空间不足时翻转） */
   placement: Placement;
+  /** 沿交叉轴指向锚点中心的偏移（px），用于定位箭头 */
+  arrow: number;
 }
 
 export interface UseFloatingPositionOptions {
@@ -36,7 +38,7 @@ export function useFloatingPosition(
   floatingRef: RefObject<HTMLElement | null>,
   { open = true, placement = 'bottom', align = 'center', offset = 8 }: UseFloatingPositionOptions = {},
 ): FloatingPosition {
-  const [position, setPosition] = useState<FloatingPosition>({ top: 0, left: 0, placement });
+  const [position, setPosition] = useState<FloatingPosition>({ top: 0, left: 0, placement, arrow: 0 });
   // 保存最新一次定位结果，避免相同坐标引发多余渲染
   const latest = useRef(position);
 
@@ -74,9 +76,15 @@ export function useFloatingPosition(
     left = Math.min(Math.max(left, offset), Math.max(offset, vw - f.width - offset));
     top = Math.min(Math.max(top, offset), Math.max(offset, vh - f.height - offset));
 
+    // 锚点中心相对浮层左上角的交叉轴偏移，交给箭头定位使用
+    const arrow =
+      side === 'top' || side === 'bottom' ? a.left + a.width / 2 - left : a.top + a.height / 2 - top;
+
     const current = latest.current;
-    if (current.top === top && current.left === left && current.placement === side) return;
-    latest.current = { top, left, placement: side };
+    if (current.top === top && current.left === left && current.placement === side && current.arrow === arrow) {
+      return;
+    }
+    latest.current = { top, left, placement: side, arrow };
     setPosition(latest.current);
   }, [anchorRef, floatingRef, placement, align, offset]);
 

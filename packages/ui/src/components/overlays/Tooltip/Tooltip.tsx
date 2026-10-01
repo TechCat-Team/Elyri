@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useId, useMemo, useRef } from 'react';
-import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode, RefObject } from 'react';
+import type { ButtonHTMLAttributes, CSSProperties, HTMLAttributes, ReactNode, RefObject } from 'react';
 
 import { Portal, cn, useControllableState, useFloatingPosition, usePresence } from '../../../core';
 import type { Alignment, Placement } from '../../../core';
@@ -167,7 +167,13 @@ function TooltipContent({ className, children, ...rest }: TooltipContentProps) {
         data-state={open ? 'open' : 'closed'}
         data-placement={position.placement}
         className={cn('elyri-ui-tooltip__content', className)}
-        style={{ top: position.top, left: position.left }}
+        style={
+          {
+            top: position.top,
+            left: position.left,
+            '--elyri-ui-arrow-offset': `${position.arrow}px`,
+          } as CSSProperties
+        }
         {...rest}
       >
         {children}

@@ -73,6 +73,45 @@
   transform-origin: center left;
 }
 
+/* 指向触发元素的三角箭头：旋转方块，背景与描边跟随面板 */
+.elyri-ui-popover__content::before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border: 1px solid transparent;
+  background: var(--elyri-ui-surface);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.elyri-ui-popover__content[data-placement='bottom']::before {
+  top: 0;
+  left: clamp(12px, var(--elyri-ui-arrow-offset, 50%), calc(100% - 12px));
+  border-top-color: var(--elyri-ui-border);
+  border-left-color: var(--elyri-ui-border);
+}
+
+.elyri-ui-popover__content[data-placement='top']::before {
+  top: 100%;
+  left: clamp(12px, var(--elyri-ui-arrow-offset, 50%), calc(100% - 12px));
+  border-right-color: var(--elyri-ui-border);
+  border-bottom-color: var(--elyri-ui-border);
+}
+
+.elyri-ui-popover__content[data-placement='right']::before {
+  left: 0;
+  top: clamp(12px, var(--elyri-ui-arrow-offset, 50%), calc(100% - 12px));
+  border-bottom-color: var(--elyri-ui-border);
+  border-left-color: var(--elyri-ui-border);
+}
+
+.elyri-ui-popover__content[data-placement='left']::before {
+  left: 100%;
+  top: clamp(12px, var(--elyri-ui-arrow-offset, 50%), calc(100% - 12px));
+  border-top-color: var(--elyri-ui-border);
+  border-right-color: var(--elyri-ui-border);
+}
+
 .elyri-ui-popover__content[data-state='closed'] {
   opacity: 0;
   pointer-events: none;

@@ -54,6 +54,36 @@
   transform-origin: center left;
 }
 
+/* 指向触发元素的三角箭头：旋转方块，颜色跟随气泡背景 */
+.elyri-ui-tooltip__content::before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--elyri-ui-tooltip-bg);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.elyri-ui-tooltip__content[data-placement='bottom']::before {
+  top: 0;
+  left: clamp(12px, var(--elyri-ui-arrow-offset, 50%), calc(100% - 12px));
+}
+
+.elyri-ui-tooltip__content[data-placement='top']::before {
+  top: 100%;
+  left: clamp(12px, var(--elyri-ui-arrow-offset, 50%), calc(100% - 12px));
+}
+
+.elyri-ui-tooltip__content[data-placement='right']::before {
+  left: 0;
+  top: clamp(12px, var(--elyri-ui-arrow-offset, 50%), calc(100% - 12px));
+}
+
+.elyri-ui-tooltip__content[data-placement='left']::before {
+  left: 100%;
+  top: clamp(12px, var(--elyri-ui-arrow-offset, 50%), calc(100% - 12px));
+}
+
 .elyri-ui-tooltip__content[data-state='closed'] {
   opacity: 0;
   animation: elyri-ui-tooltip-out 100ms cubic-bezier(0.4, 0, 1, 1);

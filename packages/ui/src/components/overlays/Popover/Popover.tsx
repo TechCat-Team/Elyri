@@ -1,5 +1,5 @@
 import { createContext, useContext, useId, useMemo, useRef } from 'react';
-import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode, RefObject } from 'react';
+import type { ButtonHTMLAttributes, CSSProperties, HTMLAttributes, ReactNode, RefObject } from 'react';
 
 import {
   Portal,
@@ -137,7 +137,13 @@ function PopoverContent({
         data-state={open ? 'open' : 'closed'}
         data-placement={position.placement}
         className={cn('elyri-ui-popover__content', className)}
-        style={{ top: position.top, left: position.left }}
+        style={
+          {
+            top: position.top,
+            left: position.left,
+            '--elyri-ui-arrow-offset': `${position.arrow}px`,
+          } as CSSProperties
+        }
         {...rest}
       >
         {children}
