@@ -1,0 +1,1 @@
+export { radioDoc } from './doc';

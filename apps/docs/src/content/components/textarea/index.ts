@@ -1,0 +1,1 @@
+export { textareaDoc } from './doc';

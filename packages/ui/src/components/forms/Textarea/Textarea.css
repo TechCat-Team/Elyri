@@ -1,0 +1,71 @@
+.elyri-ui-textarea {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--elyri-ui-border);
+  border-radius: var(--elyri-ui-radius);
+  background: var(--elyri-ui-surface);
+  color: var(--elyri-ui-text);
+  font: inherit;
+  line-height: 1.5;
+  resize: vertical;
+  transition:
+    border-color var(--elyri-ui-duration) var(--elyri-ui-ease),
+    box-shadow var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-textarea::placeholder {
+  color: var(--elyri-ui-muted);
+}
+
+.elyri-ui-textarea:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--elyri-ui-border) 55%, var(--elyri-ui-text));
+}
+
+.elyri-ui-textarea:focus-visible {
+  outline: none;
+  border-color: var(--elyri-ui-accent);
+  box-shadow: var(--elyri-ui-ring);
+}
+
+.elyri-ui-textarea:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.elyri-ui-textarea.is-invalid {
+  border-color: var(--elyri-ui-danger);
+}
+
+.elyri-ui-textarea.is-invalid:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--elyri-ui-danger) 35%, transparent);
+}
+
+.elyri-ui-textarea--autosize {
+  overflow: hidden;
+  resize: none;
+}
+
+/* 尺寸：与 Input 三档对齐，高度约为两行文本 */
+.elyri-ui-textarea--sm {
+  min-height: 60px;
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+.elyri-ui-textarea--md {
+  min-height: 72px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.elyri-ui-textarea--lg {
+  min-height: 84px;
+  padding: 10px 14px;
+  font-size: 15px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-ui-textarea {
+    transition: none;
+  }
+}

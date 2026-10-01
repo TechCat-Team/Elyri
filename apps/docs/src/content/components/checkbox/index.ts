@@ -1,0 +1,1 @@
+export { checkboxDoc } from './doc';

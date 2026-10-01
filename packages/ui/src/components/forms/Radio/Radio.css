@@ -1,0 +1,97 @@
+.elyri-ui-radio-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.elyri-ui-radio {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.elyri-ui-radio[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* 视觉隐藏但保持可聚焦与 label 关联 */
+.elyri-ui-radio__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.elyri-ui-radio__dot {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--elyri-ui-border);
+  border-radius: 50%;
+  background: var(--elyri-ui-surface);
+  transition:
+    border-color var(--elyri-ui-duration) var(--elyri-ui-ease),
+    box-shadow var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+/* 选中圆点：内圆用 ::after 画，随选中态缩放出现 */
+.elyri-ui-radio__dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--elyri-ui-accent);
+  scale: 0;
+  transition: scale var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-radio:not([data-disabled]):hover .elyri-ui-radio__dot {
+  border-color: color-mix(in srgb, var(--elyri-ui-border) 55%, var(--elyri-ui-text));
+}
+
+.elyri-ui-radio__input:checked + .elyri-ui-radio__dot {
+  border-color: var(--elyri-ui-accent);
+}
+
+/* 校验失败：红色描边（aria-invalid 由外层 radiogroup 承载） */
+.elyri-ui-radio.is-invalid .elyri-ui-radio__dot {
+  border-color: var(--elyri-ui-danger);
+}
+
+.elyri-ui-radio.is-invalid .elyri-ui-radio__input:checked + .elyri-ui-radio__dot::after {
+  background: var(--elyri-ui-danger);
+}
+
+.elyri-ui-radio__input:checked + .elyri-ui-radio__dot::after {
+  scale: 1;
+}
+
+.elyri-ui-radio__input:focus-visible + .elyri-ui-radio__dot {
+  outline: none;
+  box-shadow: var(--elyri-ui-ring);
+}
+
+.elyri-ui-radio__text {
+  color: var(--elyri-ui-text);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-ui-radio__dot,
+  .elyri-ui-radio__dot::after {
+    transition: none;
+  }
+}

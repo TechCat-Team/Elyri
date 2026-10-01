@@ -1,0 +1,95 @@
+.elyri-ui-checkbox {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.elyri-ui-checkbox[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* 视觉隐藏但保持可聚焦与 label 关联 */
+.elyri-ui-checkbox__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.elyri-ui-checkbox__box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  border: 1px solid var(--elyri-ui-border);
+  border-radius: 4px;
+  background: var(--elyri-ui-surface);
+  color: var(--elyri-ui-accent-text);
+  transition:
+    background-color var(--elyri-ui-duration) var(--elyri-ui-ease),
+    border-color var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-checkbox--sm .elyri-ui-checkbox__box {
+  width: 14px;
+  height: 14px;
+}
+
+.elyri-ui-checkbox--md .elyri-ui-checkbox__box {
+  width: 16px;
+  height: 16px;
+}
+
+.elyri-ui-checkbox__box svg {
+  width: 100%;
+  height: 100%;
+  padding: 2px;
+}
+
+/* hover 仅在输入可用时提亮边框 */
+.elyri-ui-checkbox:not([data-disabled]):hover .elyri-ui-checkbox__box {
+  border-color: color-mix(in srgb, var(--elyri-ui-border) 55%, var(--elyri-ui-text));
+}
+
+.elyri-ui-checkbox__input:checked + .elyri-ui-checkbox__box,
+.elyri-ui-checkbox__input:indeterminate + .elyri-ui-checkbox__box {
+  border-color: var(--elyri-ui-accent);
+  background: var(--elyri-ui-accent);
+}
+
+.elyri-ui-checkbox__input:focus-visible + .elyri-ui-checkbox__box {
+  outline: none;
+  box-shadow: var(--elyri-ui-ring);
+}
+
+.elyri-ui-checkbox.is-invalid .elyri-ui-checkbox__box {
+  border-color: var(--elyri-ui-danger);
+}
+
+.elyri-ui-checkbox.is-invalid .elyri-ui-checkbox__input:checked + .elyri-ui-checkbox__box,
+.elyri-ui-checkbox.is-invalid .elyri-ui-checkbox__input:indeterminate + .elyri-ui-checkbox__box {
+  border-color: var(--elyri-ui-danger);
+  background: var(--elyri-ui-danger);
+}
+
+.elyri-ui-checkbox__text {
+  color: var(--elyri-ui-text);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.elyri-ui-checkbox--sm .elyri-ui-checkbox__text {
+  font-size: 13px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-ui-checkbox__box {
+    transition: none;
+  }
+}
