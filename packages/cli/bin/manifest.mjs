@@ -35,10 +35,17 @@ export const components = {
   'wave-text': { pkg: '@elyri/motion', folder: 'text/WaveText', name: 'WaveText' },
 
   // @elyri/ui
+  alert: { pkg: '@elyri/ui', folder: 'feedback/Alert', name: 'Alert' },
   badge: { pkg: '@elyri/ui', folder: 'data-display/Badge', name: 'Badge' },
   button: { pkg: '@elyri/ui', folder: 'forms/Button', name: 'Button' },
   card: { pkg: '@elyri/ui', folder: 'data-display/Card', name: 'Card' },
+  dialog: { pkg: '@elyri/ui', folder: 'overlays/Dialog', name: 'Dialog' },
+  'dropdown-menu': { pkg: '@elyri/ui', folder: 'overlays/DropdownMenu', name: 'DropdownMenu' },
   input: { pkg: '@elyri/ui', folder: 'forms/Input', name: 'Input' },
+  popover: { pkg: '@elyri/ui', folder: 'overlays/Popover', name: 'Popover' },
+  progress: { pkg: '@elyri/ui', folder: 'feedback/Progress', name: 'Progress' },
   switch: { pkg: '@elyri/ui', folder: 'forms/Switch', name: 'Switch' },
   tabs: { pkg: '@elyri/ui', folder: 'navigation/Tabs', name: 'Tabs' },
+  toast: { pkg: '@elyri/ui', folder: 'feedback/Toast', name: 'Toast' },
+  tooltip: { pkg: '@elyri/ui', folder: 'overlays/Tooltip', name: 'Tooltip' },
 };
