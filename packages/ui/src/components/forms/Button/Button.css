@@ -106,6 +106,17 @@
     elyri-ui-button-loader-gap 280ms cubic-bezier(0.2, 0, 0, 1) both;
 }
 
+/* 退出：宽度与图标一起收起，和进入动画对称 */
+.elyri-ui-button__spinner--leaving {
+  animation: elyri-ui-button-loader-out 200ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+.elyri-ui-button__spinner--labeled.elyri-ui-button__spinner--leaving {
+  animation:
+    elyri-ui-button-loader-out 200ms cubic-bezier(0.4, 0, 1, 1) both,
+    elyri-ui-button-loader-gap-out 200ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
 .elyri-ui-button__spinner svg {
   flex: none;
   width: 1em;
@@ -116,7 +127,7 @@
 .elyri-ui-button__spinner circle {
   fill: none;
   stroke: currentcolor;
-  stroke-width: 2.5;
+  stroke-width: 4;
   stroke-linecap: round;
   stroke-dasharray: 72 100;
   animation: elyri-ui-button-loader-draw 480ms cubic-bezier(0.2, 0, 0, 1) both;
@@ -143,6 +154,30 @@
 
   to {
     margin-inline-end: 0;
+  }
+}
+
+@keyframes elyri-ui-button-loader-out {
+  from {
+    width: 1em;
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  to {
+    width: 0;
+    opacity: 0;
+    transform: scale(0.4);
+  }
+}
+
+@keyframes elyri-ui-button-loader-gap-out {
+  from {
+    margin-inline-end: 0;
+  }
+
+  to {
+    margin-inline-end: -8px;
   }
 }
 
