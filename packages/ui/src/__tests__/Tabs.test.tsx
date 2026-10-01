@@ -64,6 +64,15 @@ describe('Tabs', () => {
     expect(document.activeElement).toBe(third);
   });
 
+  it('defaults to the segmented variant and accepts underline', () => {
+    const { unmount } = renderTabs();
+    expect(screen.getByRole('tablist').getAttribute('data-variant')).toBe('segmented');
+    unmount();
+
+    renderTabs({ variant: 'underline' });
+    expect(screen.getByRole('tablist').getAttribute('data-variant')).toBe('underline');
+  });
+
   it('reports changes without mutating a controlled value', () => {
     const onValueChange = vi.fn();
     renderTabs({ defaultValue: undefined, value: 'one', onValueChange });

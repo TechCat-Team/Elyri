@@ -52,3 +52,8 @@
   background: color-mix(in srgb, var(--elyri-ui-danger) 14%, transparent);
   color: var(--elyri-ui-danger);
 }
+
+/* 隐藏边框 */
+.elyri-ui-badge[data-bordered='false'] {
+  border-color: transparent;
+}

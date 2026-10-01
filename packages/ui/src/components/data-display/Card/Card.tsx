@@ -10,8 +10,12 @@ function CardRoot({ className, ...rest }: CardProps) {
   return <div className={cn('elyri-ui-card', className)} {...rest} />;
 }
 
-function CardTitle({ className, ...rest }: HTMLAttributes<HTMLHeadingElement>) {
-  return <h3 className={cn('elyri-ui-card__title', className)} {...rest} />;
+function CardTitle({ className, children, ...rest }: HTMLAttributes<HTMLHeadingElement>) {
+  return (
+    <h3 className={cn('elyri-ui-card__title', className)} {...rest}>
+      {children}
+    </h3>
+  );
 }
 
 function CardDescription({ className, ...rest }: HTMLAttributes<HTMLParagraphElement>) {

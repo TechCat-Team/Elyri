@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import type { ButtonHTMLAttributes } from 'react';
 
 import { cn, useControllableState } from '../../../core';
@@ -18,16 +19,10 @@ export interface SwitchProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
 }
 
 /** 开关：受控 / 非受控双支持，空格与回车键切换（原生 button 语义） */
-export function Switch({
-  checked,
-  defaultChecked = false,
-  onCheckedChange,
-  size = 'md',
-  className,
-  disabled,
-  onClick,
-  ...rest
-}: SwitchProps) {
+export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(function Switch(
+  { checked, defaultChecked = false, onCheckedChange, size = 'md', className, disabled, onClick, ...rest },
+  ref,
+) {
   const [isChecked, setChecked] = useControllableState({
     value: checked,
     defaultValue: defaultChecked,
@@ -36,6 +31,7 @@ export function Switch({
 
   return (
     <button
+      ref={ref}
       type="button"
       role="switch"
       aria-checked={isChecked}
@@ -50,4 +46,4 @@ export function Switch({
       <span className="elyri-ui-switch__thumb" aria-hidden="true" />
     </button>
   );
-}
+});

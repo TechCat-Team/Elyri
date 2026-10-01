@@ -10,6 +10,7 @@
 }
 
 .elyri-ui-tabs__list {
+  position: relative;
   display: inline-flex;
   align-self: flex-start;
   gap: 4px;
@@ -23,7 +24,29 @@
   flex-direction: column;
 }
 
+/* 选中态滑块，位置与尺寸由 JS 写入 */
+.elyri-ui-tabs__indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: var(--elyri-ui-radius-sm);
+  background: var(--elyri-ui-surface);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 14%);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 320ms var(--elyri-ui-ease),
+    width 320ms var(--elyri-ui-ease),
+    height 320ms var(--elyri-ui-ease),
+    opacity var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-tabs__list[data-indicator] .elyri-ui-tabs__indicator {
+  opacity: 1;
+}
+
 .elyri-ui-tabs__trigger {
+  position: relative;
   padding: 8px 14px;
   border: 0;
   border-radius: var(--elyri-ui-radius-sm);
@@ -46,8 +69,12 @@
 }
 
 .elyri-ui-tabs__trigger[aria-selected='true'] {
-  background: var(--elyri-ui-surface);
   color: var(--elyri-ui-text);
+}
+
+/* 滑块就绪前（如 SSR 首屏）由 trigger 自己画选中背景 */
+.elyri-ui-tabs__list:not([data-indicator]) .elyri-ui-tabs__trigger[aria-selected='true'] {
+  background: var(--elyri-ui-surface);
   box-shadow: 0 1px 3px rgb(0 0 0 / 14%);
 }
 
@@ -56,10 +83,88 @@
   box-shadow: var(--elyri-ui-ring);
 }
 
+/* ---------- underline 变体 ---------- */
+.elyri-ui-tabs__list[data-variant='underline'] {
+  align-self: stretch;
+  gap: 28px;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--elyri-ui-border);
+  border-radius: 0;
+  background: transparent;
+}
+
+.elyri-ui-tabs__list[data-variant='underline'][aria-orientation='vertical'] {
+  gap: 4px;
+  border-bottom: 0;
+  border-right: 1px solid var(--elyri-ui-border);
+}
+
+.elyri-ui-tabs__list[data-variant='underline'] > .elyri-ui-tabs__trigger {
+  padding: 10px 0 12px;
+  border-radius: var(--elyri-ui-radius-sm) var(--elyri-ui-radius-sm) 0 0;
+  font-size: 16px;
+}
+
+.elyri-ui-tabs__list[data-variant='underline'][aria-orientation='vertical'] > .elyri-ui-tabs__trigger {
+  padding: 8px 20px 8px 0;
+  border-radius: var(--elyri-ui-radius-sm) 0 0 var(--elyri-ui-radius-sm);
+  text-align: left;
+}
+
+.elyri-ui-tabs__list[data-variant='underline'] > .elyri-ui-tabs__indicator {
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* 下划线压在列表底边上，与灰色分隔线重叠 */
+.elyri-ui-tabs__list[data-variant='underline'] > .elyri-ui-tabs__indicator::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--elyri-ui-accent);
+}
+
+.elyri-ui-tabs__list[data-variant='underline'][aria-orientation='vertical'] > .elyri-ui-tabs__indicator::after {
+  top: 0;
+  right: -1px;
+  bottom: 0;
+  left: auto;
+  width: 3px;
+  height: auto;
+}
+
+.elyri-ui-tabs__list[data-variant='underline']:not([data-indicator]) > .elyri-ui-tabs__trigger[aria-selected='true'] {
+  background: transparent;
+  box-shadow: inset 0 -3px 0 var(--elyri-ui-accent);
+}
+
+.elyri-ui-tabs__list[data-variant='underline'][aria-orientation='vertical']:not([data-indicator])
+  > .elyri-ui-tabs__trigger[aria-selected='true'] {
+  box-shadow: inset -3px 0 0 var(--elyri-ui-accent);
+}
+
 .elyri-ui-tabs__panel {
   color: var(--elyri-ui-text);
   font-size: 14px;
   line-height: 1.6;
+}
+
+/* hidden 移除后从 display:none 恢复，动画会自动重播 */
+.elyri-ui-tabs__panel:not([hidden]) {
+  animation: elyri-ui-tabs-panel-in 280ms var(--elyri-ui-ease);
+}
+
+@keyframes elyri-ui-tabs-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
 }
 
 .elyri-ui-tabs__panel:focus-visible {
@@ -69,7 +174,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .elyri-ui-tabs__trigger {
+  .elyri-ui-tabs__trigger,
+  .elyri-ui-tabs__indicator {
     transition: none;
+  }
+
+  .elyri-ui-tabs__panel:not([hidden]) {
+    animation: none;
   }
 }

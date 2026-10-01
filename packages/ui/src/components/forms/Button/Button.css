@@ -85,14 +85,75 @@
   filter: brightness(1.08);
 }
 
-/* 加载指示 */
+/*
+ * 加载指示：宽度从 0 展开让文字平滑右移，同时图标缩放淡入，
+ * 圆弧边旋转边从 0 画到 3/4 圈。
+ */
 .elyri-ui-button__spinner {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
   width: 1em;
   height: 1em;
-  border: 2px solid currentcolor;
-  border-top-color: transparent;
-  border-radius: 50%;
+  animation: elyri-ui-button-loader-in 280ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+/* 有文字时连同 8px gap 一起展开，避免文字先跳一下 */
+.elyri-ui-button__spinner--labeled {
+  animation:
+    elyri-ui-button-loader-in 280ms cubic-bezier(0.2, 0, 0, 1) both,
+    elyri-ui-button-loader-gap 280ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+.elyri-ui-button__spinner svg {
+  flex: none;
+  width: 1em;
+  height: 1em;
   animation: elyri-ui-button-spin 700ms linear infinite;
+}
+
+.elyri-ui-button__spinner circle {
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 72 100;
+  animation: elyri-ui-button-loader-draw 480ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+@keyframes elyri-ui-button-loader-in {
+  from {
+    width: 0;
+    opacity: 0;
+    transform: scale(0.4);
+  }
+
+  to {
+    width: 1em;
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes elyri-ui-button-loader-gap {
+  from {
+    margin-inline-end: -8px;
+  }
+
+  to {
+    margin-inline-end: 0;
+  }
+}
+
+@keyframes elyri-ui-button-loader-draw {
+  from {
+    stroke-dasharray: 0 100;
+  }
+
+  to {
+    stroke-dasharray: 72 100;
+  }
 }
 
 @keyframes elyri-ui-button-spin {
@@ -106,7 +167,12 @@
     transition: none;
   }
 
-  .elyri-ui-button__spinner {
+  .elyri-ui-button__spinner,
+  .elyri-ui-button__spinner circle {
+    animation: none;
+  }
+
+  .elyri-ui-button__spinner svg {
     animation-duration: 1800ms;
   }
 }

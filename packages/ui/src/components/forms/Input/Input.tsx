@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import type { InputHTMLAttributes } from 'react';
 
 import { cn } from '../../../core';
@@ -14,12 +15,16 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 }
 
 /** 输入框：三档尺寸，支持校验失败态，其余属性透传给原生 input */
-export function Input({ size = 'md', invalid = false, className, ...rest }: InputProps) {
+export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
+  { size = 'md', invalid = false, className, ...rest },
+  ref,
+) {
   return (
     <input
+      ref={ref}
       className={cn('elyri-ui-input', `elyri-ui-input--${size}`, invalid && 'is-invalid', className)}
       aria-invalid={invalid || undefined}
       {...rest}
     />
   );
-}
+});

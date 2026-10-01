@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import type { ButtonHTMLAttributes } from 'react';
 
 import { cn } from '../../../core';
@@ -17,17 +18,13 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 /** 按钮：四种样式、三档尺寸，加载态内置 */
-export function Button({
-  variant = 'primary',
-  size = 'md',
-  loading = false,
-  disabled,
-  className,
-  children,
-  ...rest
-}: ButtonProps) {
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  { variant = 'primary', size = 'md', loading = false, disabled, className, children, ...rest },
+  ref,
+) {
   return (
     <button
+      ref={ref}
       type="button"
       className={cn('elyri-ui-button', `elyri-ui-button--${variant}`, `elyri-ui-button--${size}`, className)}
       disabled={disabled || loading}
@@ -38,4 +35,4 @@ export function Button({
       {children}
     </button>
   );
-}
+});
