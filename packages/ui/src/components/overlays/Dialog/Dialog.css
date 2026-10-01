@@ -4,19 +4,22 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 7px 12px;
+  height: 36px;
+  padding: 0 14px;
   border: 1px solid var(--elyri-ui-border);
   border-radius: var(--elyri-ui-radius);
   background: var(--elyri-ui-surface);
   color: var(--elyri-ui-text);
   font: inherit;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
   cursor: pointer;
   transition:
     border-color var(--elyri-ui-duration) var(--elyri-ui-ease),
     color var(--elyri-ui-duration) var(--elyri-ui-ease),
-    transform var(--elyri-ui-duration) var(--elyri-ui-ease);
+    transform 120ms var(--elyri-ui-ease);
 }
 
 .elyri-ui-dialog__trigger:hover,
@@ -27,31 +30,45 @@
 
 .elyri-ui-dialog__trigger:active,
 .elyri-ui-dialog__close:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
 }
 
 .elyri-ui-dialog__close:focus-visible,
-.elyri-ui-dialog__trigger:focus-visible {
+.elyri-ui-dialog__trigger:focus-visible,
+.elyri-ui-dialog__corner-close:focus-visible {
   outline: none;
   box-shadow: var(--elyri-ui-ring);
 }
 
+/* 遮罩：淡入同时模糊逐渐加深 */
 .elyri-ui-dialog__overlay {
   position: fixed;
   inset: 0;
   z-index: var(--elyri-ui-z-dialog);
   display: grid;
   place-items: center;
-  padding: 20px;
+  padding: 24px;
   background: var(--elyri-ui-overlay);
-  backdrop-filter: blur(4px);
-  animation: elyri-ui-dialog-fade-in 140ms ease-out;
+  backdrop-filter: blur(6px);
+  animation: elyri-ui-dialog-overlay-in 180ms var(--elyri-ui-ease);
 }
 
+.elyri-ui-dialog__overlay[data-state='closed'] {
+  opacity: 0;
+  pointer-events: none;
+  animation: elyri-ui-dialog-overlay-out 140ms ease-in;
+}
+
+/*
+ * 面板：进场只用小幅位移 + 缩放，配 expo ease-out（无回弹），收尾干脆利落；
+ * opacity 用更短的 ease-out 单独走，避免跟着 transform 曲线一起发软。
+ */
 .elyri-ui-dialog__content {
   position: relative;
+  display: flex;
+  flex-direction: column;
   width: min(480px, 100%);
-  max-height: calc(100vh - 40px);
+  max-height: calc(100dvh - 48px);
   overflow-y: auto;
   padding: 24px;
   border: 1px solid var(--elyri-ui-border);
@@ -59,30 +76,156 @@
   background: var(--elyri-ui-surface);
   color: var(--elyri-ui-text);
   box-shadow:
-    0 2px 6px rgb(20 25 38 / 6%),
-    0 24px 56px -12px rgb(20 25 38 / 24%);
+    inset 0 1px 0 rgb(255 255 255 / 6%),
+    0 1px 2px rgb(20 25 38 / 6%),
+    0 8px 16px -4px rgb(20 25 38 / 8%),
+    0 32px 64px -16px rgb(20 25 38 / 28%);
   outline: none;
-  animation: elyri-ui-dialog-in 150ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.elyri-ui-dialog__overlay[data-state='closed'] {
-  opacity: 0;
-  pointer-events: none;
-  animation: elyri-ui-dialog-fade-out 110ms ease-in;
+  transform-origin: center;
+  animation:
+    elyri-ui-dialog-pop 200ms var(--elyri-ui-ease),
+    elyri-ui-dialog-fade-in 140ms ease-out;
 }
 
 .elyri-ui-dialog__content[data-state='closed'] {
   opacity: 0;
-  transform: scale(0.98);
-  animation: elyri-ui-dialog-out 110ms cubic-bezier(0.4, 0, 1, 1);
+  transform: translateY(6px) scale(0.94);
+  animation:
+    elyri-ui-dialog-out 140ms cubic-bezier(0.55, 0, 1, 0.45),
+    elyri-ui-dialog-fade-out 100ms ease-in;
+}
+
+/* 阻止关闭时的轻弹：保留进场动画名，避免移除 data-shake 时重播进场 */
+.elyri-ui-dialog__content[data-shake] {
+  animation:
+    elyri-ui-dialog-pop 200ms var(--elyri-ui-ease),
+    elyri-ui-dialog-fade-in 140ms ease-out,
+    elyri-ui-dialog-bump 320ms cubic-bezier(0.3, 0, 0.2, 1);
+}
+
+/* 使用 Header/Body/Footer 分区时由各区自理内边距，只让 Body 滚动 */
+.elyri-ui-dialog__content:has(> .elyri-ui-dialog__body) {
+  overflow: hidden;
+  padding: 0;
+}
+
+/* 给右上角关闭按钮让位 */
+.elyri-ui-dialog__content[data-closable] > .elyri-ui-dialog__title,
+.elyri-ui-dialog__content[data-closable] > .elyri-ui-dialog__header {
+  padding-right: 40px;
+}
+
+.elyri-ui-dialog__content[data-closable]:has(> .elyri-ui-dialog__body) > .elyri-ui-dialog__header {
+  padding-right: 56px;
+}
+
+.elyri-ui-dialog__corner-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--elyri-ui-muted);
+  cursor: pointer;
+  transition:
+    background var(--elyri-ui-duration) var(--elyri-ui-ease),
+    color var(--elyri-ui-duration) var(--elyri-ui-ease),
+    transform 120ms var(--elyri-ui-ease);
+}
+
+.elyri-ui-dialog__corner-close:hover {
+  background: var(--elyri-ui-surface-muted);
+  color: var(--elyri-ui-text);
+}
+
+.elyri-ui-dialog__corner-close:active {
+  transform: scale(0.9);
+}
+
+.elyri-ui-dialog__corner-close svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+}
+
+.elyri-ui-dialog__header {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.elyri-ui-dialog__header > .elyri-ui-dialog__title {
+  margin: 0;
+}
+
+.elyri-ui-dialog__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 24px;
+  border-block: 1px solid transparent;
+  font-size: 14px;
+  line-height: 1.6;
+  overscroll-behavior: contain;
+  transition: border-color var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-dialog__body[data-scroll-top] {
+  border-top-color: var(--elyri-ui-border);
+}
+
+.elyri-ui-dialog__body[data-scroll-bottom] {
+  border-bottom-color: var(--elyri-ui-border);
+}
+
+.elyri-ui-dialog__footer {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+/* 分区模式下 Header/Footer 自带内边距，与 Body 拉开节奏 */
+.elyri-ui-dialog__content:has(> .elyri-ui-dialog__body) > .elyri-ui-dialog__header {
+  margin: 0;
+  padding: 24px 24px 16px;
+}
+
+.elyri-ui-dialog__content:has(> .elyri-ui-dialog__body) > .elyri-ui-dialog__footer {
+  margin: 0;
+  padding: 16px 24px 20px;
+}
+
+.elyri-ui-dialog__content:has(> .elyri-ui-dialog__body):not(:has(> .elyri-ui-dialog__footer))
+  > .elyri-ui-dialog__body {
+  padding-bottom: 24px;
+}
+
+.elyri-ui-dialog__content:has(> .elyri-ui-dialog__body):not(:has(> .elyri-ui-dialog__header))
+  > .elyri-ui-dialog__body {
+  padding-top: 24px;
 }
 
 .elyri-ui-dialog__title {
   margin: 0 0 6px;
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 650;
   line-height: 1.35;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
 }
 
 .elyri-ui-dialog__description {
@@ -90,6 +233,32 @@
   color: var(--elyri-ui-muted);
   font-size: 14px;
   line-height: 1.6;
+}
+
+/* 窄屏：操作按钮纵向铺满，主操作在上 */
+@media (max-width: 480px) {
+  .elyri-ui-dialog__overlay {
+    padding: 16px;
+  }
+
+  .elyri-ui-dialog__footer {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+}
+
+@keyframes elyri-ui-dialog-overlay-in {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0);
+  }
+}
+
+@keyframes elyri-ui-dialog-overlay-out {
+  from {
+    opacity: 1;
+    backdrop-filter: blur(6px);
+  }
 }
 
 @keyframes elyri-ui-dialog-fade-in {
@@ -104,27 +273,47 @@
   }
 }
 
-@keyframes elyri-ui-dialog-in {
+@keyframes elyri-ui-dialog-pop {
   from {
-    opacity: 0;
-    transform: translateY(4px) scale(0.98);
+    transform: translateY(6px) scale(0.96);
   }
 }
 
 @keyframes elyri-ui-dialog-out {
   from {
-    opacity: 1;
     transform: none;
   }
 }
 
+@keyframes elyri-ui-dialog-bump {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  30% {
+    transform: scale(1.025);
+  }
+
+  60% {
+    transform: scale(0.992);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .elyri-ui-dialog__content {
-    animation-name: elyri-ui-dialog-fade-in;
+  .elyri-ui-dialog__content,
+  .elyri-ui-dialog__content[data-shake] {
+    animation: elyri-ui-dialog-fade-in 140ms ease-out;
   }
 
   .elyri-ui-dialog__content[data-state='closed'] {
     transform: none;
-    animation-name: elyri-ui-dialog-fade-out;
+    animation: elyri-ui-dialog-fade-out 100ms ease-in;
+  }
+
+  .elyri-ui-dialog__trigger,
+  .elyri-ui-dialog__close,
+  .elyri-ui-dialog__corner-close {
+    transition: none;
   }
 }

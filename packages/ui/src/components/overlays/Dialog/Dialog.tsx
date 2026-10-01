@@ -1,12 +1,15 @@
-import { createContext, useContext, useEffect, useId, useMemo, useRef, useState } from 'react';
-import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode, RefObject } from 'react';
+import { createContext, useCallback, useContext, useEffect, useId, useMemo, useRef, useState } from 'react';
+import type { ButtonHTMLAttributes, HTMLAttributes, MouseEvent, ReactNode, Ref, RefObject } from 'react';
 
-import { Portal, cn, useControllableState, useDismiss, useFocusTrap, usePresence, useScrollLock } from '../../../core';
+import { Portal, Slot, cn, useControllableState, useDismiss, useFocusTrap, usePresence, useScrollLock } from '../../../core';
+import type { DismissReason } from '../../../core';
 
 import './Dialog.css';
 
 /** 与 Dialog.css 中离场动画时长保持一致 */
-const EXIT_DURATION = 110;
+const EXIT_DURATION = 140;
+/** 与 Dialog.css 中 elyri-ui-dialog-bump 时长保持一致 */
+const SHAKE_DURATION = 320;
 
 interface DialogContextValue {
   open: boolean;
@@ -56,40 +59,56 @@ function DialogRoot({ open, defaultOpen = false, onOpenChange, modal = true, chi
   return <DialogContext.Provider value={value}>{children}</DialogContext.Provider>;
 }
 
-export type DialogTriggerProps = ButtonHTMLAttributes<HTMLButtonElement>;
+export interface DialogTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  /** 不渲染自带按钮，把行为合并到唯一子元素上（如 <Button>） */
+  asChild?: boolean;
+}
 
-function DialogTrigger({ className, children, onClick, ...rest }: DialogTriggerProps) {
+function DialogTrigger({ asChild = false, className, children, onClick, ...rest }: DialogTriggerProps) {
   const { open, setOpen, triggerRef, baseId } = useDialogContext();
 
+  const props = {
+    'aria-haspopup': 'dialog' as const,
+    'aria-expanded': open,
+    'aria-controls': `${baseId}-content`,
+    ...rest,
+    onClick: (event: MouseEvent<HTMLButtonElement>) => {
+      onClick?.(event);
+      if (!event.defaultPrevented) setOpen(!open);
+    },
+  };
+
+  if (asChild) {
+    return (
+      <Slot {...props} ref={triggerRef as Ref<HTMLElement>} className={className}>
+        {children}
+      </Slot>
+    );
+  }
+
   return (
-    <button
-      type="button"
-      ref={triggerRef}
-      aria-haspopup="dialog"
-      aria-expanded={open}
-      aria-controls={`${baseId}-content`}
-      className={cn('elyri-ui-dialog__trigger', className)}
-      {...rest}
-      onClick={(event) => {
-        onClick?.(event);
-        if (!event.defaultPrevented) setOpen(!open);
-      }}
-    >
+    <button type="button" ref={triggerRef} className={cn('elyri-ui-dialog__trigger', className)} {...props}>
       {children}
     </button>
   );
 }
 
 export interface DialogContentProps extends HTMLAttributes<HTMLDivElement> {
-  /** 点击遮罩关闭，默认 true */
+  /** 点击遮罩关闭，默认 true；为 false 时点击遮罩面板会轻弹提示 */
   closeOnOverlayClick?: boolean;
-  /** 按 Escape 关闭，默认 true */
+  /** 按 Escape 关闭，默认 true；为 false 时按 Escape 面板会轻弹提示 */
   closeOnEscape?: boolean;
+  /** 显示右上角关闭按钮，默认 true */
+  showCloseButton?: boolean;
+  /** 右上角关闭按钮的无障碍名称，默认 'Close' */
+  closeLabel?: string;
 }
 
 function DialogContent({
   closeOnOverlayClick = true,
   closeOnEscape = true,
+  showCloseButton = true,
+  closeLabel = 'Close',
   className,
   children,
   ...rest
@@ -97,13 +116,28 @@ function DialogContent({
   const { open, setOpen, baseId, modal, hasTitle, hasDescription } = useDialogContext();
   const contentRef = useRef<HTMLDivElement>(null);
   const refs = useMemo<RefObject<HTMLElement | null>[]>(() => [contentRef], []);
-  const dismiss = useMemo(() => () => setOpen(false), [setOpen]);
   const present = usePresence(open, EXIT_DURATION);
+  const [shaking, setShaking] = useState(false);
+
+  const handleDismiss = useCallback(
+    (reason: DismissReason) => {
+      const allowed = reason === 'escape' ? closeOnEscape : closeOnOverlayClick;
+      if (allowed) setOpen(false);
+      else if (modal) setShaking(true);
+    },
+    [closeOnEscape, closeOnOverlayClick, modal, setOpen],
+  );
+
+  useEffect(() => {
+    if (!shaking) return;
+    const timer = setTimeout(() => setShaking(false), SHAKE_DURATION);
+    return () => clearTimeout(timer);
+  }, [shaking]);
 
   // 离场动画期间保持滚动锁定，避免滚动条提前出现导致页面抖动
   useScrollLock(present && modal);
   useFocusTrap(contentRef, open && modal);
-  useDismiss({ open, onDismiss: dismiss, refs, escape: closeOnEscape, outside: closeOnOverlayClick });
+  useDismiss({ open, onDismiss: handleDismiss, refs });
 
   if (!present) return null;
 
@@ -121,14 +155,74 @@ function DialogContent({
           aria-describedby={hasDescription ? `${baseId}-description` : undefined}
           tabIndex={-1}
           data-state={state}
+          data-shake={(shaking && open) || undefined}
+          data-closable={showCloseButton || undefined}
           className={cn('elyri-ui-dialog__content', className)}
           {...rest}
         >
           {children}
+          {showCloseButton && (
+            <button
+              type="button"
+              aria-label={closeLabel}
+              className="elyri-ui-dialog__corner-close"
+              onClick={() => setOpen(false)}
+            >
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M4 4l8 8M12 4l-8 8" />
+              </svg>
+            </button>
+          )}
         </div>
       </div>
     </Portal>
   );
+}
+
+function DialogHeader({ className, ...rest }: HTMLAttributes<HTMLDivElement>) {
+  return <div className={cn('elyri-ui-dialog__header', className)} {...rest} />;
+}
+
+/** 可滚动主体：内容溢出时在对应边缘显示分割线 */
+function DialogBody({ className, onScroll, ...rest }: HTMLAttributes<HTMLDivElement>) {
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const [edges, setEdges] = useState({ top: false, bottom: false });
+
+  const updateEdges = useCallback(() => {
+    const body = bodyRef.current;
+    if (!body) return;
+    const top = body.scrollTop > 0;
+    const bottom = body.scrollTop + body.clientHeight < body.scrollHeight - 1;
+    setEdges((prev) => (prev.top === top && prev.bottom === bottom ? prev : { top, bottom }));
+  }, []);
+
+  useEffect(() => {
+    const body = bodyRef.current;
+    updateEdges();
+    if (!body || typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(updateEdges);
+    observer.observe(body);
+    for (const child of body.children) observer.observe(child);
+    return () => observer.disconnect();
+  }, [updateEdges]);
+
+  return (
+    <div
+      ref={bodyRef}
+      className={cn('elyri-ui-dialog__body', className)}
+      data-scroll-top={edges.top || undefined}
+      data-scroll-bottom={edges.bottom || undefined}
+      onScroll={(event) => {
+        onScroll?.(event);
+        updateEdges();
+      }}
+      {...rest}
+    />
+  );
+}
+
+function DialogFooter({ className, ...rest }: HTMLAttributes<HTMLDivElement>) {
+  return <div className={cn('elyri-ui-dialog__footer', className)} {...rest} />;
 }
 
 function DialogTitle({ className, children, ...rest }: HTMLAttributes<HTMLHeadingElement>) {
@@ -157,30 +251,41 @@ function DialogDescription({ className, ...rest }: HTMLAttributes<HTMLParagraphE
   return <p id={`${baseId}-description`} className={cn('elyri-ui-dialog__description', className)} {...rest} />;
 }
 
-export type DialogCloseProps = ButtonHTMLAttributes<HTMLButtonElement>;
+export interface DialogCloseProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  /** 不渲染自带按钮，把关闭行为合并到唯一子元素上（如 <Button>） */
+  asChild?: boolean;
+}
 
-function DialogClose({ className, children, onClick, ...rest }: DialogCloseProps) {
+function DialogClose({ asChild = false, className, children, onClick, ...rest }: DialogCloseProps) {
   const { setOpen } = useDialogContext();
 
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+    onClick?.(event);
+    if (!event.defaultPrevented) setOpen(false);
+  };
+
+  if (asChild) {
+    return (
+      <Slot {...rest} className={className} onClick={handleClick}>
+        {children}
+      </Slot>
+    );
+  }
+
   return (
-    <button
-      type="button"
-      className={cn('elyri-ui-dialog__close', className)}
-      {...rest}
-      onClick={(event) => {
-        onClick?.(event);
-        if (!event.defaultPrevented) setOpen(false);
-      }}
-    >
+    <button type="button" className={cn('elyri-ui-dialog__close', className)} {...rest} onClick={handleClick}>
       {children}
     </button>
   );
 }
 
-/** 对话框：复合组件，含触发、遮罩、焦点管理与滚动锁定 */
+/** 对话框：复合组件，含触发、遮罩、分区布局、焦点管理与滚动锁定 */
 export const Dialog = Object.assign(DialogRoot, {
   Trigger: DialogTrigger,
   Content: DialogContent,
+  Header: DialogHeader,
+  Body: DialogBody,
+  Footer: DialogFooter,
   Title: DialogTitle,
   Description: DialogDescription,
   Close: DialogClose,
