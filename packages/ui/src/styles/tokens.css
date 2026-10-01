@@ -12,18 +12,53 @@
   --elyri-ui-danger: #d64545;
   --elyri-ui-success: #2f9e6b;
   --elyri-ui-warning: #b8791a;
+  --elyri-ui-info: #3b6fd4;
+
+  --elyri-ui-overlay: rgb(12 14 20 / 48%);
+  --elyri-ui-tooltip-bg: #1f2430;
+  --elyri-ui-tooltip-text: #f4f5f7;
 
   --elyri-ui-radius: 10px;
   --elyri-ui-radius-sm: 6px;
   --elyri-ui-shadow: 0 8px 24px rgb(20 25 38 / 8%);
   --elyri-ui-ring: 0 0 0 3px rgb(109 91 208 / 35%);
 
+  /* 层级令牌：浮层统一从这里取值，避免散落魔法数字与宿主冲突 */
+  --elyri-ui-z-dialog: 50;
+  --elyri-ui-z-floating: 55;
+  --elyri-ui-z-toast: 60;
+  --elyri-ui-z-tooltip: 70;
+
   --elyri-ui-duration: 180ms;
   --elyri-ui-ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* 显式主题（与文档站 <html data-theme> 对齐）：优先级高于系统偏好 */
+:root[data-theme='dark'] {
+  --elyri-ui-accent: #b49bff;
+  --elyri-ui-accent-text: #14101f;
+  --elyri-ui-accent-soft: rgb(180 155 255 / 16%);
+  --elyri-ui-text: #eef0f4;
+  --elyri-ui-muted: #9ba1ad;
+  --elyri-ui-surface: #16191f;
+  --elyri-ui-surface-muted: #1c2027;
+  --elyri-ui-border: #272c34;
+  --elyri-ui-danger: #e5766f;
+  --elyri-ui-success: #5cc394;
+  --elyri-ui-warning: #e0a95f;
+  --elyri-ui-info: #7fa8ff;
+
+  --elyri-ui-overlay: rgb(0 0 0 / 62%);
+  --elyri-ui-tooltip-bg: #eef0f4;
+  --elyri-ui-tooltip-text: #14161c;
+
+  --elyri-ui-shadow: 0 12px 32px rgb(0 0 0 / 42%);
+  --elyri-ui-ring: 0 0 0 3px rgb(180 155 255 / 35%);
+}
+
+/* 跟随系统：data-theme='light' 时保持浅色，否则回落为深色 */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --elyri-ui-accent: #b49bff;
     --elyri-ui-accent-text: #14101f;
     --elyri-ui-accent-soft: rgb(180 155 255 / 16%);
@@ -35,8 +70,25 @@
     --elyri-ui-danger: #e5766f;
     --elyri-ui-success: #5cc394;
     --elyri-ui-warning: #e0a95f;
+    --elyri-ui-info: #7fa8ff;
+
+    --elyri-ui-overlay: rgb(0 0 0 / 62%);
+    --elyri-ui-tooltip-bg: #eef0f4;
+    --elyri-ui-tooltip-text: #14161c;
 
     --elyri-ui-shadow: 0 12px 32px rgb(0 0 0 / 42%);
     --elyri-ui-ring: 0 0 0 3px rgb(180 155 255 / 35%);
+  }
+}
+
+/*
+ * 高对比度模式：box-shadow 焦点环会被系统强制移除，
+ * 改用 outline 保证键盘焦点始终可见（特异度高于组件内的 outline:none）。
+ */
+@media (forced-colors: active) {
+  :root [class*='elyri-ui-']:focus-visible {
+    box-shadow: none;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
   }
 }
