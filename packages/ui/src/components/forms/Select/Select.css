@@ -1,0 +1,293 @@
+/* Trigger：视觉与 Input 对齐的 combobox 外壳 */
+.elyri-ui-select__trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 38px;
+  padding: 0 30px 0 12px;
+  border: 1px solid var(--elyri-ui-border);
+  border-radius: var(--elyri-ui-radius);
+  background: var(--elyri-ui-surface);
+  color: var(--elyri-ui-text);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    border-color var(--elyri-ui-duration) var(--elyri-ui-ease),
+    box-shadow var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-select__trigger--sm {
+  min-height: 32px;
+  padding: 0 28px 0 10px;
+  font-size: 13px;
+}
+
+.elyri-ui-select__trigger--md {
+  min-height: 38px;
+  padding: 0 30px 0 12px;
+  font-size: 14px;
+}
+
+.elyri-ui-select__trigger--lg {
+  min-height: 44px;
+  padding: 0 32px 0 14px;
+  font-size: 15px;
+}
+
+/* 多选：Tag 换行铺开，改为上下小间距 */
+.elyri-ui-select__trigger--multi {
+  flex-wrap: wrap;
+  padding: 4px 30px 4px 8px;
+  gap: 4px;
+}
+
+.elyri-ui-select__trigger:hover:not([data-disabled]):not([aria-expanded='true']) {
+  border-color: color-mix(in srgb, var(--elyri-ui-border) 55%, var(--elyri-ui-text));
+}
+
+.elyri-ui-select__trigger[aria-expanded='true'] {
+  border-color: var(--elyri-ui-accent);
+}
+
+.elyri-ui-select__trigger:focus-visible {
+  outline: none;
+  border-color: var(--elyri-ui-accent);
+  box-shadow: var(--elyri-ui-ring);
+}
+
+.elyri-ui-select__trigger[data-disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.elyri-ui-select__trigger.is-invalid {
+  border-color: var(--elyri-ui-danger);
+}
+
+.elyri-ui-select__trigger.is-invalid:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--elyri-ui-danger) 35%, transparent);
+}
+
+.elyri-ui-select__value {
+  flex: 1;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.elyri-ui-select__value[data-empty='true'] {
+  color: var(--elyri-ui-muted);
+}
+
+.elyri-ui-select__chevron {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-left: auto;
+  color: var(--elyri-ui-muted);
+  transition: rotate var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-select__trigger[aria-expanded='true'] .elyri-ui-select__chevron {
+  rotate: 180deg;
+}
+
+/* 多选 Tag 与清空按钮 */
+.elyri-ui-select__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 4px 2px 8px;
+  border: 1px solid var(--elyri-ui-border);
+  border-radius: var(--elyri-ui-radius-sm);
+  background: var(--elyri-ui-surface-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.elyri-ui-select__tag-remove,
+.elyri-ui-select__clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: var(--elyri-ui-muted);
+  cursor: pointer;
+}
+
+.elyri-ui-select__tag-remove {
+  width: 16px;
+  height: 16px;
+}
+
+.elyri-ui-select__tag-remove svg,
+.elyri-ui-select__clear svg {
+  width: 12px;
+  height: 12px;
+}
+
+.elyri-ui-select__tag-remove:hover:not(:disabled),
+.elyri-ui-select__clear:hover:not(:disabled) {
+  color: var(--elyri-ui-danger);
+}
+
+.elyri-ui-select__tag-remove:disabled,
+.elyri-ui-select__clear:disabled {
+  cursor: not-allowed;
+}
+
+.elyri-ui-select__tag-remove:focus-visible,
+.elyri-ui-select__clear:focus-visible {
+  outline: none;
+  box-shadow: var(--elyri-ui-ring);
+}
+
+.elyri-ui-select__clear {
+  width: 18px;
+  height: 18px;
+}
+
+/* 浮层：常驻挂载，hidden 时彻底隐藏 */
+.elyri-ui-select__content {
+  --select-shift-y: -4px;
+  position: fixed;
+  z-index: var(--elyri-ui-z-floating);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 180px;
+  max-height: min(320px, calc(100vh - 24px));
+  overflow-y: auto;
+  padding: 4px;
+  border: 1px solid var(--elyri-ui-border);
+  border-radius: 12px;
+  background: var(--elyri-ui-surface);
+  color: var(--elyri-ui-text);
+  box-shadow:
+    0 1px 2px rgb(20 25 38 / 4%),
+    0 12px 32px -8px rgb(20 25 38 / 16%);
+  outline: none;
+  transform-origin: top center;
+  animation: elyri-ui-select-in 180ms var(--elyri-ui-ease);
+}
+
+.elyri-ui-select__content[hidden] {
+  display: none;
+}
+
+.elyri-ui-select__content[data-placement='top'] {
+  --select-shift-y: 4px;
+  transform-origin: bottom center;
+}
+
+.elyri-ui-select__content[data-placement='left'] {
+  transform-origin: center right;
+}
+
+.elyri-ui-select__content[data-placement='right'] {
+  transform-origin: center left;
+}
+
+.elyri-ui-select__content[data-state='closed'] {
+  opacity: 0;
+  pointer-events: none;
+  animation: elyri-ui-select-out 120ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+.elyri-ui-select__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--elyri-ui-text);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+.elyri-ui-select__item:focus,
+.elyri-ui-select__item[data-active='true'] {
+  outline: none;
+  background: var(--elyri-ui-surface-muted);
+}
+
+.elyri-ui-select__item[data-state='checked'] {
+  color: var(--elyri-ui-accent);
+  font-weight: 600;
+}
+
+.elyri-ui-select__item:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* 勾选指示位：固定占位保证文本对齐 */
+.elyri-ui-select__item-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+.elyri-ui-select__item-indicator svg {
+  width: 14px;
+  height: 14px;
+}
+
+.elyri-ui-select__item-text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@keyframes elyri-ui-select-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--select-shift-y)) scale(0.96);
+  }
+}
+
+@keyframes elyri-ui-select-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-ui-select__trigger,
+  .elyri-ui-select__chevron,
+  .elyri-ui-select__item {
+    transition: none;
+  }
+
+  .elyri-ui-select__content {
+    animation: none;
+  }
+
+  .elyri-ui-select__content[data-state='closed'] {
+    animation: none;
+  }
+}
