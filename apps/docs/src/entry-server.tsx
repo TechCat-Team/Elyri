@@ -9,6 +9,7 @@ import { pageMeta } from './lib/meta';
 import { href, LANGS, LEGACY_PATHS, parsePath } from './lib/routes';
 import { RouterProvider } from './lib/router';
 import { docPath, sections } from './lib/sections';
+import { ToastPositionProvider } from './lib/toastPosition';
 import type { Lang } from './lib/types';
 
 export interface PrerenderRoute {
@@ -48,7 +49,9 @@ export async function render(url: string) {
     <StrictMode>
       <RouterProvider url={href(route.lang, route.path)}>
         <I18nProvider>
-          <App />
+          <ToastPositionProvider>
+            <App />
+          </ToastPositionProvider>
         </I18nProvider>
       </RouterProvider>
     </StrictMode>,

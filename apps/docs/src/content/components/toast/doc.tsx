@@ -1,5 +1,7 @@
-import { Button, ToastProvider, useToast } from '@elyri/ui';
+import { Button, useToast } from '@elyri/ui';
+import type { ToastPosition } from '@elyri/ui';
 
+import { useToastPosition } from '../../../lib/toastPosition';
 import type { ComponentDoc, Lang } from '../../../lib/types';
 
 const copy = {
@@ -7,6 +9,8 @@ const copy = {
     description: '轻提示：用 ToastProvider 承载 useToast，浮层堆叠、自动关闭、悬停暂停，兼容受控与非受控。',
     exBasic: '基础用法',
     exBasicDesc: '调用 toast({ title, description, variant }) 弹出一条提示。',
+    exPosition: '位置切换',
+    exPositionDesc: '切换 ToastProvider 的 position，提示会停靠在视口的六个方向之一。',
     exVariants: '全部变体',
     exVariantsDesc: '四种语义：info / success / warning / danger。',
     exLoading: '加载到成功',
@@ -34,6 +38,8 @@ const copy = {
     description: 'Toasts driven by ToastProvider and useToast: a stacking portal, auto-dismiss, hover pause.',
     exBasic: 'Basic',
     exBasicDesc: 'Call toast({ title, description, variant }) to push a toast.',
+    exPosition: 'Position',
+    exPositionDesc: 'Switch the ToastProvider position to dock toasts to any of the six viewport corners.',
     exVariants: 'Variants',
     exVariantsDesc: 'Four variants: info / success / warning / danger.',
     exLoading: 'Loading → Success',
@@ -68,6 +74,34 @@ function ToastBasicExample() {
       <Button onClick={() => toast({ title: 'Saved', description: 'Saved to your workspace.', variant: 'success' })}>
         Show toast
       </Button>
+    </div>
+  );
+}
+
+const TOAST_POSITIONS: ToastPosition[] = ['top-left', 'top', 'top-right', 'bottom-left', 'bottom', 'bottom-right'];
+
+/** 切换全局视口位置并弹出一条提示，直观对比六个停靠方向 */
+function ToastPositionExample() {
+  const { toast } = useToast();
+  const { position, setPosition } = useToastPosition();
+
+  const showAt = (next: ToastPosition) => {
+    setPosition(next);
+    toast({ title: 'Position', description: next, variant: 'info' });
+  };
+
+  return (
+    <div className="demo-ui-row">
+      {TOAST_POSITIONS.map((item) => (
+        <Button
+          key={item}
+          size="sm"
+          variant={item === position ? 'primary' : 'secondary'}
+          onClick={() => showAt(item)}
+        >
+          {item}
+        </Button>
+      ))}
     </div>
   );
 }
@@ -180,11 +214,7 @@ export const toastDoc = (lang: Lang): ComponentDoc => {
         title: t.exBasic,
         description: t.exBasicDesc,
         wide: true,
-        render: () => (
-          <ToastProvider>
-            <ToastBasicExample />
-          </ToastProvider>
-        ),
+        render: () => <ToastBasicExample />,
         code: `import { ToastProvider, useToast } from './components/elyri/Toast';
 import { Button } from './components/elyri/Button';
 
@@ -209,14 +239,53 @@ export function Example() {
 }`,
       },
       {
+        title: t.exPosition,
+        description: t.exPositionDesc,
+        wide: true,
+        render: () => <ToastPositionExample />,
+        code: `import { useState } from 'react';
+import { ToastProvider, useToast } from './components/elyri/Toast';
+import type { ToastPosition } from './components/elyri/Toast';
+import { Button } from './components/elyri/Button';
+
+const positions: ToastPosition[] = ['top-left', 'top', 'top-right', 'bottom-left', 'bottom', 'bottom-right'];
+
+function Trigger({ position, onPick }: { position: ToastPosition; onPick: (position: ToastPosition) => void }) {
+  const { toast } = useToast();
+
+  return (
+    <div className="demo-ui-row">
+      {positions.map((item) => (
+        <Button
+          key={item}
+          variant={item === position ? 'primary' : 'secondary'}
+          onClick={() => {
+            onPick(item);
+            toast({ title: 'Position', description: item, variant: 'info' });
+          }}
+        >
+          {item}
+        </Button>
+      ))}
+    </div>
+  );
+}
+
+export function Example() {
+  const [position, setPosition] = useState<ToastPosition>('top');
+
+  return (
+    <ToastProvider position={position}>
+      <Trigger position={position} onPick={setPosition} />
+    </ToastProvider>
+  );
+}`,
+      },
+      {
         title: t.exVariants,
         description: t.exVariantsDesc,
         wide: true,
-        render: () => (
-          <ToastProvider>
-            <ToastVariantsExample />
-          </ToastProvider>
-        ),
+        render: () => <ToastVariantsExample />,
         code: `import { ToastProvider, useToast } from './components/elyri/Toast';
 import { Button } from './components/elyri/Button';
 
@@ -253,11 +322,7 @@ export function Example() {
         title: t.exLoading,
         description: t.exLoadingDesc,
         wide: true,
-        render: () => (
-          <ToastProvider>
-            <ToastLoadingExample />
-          </ToastProvider>
-        ),
+        render: () => <ToastLoadingExample />,
         code: `import { ToastProvider, useToast } from './components/elyri/Toast';
 import { Button } from './components/elyri/Button';
 
@@ -287,11 +352,7 @@ export function Example() {
         title: t.exPromise,
         description: t.exPromiseDesc,
         wide: true,
-        render: () => (
-          <ToastProvider>
-            <ToastPromiseExample />
-          </ToastProvider>
-        ),
+        render: () => <ToastPromiseExample />,
         code: `import { ToastProvider, useToast } from './components/elyri/Toast';
 import { Button } from './components/elyri/Button';
 
@@ -321,11 +382,7 @@ export function Example() {
         title: t.exPersistent,
         description: t.exPersistentDesc,
         wide: true,
-        render: () => (
-          <ToastProvider>
-            <ToastPersistentExample />
-          </ToastProvider>
-        ),
+        render: () => <ToastPersistentExample />,
         code: `import { ToastProvider, useToast } from './components/elyri/Toast';
 import { Button } from './components/elyri/Button';
 

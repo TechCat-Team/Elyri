@@ -5,6 +5,7 @@ import { App } from './App';
 import { I18nProvider } from './lib/i18n';
 import { DEFAULT_LANG, href, isLang } from './lib/routes';
 import { RouterProvider } from './lib/router';
+import { ToastPositionProvider } from './lib/toastPosition';
 
 import '@elyri/motion/styles.css';
 import '@elyri/ui/styles.css';
@@ -39,7 +40,10 @@ if (!redirectLegacyHash()) {
       <StrictMode>
         <RouterProvider url={window.location.pathname}>
           <I18nProvider>
-            <App />
+            {/* 全局单例：示例共用同一视口，避免各自挂载 provider 导致浮层重叠 */}
+            <ToastPositionProvider>
+              <App />
+            </ToastPositionProvider>
           </I18nProvider>
         </RouterProvider>
       </StrictMode>
