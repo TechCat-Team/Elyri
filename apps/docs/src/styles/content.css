@@ -611,21 +611,22 @@
 .doc-section > * + * {
   margin-top: 14px;
 }
-.doc-prose p,
-.doc-prose ul,
-.doc-prose ol {
+/* 只作用于正文小节，避免覆盖页头 description 的间距与颜色 */
+.doc-section p,
+.doc-section ul,
+.doc-section ol {
   margin-bottom: 0;
   color: var(--docs-text);
 }
-.doc-prose p:first-child,
-.doc-prose .doc-heading + p {
+.doc-section p:first-child,
+.doc-section .doc-heading + p {
   margin-top: 0;
 }
-.doc-prose ul,
-.doc-prose ol {
+.doc-section ul,
+.doc-section ol {
   padding-left: 22px;
 }
-.doc-prose li + li {
+.doc-section li + li {
   margin-top: 6px;
 }
 .doc-prose a:not([class]) {
