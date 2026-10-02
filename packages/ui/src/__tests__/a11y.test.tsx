@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { Alert } from '../components/feedback/Alert';
 import { Progress } from '../components/feedback/Progress';
 import { ToastProvider, useToast } from '../components/feedback/Toast';
+import { Avatar, AvatarGroup } from '../components/data-display/Avatar';
 import { Button } from '../components/forms/Button';
 import { Checkbox, CheckboxGroup } from '../components/forms/Checkbox';
 import { Field } from '../components/forms/Field';
@@ -48,6 +49,22 @@ describe('accessibility (axe)', () => {
         <Alert variant="warning" title="Heads up">
           Check the field
         </Alert>
+      </div>,
+    );
+
+    await expectNoViolations(container);
+  });
+
+  it('passes for avatars and an avatar group', async () => {
+    const { container } = render(
+      <div>
+        <Avatar name="Ada Lovelace" status="online" />
+        <Avatar src="https://example.com/ada.png" alt="Ada" />
+        <AvatarGroup max={2} aria-label="Team members">
+          <Avatar name="A" />
+          <Avatar name="B" />
+          <Avatar name="C" />
+        </AvatarGroup>
       </div>,
     );
 

@@ -1,0 +1,190 @@
+.elyri-ui-avatar {
+  --elyri-ui-avatar-size: 40px;
+  --elyri-ui-avatar-ring: 2px;
+
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--elyri-ui-avatar-size);
+  height: var(--elyri-ui-avatar-size);
+  border-radius: 999px;
+  background: var(--elyri-ui-surface-muted);
+  color: var(--elyri-ui-muted);
+  font-weight: 650;
+  font-size: calc(var(--elyri-ui-avatar-size) * 0.36);
+  line-height: 1;
+  user-select: none;
+}
+
+/* 尺寸 */
+.elyri-ui-avatar--xs {
+  --elyri-ui-avatar-size: 24px;
+}
+
+.elyri-ui-avatar--sm {
+  --elyri-ui-avatar-size: 32px;
+}
+
+.elyri-ui-avatar--md {
+  --elyri-ui-avatar-size: 40px;
+}
+
+.elyri-ui-avatar--lg {
+  --elyri-ui-avatar-size: 48px;
+}
+
+.elyri-ui-avatar--xl {
+  --elyri-ui-avatar-size: 64px;
+}
+
+/* 形状 */
+.elyri-ui-avatar--square {
+  border-radius: calc(var(--elyri-ui-avatar-size) * 0.28);
+}
+
+/* 媒体层：裁切图片与回退内容，隔离状态圆点 */
+.elyri-ui-avatar__media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.elyri-ui-avatar__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* fit=contain：图片缩小居中完整显示，适合 logo 等不希望被裁切的图形 */
+.elyri-ui-avatar[data-fit='contain'] .elyri-ui-avatar__img {
+  width: 72%;
+  height: 72%;
+  object-fit: contain;
+}
+
+/* 首字母回退：默认中性底，带 name 时用稳定色相渐变 */
+.elyri-ui-avatar__fallback {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--elyri-ui-surface-muted);
+  color: var(--elyri-ui-muted);
+  letter-spacing: 0.02em;
+}
+
+/* 弥散渐变：浅色 → 主色 → 偏移色相；放在 ::before 上做模糊，文字保持清晰 */
+.elyri-ui-avatar__fallback[data-hue] {
+  --elyri-ui-avatar-h: var(--elyri-ui-avatar-hue);
+  --elyri-ui-avatar-h2: calc(var(--elyri-ui-avatar-hue) + 28);
+
+  isolation: isolate;
+  background: none;
+  color: #fff;
+}
+
+.elyri-ui-avatar__fallback[data-hue]::before {
+  content: '';
+  position: absolute;
+  inset: calc(var(--elyri-ui-avatar-size) * -0.15);
+  z-index: -1;
+  background:
+    linear-gradient(
+      115deg,
+      transparent 34%,
+      hsl(0 0% 100% / 0.34) 49%,
+      transparent 64%
+    ),
+    radial-gradient(
+      ellipse 90% 90% at 25% 20%,
+      hsl(var(--elyri-ui-avatar-h) 70% 84%) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 90% 90% at 80% 85%,
+      hsl(var(--elyri-ui-avatar-h2) 68% 58%) 0%,
+      transparent 70%
+    ),
+    linear-gradient(
+      150deg,
+      hsl(var(--elyri-ui-avatar-h) 62% 78%) 0%,
+      hsl(var(--elyri-ui-avatar-h) 60% 68%) 50%,
+      hsl(var(--elyri-ui-avatar-h2) 64% 60%) 100%
+    );
+  filter: blur(calc(var(--elyri-ui-avatar-size) * 0.14));
+}
+
+.elyri-ui-avatar__fallback > svg {
+  width: 58%;
+  height: 58%;
+}
+
+/* 在线状态圆点 */
+.elyri-ui-avatar__status {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: calc(var(--elyri-ui-avatar-size) * 0.28);
+  height: calc(var(--elyri-ui-avatar-size) * 0.28);
+  min-width: 8px;
+  min-height: 8px;
+  border: var(--elyri-ui-avatar-ring) solid var(--elyri-ui-surface);
+  border-radius: 999px;
+  background: var(--elyri-ui-muted);
+}
+
+.elyri-ui-avatar__status[data-status='online'] {
+  background: var(--elyri-ui-success);
+}
+
+.elyri-ui-avatar__status[data-status='away'] {
+  background: var(--elyri-ui-warning);
+}
+
+.elyri-ui-avatar__status[data-status='busy'] {
+  background: var(--elyri-ui-danger);
+}
+
+/* 计数徽标：+N */
+.elyri-ui-avatar--count {
+  background: var(--elyri-ui-surface-muted);
+  color: var(--elyri-ui-text);
+  font-size: calc(var(--elyri-ui-avatar-size) * 0.32);
+}
+
+/* 头像组：重叠排列，悬停抬升露出完整头像 */
+.elyri-ui-avatar-group {
+  display: inline-flex;
+  align-items: center;
+}
+
+.elyri-ui-avatar-group > * + * {
+  margin-inline-start: calc(var(--elyri-ui-avatar-size, 40px) * -0.3);
+}
+
+.elyri-ui-avatar-group > .elyri-ui-avatar {
+  box-shadow: 0 0 0 var(--elyri-ui-avatar-ring) var(--elyri-ui-surface);
+  transition: transform var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-avatar-group > .elyri-ui-avatar:hover {
+  z-index: 1;
+  transform: translateY(-3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-ui-avatar-group > .elyri-ui-avatar,
+  .elyri-ui-avatar-group > .elyri-ui-avatar:hover {
+    transition: none;
+    transform: none;
+  }
+}
