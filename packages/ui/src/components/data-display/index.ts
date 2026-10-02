@@ -2,4 +2,5 @@
 export * from './Avatar';
 export * from './Card';
 export * from './Divider';
+export * from './Empty';
 export * from './Tag';

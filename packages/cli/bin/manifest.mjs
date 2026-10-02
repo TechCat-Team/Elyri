@@ -45,6 +45,7 @@ export const components = {
   dialog: { pkg: '@elyri/ui', folder: 'overlays/Dialog', name: 'Dialog' },
   divider: { pkg: '@elyri/ui', folder: 'data-display/Divider', name: 'Divider' },
   'dropdown-menu': { pkg: '@elyri/ui', folder: 'overlays/DropdownMenu', name: 'DropdownMenu' },
+  empty: { pkg: '@elyri/ui', folder: 'data-display/Empty', name: 'Empty' },
   field: { pkg: '@elyri/ui', folder: 'forms/Field', name: 'Field' },
   input: { pkg: '@elyri/ui', folder: 'forms/Input', name: 'Input' },
   'number-input': { pkg: '@elyri/ui', folder: 'forms/NumberInput', name: 'NumberInput' },

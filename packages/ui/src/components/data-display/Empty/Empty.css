@@ -1,0 +1,144 @@
+.elyri-ui-empty {
+  --empty-image: 128px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px;
+  color: var(--elyri-ui-text);
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.elyri-ui-empty--sm {
+  --empty-image: 88px;
+  padding: 16px 12px;
+  font-size: 13px;
+}
+
+.elyri-ui-empty--lg {
+  --empty-image: 176px;
+  padding: 32px 20px;
+  font-size: 15px;
+}
+
+.elyri-ui-empty__image {
+  display: grid;
+  place-items: center;
+  width: var(--empty-image);
+  margin-bottom: 12px;
+}
+
+.elyri-ui-empty__image > svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.elyri-ui-empty__title {
+  font-size: 1.07em;
+  font-weight: 600;
+}
+
+.elyri-ui-empty__description {
+  max-width: 36ch;
+  margin-top: 4px;
+  color: var(--elyri-ui-muted);
+  font-size: 0.93em;
+}
+
+.elyri-ui-empty__action {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+/* 插画配色：全部取自主题变量，随明暗主题自动切换 */
+.elyri-ui-empty__backdrop {
+  fill: color-mix(in srgb, var(--elyri-ui-accent) 7%, transparent);
+}
+
+.elyri-ui-empty__shadow {
+  fill: color-mix(in srgb, var(--elyri-ui-text) 7%, transparent);
+}
+
+.elyri-ui-empty__paper {
+  fill: var(--elyri-ui-surface);
+  stroke: color-mix(in srgb, var(--elyri-ui-text) 14%, var(--elyri-ui-surface));
+  stroke-width: 1.5;
+}
+
+.elyri-ui-empty__paper--muted {
+  fill: var(--elyri-ui-surface-muted);
+}
+
+.elyri-ui-empty__line {
+  fill: color-mix(in srgb, var(--elyri-ui-text) 9%, transparent);
+}
+
+.elyri-ui-empty__accent {
+  fill: color-mix(in srgb, var(--elyri-ui-accent) 55%, transparent);
+}
+
+.elyri-ui-empty__lens {
+  fill: color-mix(in srgb, var(--elyri-ui-accent) 10%, var(--elyri-ui-surface));
+  stroke: var(--elyri-ui-accent);
+  stroke-width: 5;
+}
+
+.elyri-ui-empty__handle {
+  stroke: var(--elyri-ui-accent);
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+.elyri-ui-empty__sparkle {
+  fill: var(--elyri-ui-accent);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: elyri-ui-empty-twinkle 2.8s ease-in-out infinite;
+}
+
+.elyri-ui-empty__sparkle--late {
+  animation-delay: -1.4s;
+}
+
+.elyri-ui-empty__dot {
+  fill: color-mix(in srgb, var(--elyri-ui-accent) 45%, transparent);
+}
+
+.elyri-ui-empty__float {
+  animation: elyri-ui-empty-float 4s ease-in-out infinite;
+}
+
+@keyframes elyri-ui-empty-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes elyri-ui-empty-twinkle {
+  0%,
+  100% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.7);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-ui-empty__float,
+  .elyri-ui-empty__sparkle {
+    animation: none;
+  }
+}

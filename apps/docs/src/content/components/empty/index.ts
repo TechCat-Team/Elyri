@@ -1,0 +1,1 @@
+export { emptyDoc } from './doc';
