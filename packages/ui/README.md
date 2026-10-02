@@ -67,6 +67,7 @@ export function App() {
 | `Tag`          | data-display | 状态、分类与计数                                                |
 | `Card`         | data-display | 媒体 / 头部 / 内容 / 底栏插槽，四种样式与可交互态               |
 | `Tabs`         | navigation   | 方向键与 Home / End 导航，自动激活面板                          |
+| `Pagination`   | navigation   | 区间折叠，可选每页条数选择器与跳转输入框，描边 / 填充两种外观   |
 | `Dialog`       | overlays     | 复合组件，含遮罩、焦点圈定与滚动锁定                            |
 | `DropdownMenu` | overlays     | `menu` 语义，方向键、Home / End 与 typeahead 导航               |
 | `Popover`      | overlays     | 点击触发，内容可交互，外部点击 / Escape 关闭                    |

@@ -17,6 +17,7 @@ import { Slider } from '../components/forms/Slider';
 import { Switch } from '../components/forms/Switch';
 import { Textarea } from '../components/forms/Textarea';
 import { Tabs } from '../components/navigation/Tabs';
+import { Pagination } from '../components/navigation/Pagination';
 import { Dialog } from '../components/overlays/Dialog';
 import { DropdownMenu } from '../components/overlays/DropdownMenu';
 
@@ -186,6 +187,14 @@ describe('accessibility (axe)', () => {
         <Tabs.Panel value="one">Panel one</Tabs.Panel>
         <Tabs.Panel value="two">Panel two</Tabs.Panel>
       </Tabs>,
+    );
+
+    await expectNoViolations(container);
+  });
+
+  it('passes for pagination', async () => {
+    const { container } = render(
+      <Pagination total={20} defaultPage={5} showEdges showJump pageSizeOptions={[10, 20]} />,
     );
 
     await expectNoViolations(container);

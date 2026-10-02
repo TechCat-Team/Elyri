@@ -1,0 +1,222 @@
+.elyri-ui-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  color: var(--elyri-ui-text);
+}
+
+.elyri-ui-pagination[data-disabled='true'] {
+  opacity: 0.6;
+}
+
+/* 尺寸令牌：页码方块、选择器与输入框共用同一高度 */
+.elyri-ui-pagination--sm {
+  --elyri-ui-pagination-size: 28px;
+  font-size: 12px;
+}
+
+.elyri-ui-pagination--md {
+  --elyri-ui-pagination-size: 34px;
+  font-size: 13px;
+}
+
+.elyri-ui-pagination__list {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.elyri-ui-pagination__cell {
+  display: flex;
+}
+
+/* 页码与方向键统一为无边框幽灵按钮，只靠背景与文字色区分状态 */
+.elyri-ui-pagination__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--elyri-ui-pagination-size);
+  height: var(--elyri-ui-pagination-size);
+  padding: 0 7px;
+  border: 1px solid transparent;
+  border-radius: var(--elyri-ui-radius-sm);
+  background: transparent;
+  color: var(--elyri-ui-muted);
+  font: inherit;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background var(--elyri-ui-duration) var(--elyri-ui-ease),
+    border-color var(--elyri-ui-duration) var(--elyri-ui-ease),
+    color var(--elyri-ui-duration) var(--elyri-ui-ease),
+    box-shadow var(--elyri-ui-duration) var(--elyri-ui-ease),
+    transform var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-pagination__item svg {
+  width: 1.05em;
+  height: 1.05em;
+}
+
+.elyri-ui-pagination__item:focus-visible {
+  outline: none;
+  box-shadow: var(--elyri-ui-ring);
+}
+
+.elyri-ui-pagination__item:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+/* 悬停只作轻微提亮，当前页不受影响 */
+.elyri-ui-pagination__item:not(:disabled):not([aria-current='page']):hover {
+  background: var(--elyri-ui-surface-muted);
+  color: var(--elyri-ui-text);
+}
+
+.elyri-ui-pagination__item:not(:disabled):active {
+  transform: scale(0.94);
+}
+
+/* 省略号：与页码同宽，居中且不可交互 */
+.elyri-ui-pagination__ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--elyri-ui-pagination-size);
+  height: var(--elyri-ui-pagination-size);
+  color: var(--elyri-ui-muted);
+  line-height: 1;
+  user-select: none;
+}
+
+/* 当前页数字略加粗，强化层级 */
+.elyri-ui-pagination__item[aria-current='page'] {
+  font-weight: 600;
+}
+
+/* 描边：当前页主色描边 + 淡底 */
+.elyri-ui-pagination--outline .elyri-ui-pagination__item[aria-current='page'] {
+  border-color: color-mix(in srgb, var(--elyri-ui-accent) 45%, transparent);
+  background: var(--elyri-ui-accent-soft);
+  color: var(--elyri-ui-accent);
+}
+
+/* 填充：当前页实心主色 */
+.elyri-ui-pagination--filled .elyri-ui-pagination__item[aria-current='page'] {
+  background: var(--elyri-ui-accent);
+  color: var(--elyri-ui-accent-text);
+}
+
+/* 每页条数选择器：与页码同款的浅底幽灵控件 */
+.elyri-ui-pagination__size,
+.elyri-ui-pagination__jump {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--elyri-ui-muted);
+  white-space: nowrap;
+}
+
+.elyri-ui-pagination__select-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.elyri-ui-pagination__select {
+  appearance: none;
+  height: var(--elyri-ui-pagination-size);
+  padding: 0 26px 0 10px;
+  border: 1px solid transparent;
+  border-radius: var(--elyri-ui-radius-sm);
+  background: var(--elyri-ui-surface-muted);
+  color: var(--elyri-ui-text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background var(--elyri-ui-duration) var(--elyri-ui-ease),
+    box-shadow var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-pagination__select:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--elyri-ui-accent) 12%, var(--elyri-ui-surface-muted));
+}
+
+.elyri-ui-pagination__select:focus-visible {
+  outline: none;
+  background: var(--elyri-ui-surface);
+  box-shadow: var(--elyri-ui-ring);
+}
+
+.elyri-ui-pagination__select:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.elyri-ui-pagination__caret {
+  position: absolute;
+  right: 8px;
+  display: inline-flex;
+  pointer-events: none;
+}
+
+.elyri-ui-pagination__caret svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* 跳转输入框：浅底无边框，聚焦时才浮现描边 */
+.elyri-ui-pagination__jump-input {
+  width: 50px;
+  height: var(--elyri-ui-pagination-size);
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: var(--elyri-ui-radius-sm);
+  background: var(--elyri-ui-surface-muted);
+  color: var(--elyri-ui-text);
+  font: inherit;
+  font-weight: 600;
+  text-align: center;
+  transition:
+    background var(--elyri-ui-duration) var(--elyri-ui-ease),
+    box-shadow var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-pagination__jump-input::placeholder {
+  color: var(--elyri-ui-muted);
+}
+
+.elyri-ui-pagination__jump-input:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--elyri-ui-accent) 12%, var(--elyri-ui-surface-muted));
+}
+
+.elyri-ui-pagination__jump-input:focus-visible {
+  outline: none;
+  background: var(--elyri-ui-surface);
+  box-shadow: var(--elyri-ui-ring);
+}
+
+.elyri-ui-pagination__jump-input:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-ui-pagination__item,
+  .elyri-ui-pagination__select,
+  .elyri-ui-pagination__jump-input {
+    transition: none;
+  }
+
+  .elyri-ui-pagination__item:not(:disabled):active {
+    transform: none;
+  }
+}

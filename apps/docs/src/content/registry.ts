@@ -46,6 +46,7 @@ import { dropdownMenuDoc } from './components/dropdown-menu';
 import { fieldDoc } from './components/field';
 import { inputDoc } from './components/input';
 import { numberInputDoc } from './components/number-input';
+import { paginationDoc } from './components/pagination';
 import { popoverDoc } from './components/popover';
 import { progressDoc } from './components/progress';
 import { radioDoc } from './components/radio';
@@ -112,6 +113,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => {
     avatarDoc(lang),
     tagDoc(lang),
     cardDoc(lang),
+    paginationDoc(lang),
     tabsDoc(lang),
     alertDoc(lang),
     progressDoc(lang),

@@ -47,6 +47,7 @@ export const components = {
   field: { pkg: '@elyri/ui', folder: 'forms/Field', name: 'Field' },
   input: { pkg: '@elyri/ui', folder: 'forms/Input', name: 'Input' },
   'number-input': { pkg: '@elyri/ui', folder: 'forms/NumberInput', name: 'NumberInput' },
+  pagination: { pkg: '@elyri/ui', folder: 'navigation/Pagination', name: 'Pagination' },
   popover: { pkg: '@elyri/ui', folder: 'overlays/Popover', name: 'Popover' },
   progress: { pkg: '@elyri/ui', folder: 'feedback/Progress', name: 'Progress' },
   radio: { pkg: '@elyri/ui', folder: 'forms/Radio', name: 'Radio' },

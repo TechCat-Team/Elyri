@@ -13,6 +13,7 @@ import { Input } from '../components/forms/Input';
 import { RadioGroup } from '../components/forms/Radio';
 import { Select } from '../components/forms/Select';
 import { Tabs } from '../components/navigation/Tabs';
+import { Pagination } from '../components/navigation/Pagination';
 import { Dialog } from '../components/overlays/Dialog';
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
         </Tabs.List>
         <Tabs.Panel value="one">Panel</Tabs.Panel>
       </Tabs>
+      <Pagination total={5} defaultPage={2} showEdges />
     </div>
   );
 }
