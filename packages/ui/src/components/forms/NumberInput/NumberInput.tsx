@@ -1,5 +1,5 @@
 import { forwardRef, useState } from 'react';
-import type { ChangeEvent, FocusEvent, InputHTMLAttributes, KeyboardEvent } from 'react';
+import type { ChangeEvent, FocusEvent, InputHTMLAttributes, KeyboardEvent, ReactNode } from 'react';
 
 import { cn, useControllableState, useField, useFieldControlId } from '../../../core';
 
@@ -9,8 +9,12 @@ export type NumberInputSize = 'sm' | 'md' | 'lg';
 
 export interface NumberInputProps extends Omit<
   InputHTMLAttributes<HTMLInputElement>,
-  'value' | 'defaultValue' | 'size' | 'type'
+  'value' | 'defaultValue' | 'size' | 'type' | 'prefix'
 > {
+  /** 前缀：渲染在输入框左侧，如货币符号或图标 */
+  prefix?: ReactNode;
+  /** 后缀：渲染在输入框与步进按钮之间，如单位 */
+  suffix?: ReactNode;
   /** 受控值，null 表示空 */
   value?: number | null;
   /** 非受控初始值，默认 null */
@@ -58,6 +62,8 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(functi
     size = 'md',
     invalid = false,
     allowEmpty = false,
+    prefix,
+    suffix,
     className,
     id,
     disabled,
@@ -140,12 +146,22 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(functi
 
   const atMin = min !== undefined && current !== null && current <= min;
   const atMax = max !== undefined && current !== null && current >= max;
+  const hasPrefix = prefix !== undefined && prefix !== null;
+  const hasSuffix = suffix !== undefined && suffix !== null;
 
   return (
     <div
       data-disabled={isDisabled || undefined}
-      className={cn('elyri-ui-number-input', `elyri-ui-number-input--${size}`, isInvalid && 'is-invalid', className)}
+      className={cn(
+        'elyri-ui-number-input',
+        `elyri-ui-number-input--${size}`,
+        isInvalid && 'is-invalid',
+        hasPrefix && 'has-prefix',
+        hasSuffix && 'has-suffix',
+        className,
+      )}
     >
+      {hasPrefix && <span className="elyri-ui-number-input__affix elyri-ui-number-input__prefix">{prefix}</span>}
       <input
         ref={ref}
         id={id ?? field?.controlId}
@@ -174,19 +190,8 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(functi
         }}
         onKeyDown={handleKeyDown}
       />
+      {hasSuffix && <span className="elyri-ui-number-input__affix elyri-ui-number-input__suffix">{suffix}</span>}
       <div className="elyri-ui-number-input__steppers">
-        <button
-          type="button"
-          tabIndex={-1}
-          aria-label="Increase"
-          disabled={isDisabled || atMax}
-          className="elyri-ui-number-input__button"
-          onClick={() => stepBy(1)}
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
-            <path d="M6 12h12M12 6v12" />
-          </svg>
-        </button>
         <button
           type="button"
           tabIndex={-1}
@@ -197,6 +202,18 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(functi
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
             <path d="M6 12h12" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          tabIndex={-1}
+          aria-label="Increase"
+          disabled={isDisabled || atMax}
+          className="elyri-ui-number-input__button"
+          onClick={() => stepBy(1)}
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
+            <path d="M6 12h12M12 6v12" />
           </svg>
         </button>
       </div>

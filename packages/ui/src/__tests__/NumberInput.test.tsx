@@ -73,6 +73,15 @@ describe('NumberInput', () => {
     expect((screen.getByRole('spinbutton') as HTMLInputElement).name).toBe('quantity');
   });
 
+  it('renders prefix and suffix around the input', () => {
+    render(<NumberInput prefix="¥" suffix="kg" defaultValue={1} aria-label="Quantity" />);
+    const input = screen.getByRole('spinbutton');
+
+    expect(input.previousElementSibling?.textContent).toBe('¥');
+    expect(input.nextElementSibling?.textContent).toBe('kg');
+    expect(input.getAttribute('prefix')).toBe(null);
+  });
+
   it('is named by the surrounding Field label', () => {
     render(
       <Field>

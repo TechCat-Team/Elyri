@@ -91,23 +91,33 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
           if (innerRef.current) innerRef.current.indeterminate = indeterminate;
         }}
       />
-      <span className="elyri-ui-checkbox__box" aria-hidden="true">
-        {isChecked ? (
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={3}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M5 12.5l4.5 4.5L19 7" />
-          </svg>
-        ) : indeterminate ? (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round">
-            <path d="M6 12h12" />
-          </svg>
-        ) : null}
+      {/* 两个图形常驻 DOM，靠 data-state 切换 stroke-dashoffset 实现描绘 / 回收动画 */}
+      <span
+        className="elyri-ui-checkbox__box"
+        aria-hidden="true"
+        data-state={isChecked ? 'checked' : indeterminate ? 'indeterminate' : 'unchecked'}
+      >
+        <svg
+          className="elyri-ui-checkbox__icon elyri-ui-checkbox__icon--check"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={3}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M5 12.5l4.5 4.5L19 7" pathLength={1} />
+        </svg>
+        <svg
+          className="elyri-ui-checkbox__icon elyri-ui-checkbox__icon--dash"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={3}
+          strokeLinecap="round"
+        >
+          <path d="M6 12h12" pathLength={1} />
+        </svg>
       </span>
       {children !== undefined && children !== null && (
         <span className="elyri-ui-checkbox__text" aria-hidden={hideTextFromName || undefined}>

@@ -16,6 +16,10 @@ const copy = {
     exSizesDesc: '三档尺寸与 Input 对齐：sm / md / lg。',
     exStates: '禁用与校验失败',
     exStatesDesc: '禁用不可交互；invalid 标记 aria-invalid 并显示红框。',
+    exAffix: '前缀与后缀',
+    exAffixDesc: 'prefix / suffix 可放货币符号、单位或图标，后缀位于数字与步进按钮之间。',
+    descPrefix: '前缀内容，渲染在输入框左侧',
+    descSuffix: '后缀内容，渲染在数字与步进按钮之间',
     descValue: '受控值，null 表示空；不传则为非受控',
     descDefaultValue: '非受控初始值，默认 null',
     descOnValueChange: '值变化回调，清空且 allowEmpty 时回传 null',
@@ -41,6 +45,10 @@ const copy = {
     exSizesDesc: 'Three sizes matching Input: sm / md / lg.',
     exStates: 'Disabled and invalid',
     exStatesDesc: 'Disabled blocks interaction; invalid sets aria-invalid and a red outline.',
+    exAffix: 'Prefix and suffix',
+    exAffixDesc: 'Use prefix / suffix for currency symbols, units or icons; the suffix sits between the value and the steppers.',
+    descPrefix: 'Content rendered before the input',
+    descSuffix: 'Content rendered between the value and the steppers',
     descValue: 'Controlled value, null for empty; omit to run uncontrolled',
     descDefaultValue: 'Initial value when uncontrolled, default null',
     descOnValueChange: 'Called on change; null when cleared with allowEmpty',
@@ -75,6 +83,8 @@ export const numberInputDoc = (lang: Lang): ComponentDoc => {
       { name: 'allowEmpty', type: 'boolean', default: 'false', description: t.descAllowEmpty },
       { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: t.descSize },
       { name: 'invalid', type: 'boolean', description: t.descInvalid },
+      { name: 'prefix', type: 'ReactNode', description: t.descPrefix },
+      { name: 'suffix', type: 'ReactNode', description: t.descSuffix },
       { name: 'name', type: 'string', description: t.descName },
       { name: '...rest', type: 'InputHTMLAttributes', description: t.descRest },
     ],
@@ -107,6 +117,28 @@ export function Example() {
 
 export function Example() {
   return <NumberInput defaultValue={0} step={0.1} aria-label="Amount" />;
+}`,
+      },
+      {
+        title: t.exAffix,
+        description: t.exAffixDesc,
+        render: () => (
+          <div className="demo-stack">
+            <NumberInput prefix="¥" defaultValue={99} step={0.01} aria-label="Price" />
+            <NumberInput suffix="kg" defaultValue={5} min={0} aria-label="Weight" />
+            <NumberInput prefix="$" suffix="USD" defaultValue={20} aria-label="Amount" />
+          </div>
+        ),
+        code: `import { NumberInput } from './components/elyri/NumberInput';
+
+export function Example() {
+  return (
+    <div>
+      <NumberInput prefix="¥" defaultValue={99} step={0.01} aria-label="Price" />
+      <NumberInput suffix="kg" defaultValue={5} min={0} aria-label="Weight" />
+      <NumberInput prefix="$" suffix="USD" defaultValue={20} aria-label="Amount" />
+    </div>
+  );
 }`,
       },
       {

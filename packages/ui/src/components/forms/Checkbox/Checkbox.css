@@ -23,6 +23,7 @@
 }
 
 .elyri-ui-checkbox__box {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -33,7 +34,8 @@
   color: var(--elyri-ui-accent-text);
   transition:
     background-color var(--elyri-ui-duration) var(--elyri-ui-ease),
-    border-color var(--elyri-ui-duration) var(--elyri-ui-ease);
+    border-color var(--elyri-ui-duration) var(--elyri-ui-ease),
+    transform 120ms var(--elyri-ui-ease);
 }
 
 .elyri-ui-checkbox--sm .elyri-ui-checkbox__box {
@@ -46,10 +48,39 @@
   height: 16px;
 }
 
-.elyri-ui-checkbox__box svg {
+/* 图形叠放常驻，pathLength=1 归一化后用 dashoffset 0↔1 控制描绘进度 */
+.elyri-ui-checkbox__icon {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   padding: 2px;
+  overflow: visible;
+}
+
+/* 收起：快速回收笔画，末尾再淡出，避免圆角端帽残留小点 */
+.elyri-ui-checkbox__icon path {
+  stroke-dasharray: 1 2;
+  stroke-dashoffset: 1;
+  opacity: 0;
+  transition:
+    stroke-dashoffset 90ms cubic-bezier(0.4, 0, 1, 1),
+    opacity 0ms linear 90ms;
+}
+
+/* 展开：等背景着色后再从左到右描绘 */
+.elyri-ui-checkbox__box[data-state='checked'] .elyri-ui-checkbox__icon--check path,
+.elyri-ui-checkbox__box[data-state='indeterminate'] .elyri-ui-checkbox__icon--dash path {
+  stroke-dashoffset: 0;
+  opacity: 1;
+  transition:
+    stroke-dashoffset 160ms cubic-bezier(0.22, 1, 0.36, 1) 30ms,
+    opacity 0ms linear 30ms;
+}
+
+/* 按下时轻微收缩，增加触感 */
+.elyri-ui-checkbox:not([data-disabled]):active .elyri-ui-checkbox__box {
+  transform: scale(0.92);
 }
 
 /* hover 仅在输入可用时提亮边框 */
@@ -89,7 +120,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .elyri-ui-checkbox__box {
+  .elyri-ui-checkbox__box,
+  .elyri-ui-checkbox__icon path,
+  .elyri-ui-checkbox__box[data-state] .elyri-ui-checkbox__icon path {
     transition: none;
   }
 }
