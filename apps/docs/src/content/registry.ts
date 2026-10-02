@@ -37,6 +37,7 @@ import { waveTextDoc } from './components/wave-text';
 import { alertDoc } from './components/alert';
 import { badgeDoc } from './components/badge';
 import { buttonDoc } from './components/button';
+import { buttonGroupDoc } from './components/button-group';
 import { cardDoc } from './components/card';
 import { checkboxDoc } from './components/checkbox';
 import { dialogDoc } from './components/dialog';
@@ -94,6 +95,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => {
     haloDoc(lang),
     asciiImageDoc(lang),
     buttonDoc(lang),
+    buttonGroupDoc(lang),
     inputDoc(lang),
     numberInputDoc(lang),
     switchDoc(lang),

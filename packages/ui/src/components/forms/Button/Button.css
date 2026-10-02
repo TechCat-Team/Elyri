@@ -85,6 +85,54 @@
   filter: brightness(1.08);
 }
 
+/* 图标：置于文字前 / 后，随按钮字号缩放并垂直居中 */
+.elyri-ui-button__icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15em;
+  line-height: 0;
+}
+
+.elyri-ui-button__icon > svg {
+  width: 1em;
+  height: 1em;
+}
+
+/* 直接作为子元素的图标（如纯图标按钮）同样按字号缩放，避免无尺寸的 svg 撑满按钮 */
+.elyri-ui-button > svg {
+  flex: none;
+  width: 1.15em;
+  height: 1.15em;
+}
+
+/* 纯图标 / 纯圆形按钮：去掉左右内边距并压成与高度相等的正方形，务必自行提供 aria-label */
+.elyri-ui-button--icon-only,
+.elyri-ui-button--circle {
+  padding: 0;
+}
+
+.elyri-ui-button--icon-only.elyri-ui-button--sm,
+.elyri-ui-button--circle.elyri-ui-button--sm {
+  width: 32px;
+}
+
+.elyri-ui-button--icon-only.elyri-ui-button--md,
+.elyri-ui-button--circle.elyri-ui-button--md {
+  width: 38px;
+}
+
+.elyri-ui-button--icon-only.elyri-ui-button--lg,
+.elyri-ui-button--circle.elyri-ui-button--lg {
+  width: 44px;
+}
+
+/* 纯圆形：在正方形基础上取满圆角 */
+.elyri-ui-button.elyri-ui-button--circle {
+  border-radius: 50%;
+}
+
 /*
  * 加载指示：宽度从 0 展开让文字平滑右移，同时图标缩放淡入，
  * 圆弧边旋转边从 0 画到 3/4 圈。

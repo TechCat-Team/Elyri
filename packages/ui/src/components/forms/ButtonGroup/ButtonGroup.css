@@ -1,0 +1,115 @@
+.elyri-ui-button-group {
+  display: inline-flex;
+  align-items: stretch;
+}
+
+.elyri-ui-button-group[data-orientation='vertical'] {
+  flex-direction: column;
+}
+
+/* 分离模式：各按钮保持原样的圆角与边框，只补上间距 */
+.elyri-ui-button-group[data-attached='false'] {
+  gap: 8px;
+}
+
+/* 拼接模式：去掉内侧圆角，用负外边距把相邻的两条 1px 边框叠成一条 */
+.elyri-ui-button-group[data-attached='true'] > .elyri-ui-button {
+  position: relative;
+  border-radius: 0;
+}
+
+.elyri-ui-button-group[data-attached='true'][data-orientation='horizontal'] > .elyri-ui-button:not(:first-child) {
+  margin-inline-start: -1px;
+}
+
+.elyri-ui-button-group[data-attached='true'][data-orientation='vertical'] > .elyri-ui-button:not(:first-child) {
+  margin-block-start: -1px;
+}
+
+/* 圆角只留在两端 */
+.elyri-ui-button-group[data-attached='true'][data-orientation='horizontal'] > .elyri-ui-button:first-child {
+  border-start-start-radius: var(--elyri-ui-radius);
+  border-end-start-radius: var(--elyri-ui-radius);
+}
+
+.elyri-ui-button-group[data-attached='true'][data-orientation='horizontal'] > .elyri-ui-button:last-child {
+  border-start-end-radius: var(--elyri-ui-radius);
+  border-end-end-radius: var(--elyri-ui-radius);
+}
+
+.elyri-ui-button-group[data-attached='true'][data-orientation='vertical'] > .elyri-ui-button:first-child {
+  border-start-start-radius: var(--elyri-ui-radius);
+  border-start-end-radius: var(--elyri-ui-radius);
+}
+
+.elyri-ui-button-group[data-attached='true'][data-orientation='vertical'] > .elyri-ui-button:last-child {
+  border-end-start-radius: var(--elyri-ui-radius);
+  border-end-end-radius: var(--elyri-ui-radius);
+}
+
+/* 拼接组内 secondary 的悬停改用轻底色，否则只亮半圈边框会显得断层 */
+.elyri-ui-button-group[data-attached='true'] > .elyri-ui-button--secondary:hover:not(:disabled) {
+  border-color: var(--elyri-ui-border);
+  background: var(--elyri-ui-accent-soft);
+  color: var(--elyri-ui-accent);
+}
+
+/*
+ * 隐去相邻按钮之间那一圈边框，改由内缩的短分隔线示意边界，
+ * 避免每个接缝都拉出一条贯通全高的硬线。
+ */
+.elyri-ui-button-group[data-attached='true'][data-orientation='horizontal'] > .elyri-ui-button:not(:last-child) {
+  border-inline-end-color: transparent;
+}
+
+.elyri-ui-button-group[data-attached='true'][data-orientation='horizontal'] > .elyri-ui-button:not(:first-child) {
+  border-inline-start-color: transparent;
+}
+
+.elyri-ui-button-group[data-attached='true'][data-orientation='vertical'] > .elyri-ui-button:not(:last-child) {
+  border-block-end-color: transparent;
+}
+
+.elyri-ui-button-group[data-attached='true'][data-orientation='vertical'] > .elyri-ui-button:not(:first-child) {
+  border-block-start-color: transparent;
+}
+
+/*
+ * 相邻处的淡分隔线：两端内缩成短线段，轻度示意边界，比全高硬线更柔和。
+ * 颜色取自 currentcolor，浅底 / 深底按钮上都自动协调。
+ */
+.elyri-ui-button-group[data-attached='true'][data-orientation='horizontal']
+  > .elyri-ui-button:not(:first-child)::before {
+  content: '';
+  position: absolute;
+  inset-block: 22%;
+  inset-inline-start: 0;
+  width: 1px;
+  background: currentcolor;
+  opacity: 0.22;
+  pointer-events: none;
+}
+
+.elyri-ui-button-group[data-attached='true'][data-orientation='vertical'] > .elyri-ui-button:not(:first-child)::before {
+  content: '';
+  position: absolute;
+  inset-inline: 22%;
+  inset-block-start: 0;
+  height: 1px;
+  background: currentcolor;
+  opacity: 0.22;
+  pointer-events: none;
+}
+
+/* 悬停 / 聚焦时把当前按钮提到最上层，边框与焦点环不被相邻按钮盖住 */
+.elyri-ui-button-group[data-attached='true'] > .elyri-ui-button:hover,
+.elyri-ui-button-group[data-attached='true'] > .elyri-ui-button:focus-visible {
+  z-index: 1;
+}
+
+@media (forced-colors: active) {
+  .elyri-ui-button-group[data-attached='true'] > .elyri-ui-button:not(:first-child)::before {
+    background: CanvasText;
+    opacity: 1;
+  }
+}

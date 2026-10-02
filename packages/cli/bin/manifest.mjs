@@ -38,6 +38,7 @@ export const components = {
   alert: { pkg: '@elyri/ui', folder: 'feedback/Alert', name: 'Alert' },
   badge: { pkg: '@elyri/ui', folder: 'data-display/Badge', name: 'Badge' },
   button: { pkg: '@elyri/ui', folder: 'forms/Button', name: 'Button' },
+  'button-group': { pkg: '@elyri/ui', folder: 'forms/ButtonGroup', name: 'ButtonGroup' },
   card: { pkg: '@elyri/ui', folder: 'data-display/Card', name: 'Card' },
   checkbox: { pkg: '@elyri/ui', folder: 'forms/Checkbox', name: 'Checkbox' },
   dialog: { pkg: '@elyri/ui', folder: 'overlays/Dialog', name: 'Dialog' },

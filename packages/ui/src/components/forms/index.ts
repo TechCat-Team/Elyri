@@ -1,5 +1,6 @@
 // forms 分类出口。Slider 等后续在此追加。
 export * from './Button';
+export * from './ButtonGroup';
 export * from './Checkbox';
 export * from './Field';
 export * from './Input';

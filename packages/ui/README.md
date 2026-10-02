@@ -46,28 +46,29 @@ export function App() {
 
 ## 组件
 
-| 组件           | 分类         | 说明                                                     |
-| -------------- | ------------ | -------------------------------------------------------- |
-| `Button`       | forms        | 四种样式、三档尺寸，内置加载态                           |
-| `Checkbox`     | forms        | 受控 / 非受控双支持，含半选态，可带标签文案              |
-| `Field`        | forms        | 表单域，自动关联 label / 描述 / 错误信息，校验由外部驱动 |
-| `Input`        | forms        | 三档尺寸，支持校验失败态                                 |
-| `NumberInput`  | forms        | 数字输入，内置步进按钮，支持 min / max / step 与小数精度 |
-| `Radio`        | forms        | 单选组，同名原生 radio 提供箭头键循环切换                |
-| `Select`       | forms        | 下拉选择，combobox + listbox 语义，支持单选与多选        |
-| `Slider`       | forms        | 滑块，单值或双值区间，指针拖拽 + 完整键盘操作            |
-| `Switch`       | forms        | 受控 / 非受控双支持，`role="switch"`，可随表单提交       |
-| `Textarea`     | forms        | 多行输入，与 Input 同款尺寸，可选内容自适应高度          |
-| `Alert`        | feedback     | 四种语义配色，可带标题、图标、操作与关闭按钮             |
-| `Progress`     | feedback     | 确定 / 不确定两种形态，四档语义配色                      |
-| `Toast`        | feedback     | `ToastProvider` + `useToast`，支持 promise 与堆叠        |
-| `Badge`        | data-display | 状态、标签与计数                                         |
-| `Card`         | data-display | 容器 + 标题 / 描述 / 内容 / 底栏                         |
-| `Tabs`         | navigation   | 方向键与 Home / End 导航，自动激活面板                   |
-| `Dialog`       | overlays     | 复合组件，含遮罩、焦点圈定与滚动锁定                     |
-| `DropdownMenu` | overlays     | `menu` 语义，方向键、Home / End 与 typeahead 导航        |
-| `Popover`      | overlays     | 点击触发，内容可交互，外部点击 / Escape 关闭             |
-| `Tooltip`      | overlays     | 悬停或聚焦触发，只承载不可交互的短文案                   |
+| 组件           | 分类         | 说明                                                       |
+| -------------- | ------------ | ---------------------------------------------------------- |
+| `Button`       | forms        | 四种样式、三档尺寸，内置加载态，可带图标与纯圆形           |
+| `ButtonGroup`  | forms        | 相邻按钮拼接成一体，支持横向 / 纵向、拼接 / 分离与图标按钮 |
+| `Checkbox`     | forms        | 受控 / 非受控双支持，含半选态，可带标签文案                |
+| `Field`        | forms        | 表单域，自动关联 label / 描述 / 错误信息，校验由外部驱动   |
+| `Input`        | forms        | 三档尺寸，支持校验失败态                                   |
+| `NumberInput`  | forms        | 数字输入，内置步进按钮，支持 min / max / step 与小数精度   |
+| `Radio`        | forms        | 单选组，同名原生 radio 提供箭头键循环切换                  |
+| `Select`       | forms        | 下拉选择，combobox + listbox 语义，支持单选与多选          |
+| `Slider`       | forms        | 滑块，单值或双值区间，指针拖拽 + 完整键盘操作              |
+| `Switch`       | forms        | 受控 / 非受控双支持，`role="switch"`，可随表单提交         |
+| `Textarea`     | forms        | 多行输入，与 Input 同款尺寸，可选内容自适应高度            |
+| `Alert`        | feedback     | 四种语义配色，可带标题、图标、操作与关闭按钮               |
+| `Progress`     | feedback     | 确定 / 不确定两种形态，四档语义配色                        |
+| `Toast`        | feedback     | `ToastProvider` + `useToast`，支持 promise 与堆叠          |
+| `Badge`        | data-display | 状态、标签与计数                                           |
+| `Card`         | data-display | 容器 + 标题 / 描述 / 内容 / 底栏                           |
+| `Tabs`         | navigation   | 方向键与 Home / End 导航，自动激活面板                     |
+| `Dialog`       | overlays     | 复合组件，含遮罩、焦点圈定与滚动锁定                       |
+| `DropdownMenu` | overlays     | `menu` 语义，方向键、Home / End 与 typeahead 导航          |
+| `Popover`      | overlays     | 点击触发，内容可交互，外部点击 / Escape 关闭               |
+| `Tooltip`      | overlays     | 悬停或聚焦触发，只承载不可交互的短文案                     |
 
 ## Hooks
 
