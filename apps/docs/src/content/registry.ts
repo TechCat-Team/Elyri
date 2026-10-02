@@ -41,6 +41,7 @@ import { buttonGroupDoc } from './components/button-group';
 import { cardDoc } from './components/card';
 import { checkboxDoc } from './components/checkbox';
 import { dialogDoc } from './components/dialog';
+import { dividerDoc } from './components/divider';
 import { dropdownMenuDoc } from './components/dropdown-menu';
 import { fieldDoc } from './components/field';
 import { inputDoc } from './components/input';
@@ -107,6 +108,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => {
     sliderDoc(lang),
     textareaDoc(lang),
     fieldDoc(lang),
+    dividerDoc(lang),
     avatarDoc(lang),
     tagDoc(lang),
     cardDoc(lang),

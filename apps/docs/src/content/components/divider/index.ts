@@ -1,0 +1,1 @@
+export { dividerDoc } from './doc';

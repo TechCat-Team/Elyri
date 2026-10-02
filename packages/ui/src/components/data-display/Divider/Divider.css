@@ -1,0 +1,114 @@
+.elyri-ui-divider {
+  --elyri-ui-divider-color: var(--elyri-ui-border);
+  --elyri-ui-divider-space: 16px;
+
+  display: flex;
+  box-sizing: border-box;
+  color: var(--elyri-ui-muted);
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* 横向：铺满、居中排布，两侧各一条线 */
+.elyri-ui-divider[data-orientation='horizontal'] {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  margin-block: var(--elyri-ui-divider-space);
+}
+
+.elyri-ui-divider[data-orientation='horizontal'] .elyri-ui-divider__line {
+  flex: 1 1 auto;
+  height: 1px;
+}
+
+/* 纵向：1px 宽，随父级高度拉伸，两侧留白改为左右 */
+.elyri-ui-divider[data-orientation='vertical'] {
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  width: 1px;
+  min-height: 1em;
+  margin-inline: var(--elyri-ui-divider-space);
+}
+
+.elyri-ui-divider[data-orientation='vertical'] .elyri-ui-divider__line {
+  flex: 1 1 auto;
+  width: 1px;
+}
+
+.elyri-ui-divider__line {
+  background: var(--elyri-ui-divider-color);
+}
+
+/* 线型 */
+.elyri-ui-divider[data-variant='dashed'][data-orientation='horizontal'] .elyri-ui-divider__line {
+  background: repeating-linear-gradient(90deg, var(--elyri-ui-divider-color) 0 6px, transparent 6px 12px);
+}
+
+.elyri-ui-divider[data-variant='dotted'][data-orientation='horizontal'] .elyri-ui-divider__line {
+  background: repeating-linear-gradient(90deg, var(--elyri-ui-divider-color) 0 2px, transparent 2px 6px);
+}
+
+.elyri-ui-divider[data-variant='dashed'][data-orientation='vertical'] .elyri-ui-divider__line {
+  background: repeating-linear-gradient(180deg, var(--elyri-ui-divider-color) 0 6px, transparent 6px 12px);
+}
+
+.elyri-ui-divider[data-variant='dotted'][data-orientation='vertical'] .elyri-ui-divider__line {
+  background: repeating-linear-gradient(180deg, var(--elyri-ui-divider-color) 0 2px, transparent 2px 6px);
+}
+
+/* 渐变：两端淡出，带文字时内侧保持实色，避免文字旁出现断层 */
+.elyri-ui-divider[data-variant='gradient'][data-orientation='horizontal'] .elyri-ui-divider__line {
+  background: linear-gradient(90deg, transparent, var(--elyri-ui-divider-color), transparent);
+}
+
+.elyri-ui-divider[data-variant='gradient'][data-has-label='true'][data-orientation='horizontal']
+  > .elyri-ui-divider__line:first-child {
+  background: linear-gradient(90deg, transparent, var(--elyri-ui-divider-color));
+}
+
+.elyri-ui-divider[data-variant='gradient'][data-has-label='true'][data-orientation='horizontal']
+  > .elyri-ui-divider__line:last-child {
+  background: linear-gradient(90deg, var(--elyri-ui-divider-color), transparent);
+}
+
+.elyri-ui-divider[data-variant='gradient'][data-orientation='vertical'] .elyri-ui-divider__line {
+  background: linear-gradient(180deg, transparent, var(--elyri-ui-divider-color), transparent);
+}
+
+/* 文字 */
+.elyri-ui-divider__label {
+  flex: none;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+/* 对齐：start / end 时把文字推到一端，另一侧线变短 */
+.elyri-ui-divider[data-has-label='true'][data-align='start'] > .elyri-ui-divider__line:first-child {
+  flex: 0 0 16px;
+}
+
+.elyri-ui-divider[data-has-label='true'][data-align='end'] > .elyri-ui-divider__line:last-child {
+  flex: 0 0 16px;
+}
+
+/* 间距 */
+.elyri-ui-divider[data-spacing='none'] {
+  --elyri-ui-divider-space: 0px;
+}
+
+.elyri-ui-divider[data-spacing='sm'] {
+  --elyri-ui-divider-space: 8px;
+}
+
+.elyri-ui-divider[data-spacing='md'] {
+  --elyri-ui-divider-space: 16px;
+}
+
+.elyri-ui-divider[data-spacing='lg'] {
+  --elyri-ui-divider-space: 24px;
+}
