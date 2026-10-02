@@ -48,6 +48,7 @@ import { dropdownMenuDoc } from './components/dropdown-menu';
 import { emptyDoc } from './components/empty';
 import { fieldDoc } from './components/field';
 import { inputDoc } from './components/input';
+import { itemDoc } from './components/item';
 import { numberInputDoc } from './components/number-input';
 import { paginationDoc } from './components/pagination';
 import { popoverDoc } from './components/popover';
@@ -116,6 +117,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => {
     avatarDoc(lang),
     tagDoc(lang),
     cardDoc(lang),
+    itemDoc(lang),
     emptyDoc(lang),
     accordionDoc(lang),
     paginationDoc(lang),

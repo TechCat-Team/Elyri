@@ -1,0 +1,175 @@
+.elyri-ui-item {
+  --elyri-ui-item-pad-y: 10px;
+  --elyri-ui-item-pad-x: 12px;
+  --elyri-ui-item-gap: 12px;
+  --elyri-ui-item-media: 40px;
+
+  display: flex;
+  align-items: center;
+  gap: var(--elyri-ui-item-gap);
+  padding: var(--elyri-ui-item-pad-y) var(--elyri-ui-item-pad-x);
+  border: 1px solid transparent;
+  border-radius: calc(var(--elyri-ui-radius) - 2px);
+  color: var(--elyri-ui-text);
+  transition:
+    background-color var(--elyri-ui-duration) var(--elyri-ui-ease),
+    border-color var(--elyri-ui-duration) var(--elyri-ui-ease),
+    box-shadow var(--elyri-ui-duration) var(--elyri-ui-ease),
+    transform var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+/* 尺寸：与 Avatar 的 sm / md / lg 对齐，方便直接嵌套头像 */
+.elyri-ui-item--sm {
+  --elyri-ui-item-pad-y: 7px;
+  --elyri-ui-item-pad-x: 10px;
+  --elyri-ui-item-gap: 10px;
+  --elyri-ui-item-media: 32px;
+}
+
+.elyri-ui-item--md {
+  --elyri-ui-item-pad-y: 10px;
+  --elyri-ui-item-pad-x: 12px;
+  --elyri-ui-item-gap: 12px;
+  --elyri-ui-item-media: 40px;
+}
+
+.elyri-ui-item--lg {
+  --elyri-ui-item-pad-y: 14px;
+  --elyri-ui-item-pad-x: 16px;
+  --elyri-ui-item-gap: 14px;
+  --elyri-ui-item-media: 48px;
+}
+
+/* 样式 */
+.elyri-ui-item--default {
+  background: transparent;
+}
+
+.elyri-ui-item--outline {
+  border-color: var(--elyri-ui-border);
+  background: var(--elyri-ui-surface);
+}
+
+.elyri-ui-item--muted {
+  background: var(--elyri-ui-surface-muted);
+}
+
+/* 可交互 */
+.elyri-ui-item[data-interactive='true'] {
+  cursor: pointer;
+}
+
+.elyri-ui-item[data-interactive='true']:hover {
+  border-color: color-mix(in srgb, var(--elyri-ui-accent) 32%, var(--elyri-ui-border));
+  background: color-mix(in srgb, var(--elyri-ui-accent) 7%, var(--elyri-ui-surface));
+  transform: translateY(-1px);
+}
+
+.elyri-ui-item[data-interactive='true']:focus-visible {
+  outline: none;
+  box-shadow: var(--elyri-ui-ring);
+}
+
+/* 媒体：默认仅作为定宽容器，icn / image 变体自带底衬 */
+.elyri-ui-item__media {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.elyri-ui-item__media--icon {
+  width: var(--elyri-ui-item-media);
+  height: var(--elyri-ui-item-media);
+  border-radius: calc(var(--elyri-ui-radius) - 3px);
+  background: var(--elyri-ui-accent-soft);
+  color: var(--elyri-ui-accent);
+  font-size: calc(var(--elyri-ui-item-media) * 0.42);
+}
+
+.elyri-ui-item__media--icon > svg {
+  width: 55%;
+  height: 55%;
+}
+
+.elyri-ui-item__media--image {
+  width: var(--elyri-ui-item-media);
+  height: var(--elyri-ui-item-media);
+  overflow: hidden;
+  border-radius: calc(var(--elyri-ui-radius) - 3px);
+  background: var(--elyri-ui-surface-muted);
+}
+
+.elyri-ui-item__media--image > img,
+.elyri-ui-item__media--image > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 内容 */
+.elyri-ui-item__content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.elyri-ui-item__title {
+  margin: 0;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.elyri-ui-item__description {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  color: var(--elyri-ui-muted);
+  font-size: 13px;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.elyri-ui-item--sm .elyri-ui-item__title {
+  font-size: 13px;
+}
+
+.elyri-ui-item--sm .elyri-ui-item__description {
+  font-size: 12px;
+}
+
+.elyri-ui-item--lg .elyri-ui-item__title {
+  font-size: 15px;
+}
+
+/* 尾部操作 */
+.elyri-ui-item__actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+/* 分组：纵向堆叠，作为 Card.Content 内部的列表 */
+.elyri-ui-item-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-ui-item,
+  .elyri-ui-item[data-interactive='true']:hover {
+    transition: none;
+    transform: none;
+  }
+}

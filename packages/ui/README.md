@@ -67,6 +67,7 @@ export function App() {
 | `Tag`          | data-display | 状态、分类与计数                                                 |
 | `Empty`        | data-display | 空状态，内置三款随主题变色的插画，可带标题、描述与操作           |
 | `Card`         | data-display | 媒体 / 头部 / 内容 / 底栏插槽，四种样式与可交互态                |
+| `Item`         | data-display | 列表项：媒体 / 内容 / 操作三段式，可分组堆叠或嵌入卡片           |
 | `Tabs`         | navigation   | 方向键与 Home / End 导航，自动激活面板                           |
 | `Pagination`   | navigation   | 区间折叠，可选每页条数选择器与跳转输入框，描边 / 填充两种外观    |
 | `Dialog`       | overlays     | 复合组件，含遮罩、焦点圈定与滚动锁定                             |

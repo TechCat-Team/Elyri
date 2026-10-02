@@ -49,6 +49,7 @@ export const components = {
   empty: { pkg: '@elyri/ui', folder: 'data-display/Empty', name: 'Empty' },
   field: { pkg: '@elyri/ui', folder: 'forms/Field', name: 'Field' },
   input: { pkg: '@elyri/ui', folder: 'forms/Input', name: 'Input' },
+  item: { pkg: '@elyri/ui', folder: 'data-display/Item', name: 'Item' },
   'number-input': { pkg: '@elyri/ui', folder: 'forms/NumberInput', name: 'NumberInput' },
   pagination: { pkg: '@elyri/ui', folder: 'navigation/Pagination', name: 'Pagination' },
   popover: { pkg: '@elyri/ui', folder: 'overlays/Popover', name: 'Popover' },
