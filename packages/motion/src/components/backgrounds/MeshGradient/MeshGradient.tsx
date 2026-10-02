@@ -7,6 +7,8 @@ import './MeshGradient.css';
 export interface MeshGradientProps {
   children?: ReactNode;
   className?: string;
+  /** 自定义内联样式，可用于控制尺寸 */
+  style?: CSSProperties;
   /** 四个色团的颜色（hex） */
   colors?: [string, string, string, string];
   /** 胶片颗粒强度，0 为关闭 */
@@ -150,6 +152,7 @@ void main() {
 export function MeshGradient({
   children,
   className,
+  style,
   colors = DEFAULT_COLORS,
   grain = 0.35,
   speed = 1,
@@ -181,6 +184,7 @@ export function MeshGradient({
           '--elyri-mesh-gradient-c1': c1,
           '--elyri-mesh-gradient-c2': c2,
           '--elyri-mesh-gradient-c3': c3,
+          ...style,
         } as CSSProperties
       }
     >
