@@ -655,6 +655,79 @@
   width: min(560px, 100%);
   text-align: left;
 }
+/* @elyri/ui 侧边栏演示：模拟应用壳，左侧侧边栏 + 右侧内容区 */
+.demo-ui-sidebar {
+  display: flex;
+  width: min(720px, 100%);
+  height: 380px;
+  overflow: hidden;
+  border: 1px solid var(--docs-border);
+  border-radius: 14px;
+  background: var(--docs-surface);
+  text-align: left;
+}
+.demo-ui-sidebar-main {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 16px;
+  color: var(--docs-muted);
+  font-size: 13px;
+  text-align: center;
+}
+.demo-ui-sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+/* 外部按钮控制折叠：顶部导航栏 + 侧边栏组合演示 */
+.demo-ui-sidebar-shell {
+  display: flex;
+  flex-direction: column;
+  width: min(720px, 100%);
+  overflow: hidden;
+  border: 1px solid var(--docs-border);
+  border-radius: 14px;
+  background: var(--docs-surface);
+  text-align: left;
+}
+.demo-ui-sidebar-shell .demo-ui-sidebar {
+  width: 100%;
+  height: 340px;
+  border: 0;
+  border-radius: 0;
+}
+.demo-ui-sidebar-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--docs-border);
+}
+.demo-ui-sidebar-toggle {
+  padding: 6px 14px;
+  border: 1px solid var(--docs-border);
+  border-radius: 8px;
+  background: var(--docs-surface);
+  color: var(--docs-text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    color 120ms ease,
+    border-color 120ms ease,
+    background-color 120ms ease;
+}
+.demo-ui-sidebar-toggle:hover {
+  border-color: var(--docs-accent);
+  color: var(--docs-accent);
+}
 /* 指针倾斜演示 */
 .demo-tilt {
   display: flex;

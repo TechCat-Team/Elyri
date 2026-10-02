@@ -1,0 +1,1 @@
+export { sidebarDoc } from './doc';

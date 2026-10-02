@@ -55,6 +55,7 @@ import { popoverDoc } from './components/popover';
 import { progressDoc } from './components/progress';
 import { radioDoc } from './components/radio';
 import { selectDoc } from './components/select';
+import { sidebarDoc } from './components/sidebar';
 import { skeletonDoc } from './components/skeleton';
 import { sliderDoc } from './components/slider';
 import { switchDoc } from './components/switch';
@@ -122,6 +123,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => {
     accordionDoc(lang),
     paginationDoc(lang),
     tabsDoc(lang),
+    sidebarDoc(lang),
     alertDoc(lang),
     progressDoc(lang),
     skeletonDoc(lang),

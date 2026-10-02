@@ -1,0 +1,403 @@
+/* 侧边栏：折叠态宽度由局部变量控制，宿主可覆盖；颜色全部走主题令牌 */
+.elyri-ui-sidebar {
+  --elyri-ui-sidebar-width: 260px;
+  --elyri-ui-sidebar-collapsed-width: 64px;
+  /* 内部派生色：基于主题令牌混合，明暗主题自动适配 */
+  --elyri-ui-sidebar-bg: color-mix(in srgb, var(--elyri-ui-surface-muted) 55%, var(--elyri-ui-surface));
+  --elyri-ui-sidebar-hover: color-mix(in srgb, var(--elyri-ui-text) 6%, transparent);
+  --elyri-ui-sidebar-line: color-mix(in srgb, var(--elyri-ui-border) 80%, transparent);
+  --elyri-ui-sidebar-item-height: 34px;
+  --elyri-ui-sidebar-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  width: var(--elyri-ui-sidebar-width);
+  height: 100%;
+  min-height: 0;
+  border-right: 1px solid var(--elyri-ui-sidebar-line);
+  background: var(--elyri-ui-sidebar-bg);
+  color: var(--elyri-ui-text);
+  transition: width 280ms var(--elyri-ui-ease);
+}
+
+.elyri-ui-sidebar[data-collapsed] {
+  width: var(--elyri-ui-sidebar-collapsed-width);
+}
+
+/* ---------- 顶部 / 底部 ---------- */
+
+.elyri-ui-sidebar__header,
+.elyri-ui-sidebar__footer {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 10px 12px;
+}
+
+.elyri-ui-sidebar__header {
+  justify-content: space-between;
+}
+
+.elyri-ui-sidebar__footer {
+  border-top: 1px solid var(--elyri-ui-sidebar-line);
+}
+
+/* 折叠时顶部 / 底部只保留折叠开关，其余内容隐藏 */
+.elyri-ui-sidebar[data-collapsed] .elyri-ui-sidebar__header,
+.elyri-ui-sidebar[data-collapsed] .elyri-ui-sidebar__footer {
+  justify-content: center;
+  padding-inline: 8px;
+}
+
+.elyri-ui-sidebar[data-collapsed] .elyri-ui-sidebar__header > :not(.elyri-ui-sidebar__trigger),
+.elyri-ui-sidebar[data-collapsed] .elyri-ui-sidebar__footer > :not(.elyri-ui-sidebar__trigger) {
+  display: none;
+}
+
+/* ---------- 导航主体 ---------- */
+
+.elyri-ui-sidebar__content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 0;
+  padding: 4px 10px 12px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--elyri-ui-sidebar-line) transparent;
+}
+
+.elyri-ui-sidebar__group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.elyri-ui-sidebar__group-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.elyri-ui-sidebar__group-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 28px;
+  padding: 0 10px;
+  color: var(--elyri-ui-muted);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  opacity: 0.85;
+}
+
+.elyri-ui-sidebar__group-icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+}
+
+.elyri-ui-sidebar__group-icon > svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* 折叠时：有图标则居中显示图标，无图标则整条隐藏 */
+.elyri-ui-sidebar[data-collapsed] .elyri-ui-sidebar__group-label {
+  justify-content: center;
+  padding: 0;
+}
+
+.elyri-ui-sidebar[data-collapsed] .elyri-ui-sidebar__group-label:not(:has(.elyri-ui-sidebar__group-icon)) {
+  display: none;
+}
+
+.elyri-ui-sidebar[data-collapsed] .elyri-ui-sidebar__group-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- 导航项 ---------- */
+
+.elyri-ui-sidebar__item,
+.elyri-ui-sidebar__sub-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: var(--elyri-ui-sidebar-item-height);
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--elyri-ui-sidebar-radius);
+  background: none;
+  color: var(--elyri-ui-muted);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.elyri-ui-sidebar__item:not(:disabled, [aria-disabled='true']):hover,
+.elyri-ui-sidebar__sub-item:not(:disabled, [aria-disabled='true']):hover {
+  background: var(--elyri-ui-sidebar-hover);
+  color: var(--elyri-ui-text);
+}
+
+.elyri-ui-sidebar__item:not(:disabled, [aria-disabled='true']):active,
+.elyri-ui-sidebar__sub-item:not(:disabled, [aria-disabled='true']):active {
+  background: color-mix(in srgb, var(--elyri-ui-text) 9%, transparent);
+}
+
+.elyri-ui-sidebar__item:focus-visible,
+.elyri-ui-sidebar__sub-item:focus-visible {
+  outline: none;
+  box-shadow: var(--elyri-ui-ring);
+}
+
+.elyri-ui-sidebar__item[aria-disabled='true'],
+.elyri-ui-sidebar__sub-item[aria-disabled='true'],
+.elyri-ui-sidebar__item:disabled,
+.elyri-ui-sidebar__sub-item:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* 激活态：浮起的卡片底色 + 主文字色，图标用强调色点睛 */
+.elyri-ui-sidebar__item--active,
+.elyri-ui-sidebar__item--active:not(:disabled, [aria-disabled='true']):hover {
+  background: var(--elyri-ui-surface);
+  color: var(--elyri-ui-text);
+  font-weight: 600;
+  box-shadow:
+    0 0 0 1px var(--elyri-ui-sidebar-line),
+    0 1px 2px rgb(20 25 38 / 6%);
+}
+
+.elyri-ui-sidebar__item--active:focus-visible {
+  box-shadow: var(--elyri-ui-ring);
+}
+
+.elyri-ui-sidebar__item--active .elyri-ui-sidebar__item-icon,
+.elyri-ui-sidebar__sub-item--active .elyri-ui-sidebar__item-icon {
+  color: var(--elyri-ui-accent);
+}
+
+.elyri-ui-sidebar__item-icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  color: inherit;
+  transition: color 150ms ease;
+}
+
+.elyri-ui-sidebar__item-icon > svg {
+  width: 100%;
+  height: 100%;
+}
+
+.elyri-ui-sidebar__item-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.elyri-ui-sidebar__item-badge {
+  flex: none;
+  min-width: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--elyri-ui-sidebar-hover);
+  color: var(--elyri-ui-muted);
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 18px;
+  text-align: center;
+}
+
+.elyri-ui-sidebar__item--active .elyri-ui-sidebar__item-badge,
+.elyri-ui-sidebar__sub-item--active .elyri-ui-sidebar__item-badge {
+  background: var(--elyri-ui-accent-soft);
+  color: var(--elyri-ui-accent);
+}
+
+.elyri-ui-sidebar__item-arrow {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  color: var(--elyri-ui-muted);
+  opacity: 0.7;
+  transition:
+    transform 220ms var(--elyri-ui-ease),
+    opacity 150ms ease;
+}
+
+.elyri-ui-sidebar__item:hover .elyri-ui-sidebar__item-arrow {
+  opacity: 1;
+}
+
+.elyri-ui-sidebar__item[aria-expanded='true'] .elyri-ui-sidebar__item-arrow {
+  transform: rotate(180deg);
+}
+
+/* ---------- 二级导航 ---------- */
+
+/* grid-template-rows 0fr → 1fr：无需测量的高度动画 */
+.elyri-ui-sidebar__sub {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 260ms var(--elyri-ui-ease),
+    opacity 200ms ease;
+}
+
+.elyri-ui-sidebar__sub[data-open] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.elyri-ui-sidebar__sub-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* 竖向引导线与父项图标中线对齐 */
+.elyri-ui-sidebar__sub-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: 2px 0 4px 18px;
+  padding-left: 8px;
+  border-left: 1px solid var(--elyri-ui-sidebar-line);
+}
+
+.elyri-ui-sidebar__sub-item {
+  --elyri-ui-sidebar-item-height: 30px;
+  font-size: 13px;
+}
+
+/* 子项激活：在引导线上叠一段强调色指示条 */
+.elyri-ui-sidebar__sub-item--active {
+  color: var(--elyri-ui-text);
+  font-weight: 600;
+}
+
+.elyri-ui-sidebar__sub-item--active::before {
+  position: absolute;
+  top: 7px;
+  bottom: 7px;
+  left: -10px;
+  width: 3px;
+  border-radius: 999px;
+  background: var(--elyri-ui-accent);
+  content: '';
+}
+
+/* ---------- 折叠态：标签 / 徽标 / 子级视觉隐藏，仅保留图标 ---------- */
+
+.elyri-ui-sidebar[data-collapsed] .elyri-ui-sidebar__item,
+.elyri-ui-sidebar[data-collapsed] .elyri-ui-sidebar__sub-item {
+  justify-content: center;
+  min-height: 40px;
+  padding-inline: 0;
+}
+
+.elyri-ui-sidebar[data-collapsed] .elyri-ui-sidebar__item-label,
+.elyri-ui-sidebar[data-collapsed] .elyri-ui-sidebar__item-badge,
+.elyri-ui-sidebar[data-collapsed] .elyri-ui-sidebar__item-arrow,
+.elyri-ui-sidebar[data-collapsed] .elyri-ui-sidebar__sub {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- 分隔线与折叠开关 ---------- */
+
+.elyri-ui-sidebar__separator {
+  flex: none;
+  height: 1px;
+  margin: 0 10px;
+  background: var(--elyri-ui-sidebar-line);
+}
+
+.elyri-ui-sidebar__trigger {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--elyri-ui-sidebar-radius);
+  background: transparent;
+  color: var(--elyri-ui-muted);
+  cursor: pointer;
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+}
+
+.elyri-ui-sidebar__trigger:not(:disabled):hover {
+  background: var(--elyri-ui-sidebar-hover);
+  color: var(--elyri-ui-text);
+}
+
+.elyri-ui-sidebar__trigger:focus-visible {
+  outline: none;
+  box-shadow: var(--elyri-ui-ring);
+}
+
+.elyri-ui-sidebar__trigger:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.elyri-ui-sidebar__trigger-icon {
+  display: inline-flex;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-ui-sidebar,
+  .elyri-ui-sidebar__sub,
+  .elyri-ui-sidebar__item-arrow,
+  .elyri-ui-sidebar__item,
+  .elyri-ui-sidebar__sub-item,
+  .elyri-ui-sidebar__trigger {
+    transition: none;
+  }
+}
