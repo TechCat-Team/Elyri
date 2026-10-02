@@ -212,6 +212,22 @@ test('every registered component can be copied', async () => {
   });
 });
 
+test('add rewrites cross-component imports for declared deps', async () => {
+  await withProject(['@elyri/ui'], async (cwd) => {
+    await add({ cwd, names: ['data-table'], registry: components, manager: 'pnpm' });
+
+    const source = await readFile(join(cwd, 'src/components/elyri/DataTable/DataTable.tsx'), 'utf8');
+    assert.match(source, /from '\.\.\/Checkbox'/);
+    assert.match(source, /from '\.\.\/Pagination'/);
+    assert.doesNotMatch(source, /\.\.\/\.\.\/(forms|navigation)\//);
+
+    // deps are copied as sibling folders that the rewritten imports resolve to
+    for (const name of ['Checkbox', 'Pagination']) {
+      assert.match(await readFile(join(cwd, 'src/components/elyri', name, 'index.ts'), 'utf8'), /^export /m);
+    }
+  });
+});
+
 test('add asks to install the matching package first', async () => {
   await withTempDir(async (cwd) => {
     await assert.rejects(

@@ -42,6 +42,7 @@ import { buttonGroupDoc } from './components/button-group';
 import { cardDoc } from './components/card';
 import { checkboxDoc } from './components/checkbox';
 import { contextMenuDoc } from './components/context-menu';
+import { dataTableDoc } from './components/data-table';
 import { dialogDoc } from './components/dialog';
 import { dividerDoc } from './components/divider';
 import { dropdownMenuDoc } from './components/dropdown-menu';
@@ -118,6 +119,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => {
     avatarDoc(lang),
     tagDoc(lang),
     cardDoc(lang),
+    dataTableDoc(lang),
     itemDoc(lang),
     emptyDoc(lang),
     accordionDoc(lang),

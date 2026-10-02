@@ -6,6 +6,8 @@ import { Alert } from '../components/feedback/Alert';
 import { Progress } from '../components/feedback/Progress';
 import { ToastProvider, useToast } from '../components/feedback/Toast';
 import { Avatar, AvatarGroup } from '../components/data-display/Avatar';
+import { DataTable } from '../components/data-display/DataTable';
+import type { DataTableColumn } from '../components/data-display/DataTable';
 import { Button } from '../components/forms/Button';
 import { Checkbox, CheckboxGroup } from '../components/forms/Checkbox';
 import { Field } from '../components/forms/Field';
@@ -308,5 +310,34 @@ describe('accessibility (axe)', () => {
     await waitFor(() => expect(screen.getByText('Saved')).toBeTruthy());
 
     await expectNoViolations(document.body);
+  });
+
+  it('passes for a data table', async () => {
+    interface Row {
+      id: number;
+      name: string;
+      role: string;
+    }
+    const tableColumns: DataTableColumn<Row>[] = [
+      { id: 'name', header: 'Name', accessor: 'name', sortable: true },
+      { id: 'role', header: 'Role', accessor: 'role' },
+    ];
+
+    const { container } = render(
+      <DataTable
+        caption="Users"
+        columns={tableColumns}
+        data={[
+          { id: 1, name: 'Ada', role: 'admin' },
+          { id: 2, name: 'Alan', role: 'user' },
+        ]}
+        selectable
+        searchable
+        pageSize={5}
+        pageSizeOptions={[5, 10]}
+      />,
+    );
+
+    await expectNoViolations(container);
   });
 });

@@ -6,6 +6,8 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { Alert } from '../components/feedback/Alert';
 import { ToastProvider } from '../components/feedback/Toast';
+import { DataTable } from '../components/data-display/DataTable';
+import type { DataTableColumn } from '../components/data-display/DataTable';
 import { Button } from '../components/forms/Button';
 import { Checkbox } from '../components/forms/Checkbox';
 import { Field } from '../components/forms/Field';
@@ -16,6 +18,15 @@ import { Accordion } from '../components/navigation/Accordion';
 import { Tabs } from '../components/navigation/Tabs';
 import { Pagination } from '../components/navigation/Pagination';
 import { Dialog } from '../components/overlays/Dialog';
+
+interface TableRow {
+  id: number;
+  name: string;
+}
+
+const tableColumns: DataTableColumn<TableRow>[] = [
+  { id: 'name', header: 'Name', accessor: 'name', sortable: true },
+];
 
 function App() {
   return (
@@ -52,6 +63,15 @@ function App() {
         </Accordion.Item>
       </Accordion>
       <Pagination total={5} defaultPage={2} showEdges />
+      <DataTable
+        columns={tableColumns}
+        data={[
+          { id: 1, name: 'Ada' },
+          { id: 2, name: 'Alan' },
+        ]}
+        selectable
+        searchable
+      />
     </div>
   );
 }

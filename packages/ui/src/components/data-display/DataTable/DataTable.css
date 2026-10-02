@@ -1,0 +1,382 @@
+.elyri-ui-data-table {
+  --dt-pad-y: 12px;
+  --dt-pad-x: 14px;
+  --dt-font: 14px;
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: calc(var(--elyri-ui-radius) + 2px);
+  color: var(--elyri-ui-text);
+  font-size: var(--dt-font);
+  line-height: 1.5;
+}
+
+/* 尺寸令牌：表头、单元格、工具栏共用 */
+.elyri-ui-data-table--sm {
+  --dt-pad-y: 8px;
+  --dt-pad-x: 11px;
+  --dt-font: 13px;
+}
+
+.elyri-ui-data-table--lg {
+  --dt-pad-y: 16px;
+  --dt-pad-x: 18px;
+  --dt-font: 15px;
+}
+
+/* 外观 */
+.elyri-ui-data-table--outline {
+  overflow: hidden;
+  border: 1px solid var(--elyri-ui-border);
+  background: var(--elyri-ui-surface);
+  box-shadow: var(--elyri-ui-shadow);
+}
+
+.elyri-ui-data-table--plain {
+  background: transparent;
+}
+
+/* 工具栏：标题 + 搜索 + 自定义内容 */
+.elyri-ui-data-table__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--elyri-ui-border);
+}
+
+.elyri-ui-data-table--plain .elyri-ui-data-table__toolbar {
+  padding-inline: 0;
+}
+
+.elyri-ui-data-table__title {
+  font-size: 1.07em;
+  font-weight: 650;
+}
+
+.elyri-ui-data-table__toolbar-spacer {
+  flex: 1;
+}
+
+/* 搜索框 */
+.elyri-ui-data-table__search {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.elyri-ui-data-table__search-icon {
+  position: absolute;
+  left: 10px;
+  width: 16px;
+  height: 16px;
+  color: var(--elyri-ui-muted);
+  pointer-events: none;
+}
+
+.elyri-ui-data-table__search-input {
+  min-width: 200px;
+  height: 34px;
+  padding: 0 12px 0 32px;
+  border: 1px solid var(--elyri-ui-border);
+  border-radius: var(--elyri-ui-radius-sm);
+  background: var(--elyri-ui-surface);
+  color: inherit;
+  font: inherit;
+  transition:
+    border-color var(--elyri-ui-duration) var(--elyri-ui-ease),
+    box-shadow var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-data-table__search-input::placeholder {
+  color: var(--elyri-ui-muted);
+}
+
+.elyri-ui-data-table__search-input:focus-visible {
+  border-color: var(--elyri-ui-accent);
+  outline: none;
+  box-shadow: var(--elyri-ui-ring);
+}
+
+/* 视口：横向滚动与吸顶表头的定位上下文 */
+.elyri-ui-data-table__viewport {
+  position: relative;
+  width: 100%;
+  overflow: auto;
+}
+
+.elyri-ui-data-table--plain .elyri-ui-data-table__viewport {
+  border: 1px solid var(--elyri-ui-border);
+  border-radius: calc(var(--elyri-ui-radius) + 2px);
+}
+
+.elyri-ui-data-table__table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.elyri-ui-data-table__caption {
+  padding: 12px 14px 4px;
+  color: var(--elyri-ui-muted);
+  font-size: 0.93em;
+  text-align: left;
+  caption-side: top;
+}
+
+/* 表头单元格 */
+.elyri-ui-data-table__th {
+  padding: var(--dt-pad-y) var(--dt-pad-x);
+  border-bottom: 1px solid var(--elyri-ui-border);
+  background: var(--elyri-ui-surface-muted);
+  color: var(--elyri-ui-muted);
+  font-size: 0.89em;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.elyri-ui-data-table__th.is-center {
+  text-align: center;
+}
+
+.elyri-ui-data-table__th.is-right {
+  text-align: right;
+}
+
+.elyri-ui-data-table__th.is-select {
+  width: 1%;
+  padding-right: 0;
+}
+
+/* 排序按钮 */
+.elyri-ui-data-table__sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.elyri-ui-data-table__sort:hover {
+  color: var(--elyri-ui-text);
+}
+
+.elyri-ui-data-table__sort:focus-visible {
+  outline: 2px solid var(--elyri-ui-accent);
+  outline-offset: 2px;
+}
+
+.elyri-ui-data-table__sort-icon {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  opacity: 0.4;
+  transition: opacity var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-data-table__sort[data-active='true'] .elyri-ui-data-table__sort-icon {
+  color: var(--elyri-ui-accent);
+  opacity: 1;
+}
+
+/* 数据单元格 */
+.elyri-ui-data-table__td {
+  padding: var(--dt-pad-y) var(--dt-pad-x);
+  border-bottom: 1px solid var(--elyri-ui-border);
+  vertical-align: middle;
+}
+
+.elyri-ui-data-table__td.is-center {
+  text-align: center;
+}
+
+.elyri-ui-data-table__td.is-right {
+  text-align: right;
+}
+
+.elyri-ui-data-table__td.is-select {
+  width: 1%;
+  padding-right: 0;
+}
+
+.elyri-ui-data-table__row:last-child .elyri-ui-data-table__td {
+  border-bottom: 0;
+}
+
+/* 斑马纹 */
+.elyri-ui-data-table[data-striped='true'] .elyri-ui-data-table__row:nth-child(even) {
+  background: var(--elyri-ui-surface-muted);
+}
+
+/* 悬停高亮 */
+.elyri-ui-data-table[data-hoverable='true'] .elyri-ui-data-table__row:hover {
+  background: color-mix(in srgb, var(--elyri-ui-accent) 6%, var(--elyri-ui-surface));
+}
+
+/* 选中行 */
+.elyri-ui-data-table .elyri-ui-data-table__row[data-selected='true'] {
+  background: color-mix(in srgb, var(--elyri-ui-accent) 10%, var(--elyri-ui-surface));
+}
+
+/* 吸顶表头 */
+.elyri-ui-data-table[data-sticky='true'] .elyri-ui-data-table__head-row .elyri-ui-data-table__th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* 空状态 */
+.elyri-ui-data-table__empty-cell {
+  padding: 0;
+  border-bottom: 0;
+}
+
+.elyri-ui-data-table__empty {
+  display: grid;
+  place-items: center;
+  padding: 8px;
+}
+
+.elyri-ui-data-table__empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 24px 16px;
+  color: var(--elyri-ui-muted);
+  font-size: 0.93em;
+  text-align: center;
+}
+
+.elyri-ui-data-table__empty-state svg {
+  width: 44px;
+  height: 44px;
+}
+
+.elyri-ui-data-table__empty-paper {
+  fill: var(--elyri-ui-surface);
+  stroke: color-mix(in srgb, var(--elyri-ui-text) 16%, var(--elyri-ui-surface));
+  stroke-width: 1.5;
+}
+
+.elyri-ui-data-table__empty-line {
+  fill: color-mix(in srgb, var(--elyri-ui-text) 10%, transparent);
+}
+
+/* 加载骨架行的单元格不参与悬停高亮 */
+.elyri-ui-data-table[data-hoverable='true'] .elyri-ui-data-table__row:has(.elyri-ui-data-table__skeleton):hover {
+  background: transparent;
+}
+
+/* 底栏：选中摘要 + 分页 */
+.elyri-ui-data-table__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-top: 1px solid var(--elyri-ui-border);
+}
+
+.elyri-ui-data-table--plain .elyri-ui-data-table__footer {
+  padding-inline: 0;
+}
+
+.elyri-ui-data-table__selection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--elyri-ui-muted);
+  font-size: 0.93em;
+}
+
+.elyri-ui-data-table__button {
+  padding: 2px 4px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: var(--elyri-ui-accent);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.elyri-ui-data-table__button:hover {
+  text-decoration: underline;
+}
+
+.elyri-ui-data-table__button:focus-visible {
+  outline: 2px solid var(--elyri-ui-accent);
+  outline-offset: 1px;
+}
+
+/* 仅供读屏：选择列的表头需要非空文本 */
+.elyri-ui-data-table__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 加载骨架 */
+.elyri-ui-data-table__skeleton {
+  display: inline-block;
+  border-radius: 5px;
+  background: linear-gradient(
+    90deg,
+    var(--elyri-ui-skeleton) 25%,
+    var(--elyri-ui-skeleton-highlight) 37%,
+    var(--elyri-ui-skeleton) 63%
+  );
+  background-size: 400% 100%;
+  animation: elyri-ui-data-table-shimmer 1.4s ease infinite;
+}
+
+.elyri-ui-data-table__skeleton.is-text {
+  width: 100%;
+  max-width: 160px;
+  height: 12px;
+}
+
+.elyri-ui-data-table__skeleton.is-box {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+@keyframes elyri-ui-data-table-shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-ui-data-table__sort-icon,
+  .elyri-ui-data-table__search-input {
+    transition: none;
+  }
+
+  .elyri-ui-data-table__skeleton {
+    animation: none;
+  }
+}

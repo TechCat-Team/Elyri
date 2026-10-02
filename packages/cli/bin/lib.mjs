@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs';
 import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
-import { dirname, join, relative, resolve, sep } from 'node:path';
+import { dirname, join, posix, relative, resolve, sep } from 'node:path';
 
 /** The shared runtime is always imported as `<pkg>/core`, whatever depth the source used. */
 const coreImport = /from\s+(['"])(?:\.\.\/)+core\1/g;
@@ -171,24 +171,49 @@ const collectFiles = async (componentRoot) => {
 
 /**
  * Rewrite one source file so the shared runtime is imported from the package.
- * Relative imports that would still escape the component folder are an error:
- * copying them would produce a file that cannot resolve its own imports.
+ * A relative import may also point at another registered component: when `resolveComponent`
+ * maps that specifier to a sibling folder name, it is rewritten accordingly (deps are copied
+ * as siblings). Any other import that would escape the component folder is an error: copying
+ * it would produce a file that cannot resolve its own imports.
  */
-export const rewriteSource = (source, pkg, file) => {
+export const rewriteSource = (source, pkg, file, resolveComponent) => {
   const depth = file.split('/').length - 1;
-  const rewritten = source.replace(coreImport, (_match, quote) => `from ${quote}${pkg}/core${quote}`);
 
   const escaping = new Set();
-  for (const [, , specifier] of rewritten.matchAll(relativeImport)) {
-    const prefix = /^(?:\.\.\/)+/.exec(specifier)?.[0] ?? '';
-    const up = prefix ? prefix.split('../').length - 1 : 0;
-    if (up > depth) escaping.add(specifier);
-  }
+  const rewritten = source
+    .replace(coreImport, (_match, quote) => `from ${quote}${pkg}/core${quote}`)
+    .replace(relativeImport, (match, quote, specifier) => {
+      const prefix = /^(?:\.\.\/)+/.exec(specifier)?.[0] ?? '';
+      const up = prefix ? prefix.split('../').length - 1 : 0;
+      if (up <= depth) return match;
+
+      const replacement = resolveComponent?.(specifier);
+      if (!replacement) {
+        escaping.add(specifier);
+        return match;
+      }
+      return match.replace(specifier, replacement);
+    });
+
   if (escaping.size) {
     throw new Error(`${file} imports outside the component folder: ${[...escaping].join(', ')}`);
   }
 
   return rewritten;
+};
+
+/**
+ * Map a cross-component relative import to the sibling folder a copy will live in.
+ * `fromDir` is the importing file's directory relative to `<pkg>/src/components`.
+ * Returns the new specifier, or null when the target is not a registered component.
+ */
+const rewriteComponentImport = (registry, pkg, fromDir, file, specifier) => {
+  const target = posix.normalize(posix.join(fromDir, specifier));
+  const dep = Object.values(registry).find((entry) => entry.pkg === pkg && entry.folder === target);
+  if (!dep) return null;
+
+  const depth = posix.dirname(file).split('/').filter((segment) => segment && segment !== '.').length;
+  return `${'../'.repeat(depth + 1)}${dep.name}`;
 };
 
 /**
@@ -224,10 +249,15 @@ export const add = async ({ cwd, names, registry, manager = 'pnpm', dir, overwri
     for (const file of files) {
       const from = join(componentRoot, file);
       const source = await readFile(from, 'utf8');
+      const fromDir = posix.join(entry.folder, posix.dirname(file));
       pending.push({
         from,
         to: join(destination, entry.name, file),
-        content: isScript(file) ? rewriteSource(source, entry.pkg, file) : source,
+        content: isScript(file)
+          ? rewriteSource(source, entry.pkg, file, (specifier) =>
+              rewriteComponentImport(registry, entry.pkg, fromDir, file, specifier),
+            )
+          : source,
       });
     }
   }
