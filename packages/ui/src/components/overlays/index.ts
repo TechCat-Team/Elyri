@@ -1,3 +1,4 @@
+export * from './ContextMenu';
 export * from './Dialog';
 export * from './DropdownMenu';
 export * from './Popover';

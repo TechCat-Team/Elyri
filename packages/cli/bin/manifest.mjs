@@ -42,6 +42,7 @@ export const components = {
   'button-group': { pkg: '@elyri/ui', folder: 'forms/ButtonGroup', name: 'ButtonGroup' },
   card: { pkg: '@elyri/ui', folder: 'data-display/Card', name: 'Card' },
   checkbox: { pkg: '@elyri/ui', folder: 'forms/Checkbox', name: 'Checkbox' },
+  'context-menu': { pkg: '@elyri/ui', folder: 'overlays/ContextMenu', name: 'ContextMenu' },
   dialog: { pkg: '@elyri/ui', folder: 'overlays/Dialog', name: 'Dialog' },
   divider: { pkg: '@elyri/ui', folder: 'data-display/Divider', name: 'Divider' },
   'dropdown-menu': { pkg: '@elyri/ui', folder: 'overlays/DropdownMenu', name: 'DropdownMenu' },

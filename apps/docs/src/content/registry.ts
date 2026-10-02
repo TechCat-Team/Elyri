@@ -41,6 +41,7 @@ import { buttonDoc } from './components/button';
 import { buttonGroupDoc } from './components/button-group';
 import { cardDoc } from './components/card';
 import { checkboxDoc } from './components/checkbox';
+import { contextMenuDoc } from './components/context-menu';
 import { dialogDoc } from './components/dialog';
 import { dividerDoc } from './components/divider';
 import { dropdownMenuDoc } from './components/dropdown-menu';
@@ -124,6 +125,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => {
     skeletonDoc(lang),
     toastDoc(lang),
     dialogDoc(lang),
+    contextMenuDoc(lang),
     tooltipDoc(lang),
     popoverDoc(lang),
     dropdownMenuDoc(lang),

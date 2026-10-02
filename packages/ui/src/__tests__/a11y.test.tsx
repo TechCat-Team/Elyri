@@ -19,6 +19,7 @@ import { Textarea } from '../components/forms/Textarea';
 import { Accordion } from '../components/navigation/Accordion';
 import { Tabs } from '../components/navigation/Tabs';
 import { Pagination } from '../components/navigation/Pagination';
+import { ContextMenu } from '../components/overlays/ContextMenu';
 import { Dialog } from '../components/overlays/Dialog';
 import { DropdownMenu } from '../components/overlays/DropdownMenu';
 
@@ -248,6 +249,49 @@ describe('accessibility (axe)', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: 'Actions' }));
+    await waitFor(() => expect(screen.getByRole('menu')).toBeTruthy());
+
+    await expectNoViolations(document.body);
+  });
+
+  it('passes when a menu with checkbox, radio and a submenu is open', async () => {
+    render(
+      <DropdownMenu defaultOpen>
+        <DropdownMenu.Trigger>Actions</DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.Label>View</DropdownMenu.Label>
+          <DropdownMenu.CheckboxItem defaultChecked>Show grid</DropdownMenu.CheckboxItem>
+          <DropdownMenu.RadioGroup defaultValue="name">
+            <DropdownMenu.RadioItem value="name">Name</DropdownMenu.RadioItem>
+            <DropdownMenu.RadioItem value="date">Date</DropdownMenu.RadioItem>
+          </DropdownMenu.RadioGroup>
+          <DropdownMenu.Separator />
+          <DropdownMenu.Sub>
+            <DropdownMenu.SubTrigger>Share</DropdownMenu.SubTrigger>
+            <DropdownMenu.SubContent>
+              <DropdownMenu.Item>Email</DropdownMenu.Item>
+            </DropdownMenu.SubContent>
+          </DropdownMenu.Sub>
+        </DropdownMenu.Content>
+      </DropdownMenu>,
+    );
+
+    await waitFor(() => expect(screen.getByRole('menu')).toBeTruthy());
+    await expectNoViolations(document.body);
+  });
+
+  it('passes when a context menu is open', async () => {
+    render(
+      <ContextMenu>
+        <ContextMenu.Trigger>Canvas</ContextMenu.Trigger>
+        <ContextMenu.Content>
+          <ContextMenu.Item>Duplicate</ContextMenu.Item>
+          <ContextMenu.Item danger>Delete</ContextMenu.Item>
+        </ContextMenu.Content>
+      </ContextMenu>,
+    );
+
+    fireEvent.contextMenu(screen.getByText('Canvas'), { clientX: 10, clientY: 10 });
     await waitFor(() => expect(screen.getByRole('menu')).toBeTruthy());
 
     await expectNoViolations(document.body);

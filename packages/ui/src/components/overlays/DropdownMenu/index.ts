@@ -1,7 +1,10 @@
 export { DropdownMenu } from './DropdownMenu';
 export type {
-  DropdownMenuItemProps,
+  DropdownMenuCheckboxItemProps,
   DropdownMenuContentProps,
+  DropdownMenuItemProps,
   DropdownMenuProps,
+  DropdownMenuRadioGroupProps,
+  DropdownMenuSubProps,
   DropdownMenuTriggerProps,
 } from './DropdownMenu';
