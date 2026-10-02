@@ -15,6 +15,8 @@ const copy = {
     exVariantsDesc: '四种语义：info / success / warning / danger。',
     exLoading: '加载到成功',
     exLoadingDesc: '先弹出 loading 提示，再用 update(id, options) 就地改成 success。',
+    exMessage: '单行 Message',
+    exMessageDesc: '不传 description 时只显示一行标题；先弹出 loading，再用 update 改成 danger。',
     exPromise: 'Promise',
     exPromiseDesc: 'promise(p, messages) 自动跟随 promise 切换 loading / success / error。',
     exPersistent: '常驻',
@@ -44,6 +46,8 @@ const copy = {
     exVariantsDesc: 'Four variants: info / success / warning / danger.',
     exLoading: 'Loading → Success',
     exLoadingDesc: 'Push a loading toast, then update it in place to success with update(id, options).',
+    exMessage: 'Single-line Message',
+    exMessageDesc: 'Omit description to show a single-line title; push a loading message, then update it to danger.',
     exPromise: 'Promise',
     exPromiseDesc: 'promise(p, messages) follows a promise and switches loading / success / error.',
     exPersistent: 'Persistent',
@@ -141,6 +145,21 @@ function ToastLoadingExample() {
   return (
     <div className="demo-ui-row">
       <Button onClick={showLoading}>Upload file</Button>
+    </div>
+  );
+}
+
+function ToastMessageExample() {
+  const { toast, update } = useToast();
+
+  const showMessage = () => {
+    const id = toast({ title: 'Connecting…', variant: 'loading' });
+    setTimeout(() => update(id, { title: 'Connection failed', variant: 'danger' }), 1500);
+  };
+
+  return (
+    <div className="demo-ui-row">
+      <Button onClick={showMessage}>Connect</Button>
     </div>
   );
 }
@@ -338,6 +357,33 @@ function Trigger() {
   };
 
   return <Button onClick={showLoading}>Upload file</Button>;
+}
+
+export function Example() {
+  return (
+    <ToastProvider>
+      <Trigger />
+    </ToastProvider>
+  );
+}`,
+      },
+      {
+        title: t.exMessage,
+        description: t.exMessageDesc,
+        wide: true,
+        render: () => <ToastMessageExample />,
+        code: `import { ToastProvider, useToast } from './components/elyri/Toast';
+import { Button } from './components/elyri/Button';
+
+function Trigger() {
+  const { toast, update } = useToast();
+
+  const showMessage = () => {
+    const id = toast({ title: 'Connecting…', variant: 'loading' });
+    setTimeout(() => update(id, { title: 'Connection failed', variant: 'danger' }), 1500);
+  };
+
+  return <Button onClick={showMessage}>Connect</Button>;
 }
 
 export function Example() {
