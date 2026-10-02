@@ -107,4 +107,39 @@ describe('Slider', () => {
 
     expect(screen.getByRole('slider', { name: 'Volume' })).toBeTruthy();
   });
+
+  it('formats the value bubble and aria-valuetext', () => {
+    const { container } = render(
+      <Slider defaultValue={40} showValue formatValue={(v) => `${v}%`} aria-label="Volume" />,
+    );
+    const slider = screen.getByRole('slider', { name: 'Volume' });
+
+    expect(slider.getAttribute('aria-valuetext')).toBe('40%');
+    expect(container.querySelector('.elyri-ui-slider__bubble')?.textContent).toBe('40%');
+
+    fireEvent.keyDown(slider, { key: 'ArrowRight' });
+    expect(container.querySelector('.elyri-ui-slider__bubble')?.textContent).toBe('41%');
+  });
+
+  it('omits the value bubble by default', () => {
+    const { container } = render(<Slider defaultValue={40} aria-label="Volume" />);
+
+    expect(container.querySelector('.elyri-ui-slider__bubble')).toBeNull();
+    expect(screen.getByRole('slider', { name: 'Volume' }).hasAttribute('aria-valuetext')).toBe(false);
+  });
+
+  it('renders a mark for every step and flags the filled ones', () => {
+    const { container } = render(<Slider defaultValue={40} step={20} marks aria-label="Volume" />);
+    const marks = container.querySelectorAll('.elyri-ui-slider__mark');
+
+    expect(marks).toHaveLength(6);
+    expect(container.querySelectorAll('.elyri-ui-slider__mark[data-active]')).toHaveLength(3);
+  });
+
+  it('renders only the given marks within bounds', () => {
+    const { container } = render(<Slider defaultValue={[20, 60]} marks={[-10, 25, 50, 90, 120]} aria-label="Price" />);
+
+    expect(container.querySelectorAll('.elyri-ui-slider__mark')).toHaveLength(3);
+    expect(container.querySelectorAll('.elyri-ui-slider__mark[data-active]')).toHaveLength(2);
+  });
 });

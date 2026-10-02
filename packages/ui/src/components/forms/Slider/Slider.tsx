@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useMemo, useRef } from 'react';
+import { forwardRef, useCallback, useMemo, useRef, useState } from 'react';
 import type { HTMLAttributes, KeyboardEvent, PointerEvent } from 'react';
 
 import { cn, useControllableState, useField, useFieldControlId } from '../../../core';
@@ -34,6 +34,12 @@ export interface SliderProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onCha
   maxLabel?: string;
   /** 表单字段名：设置后渲染隐藏 input，使值可随原生表单提交（区间按重复字段名提交两个值） */
   name?: string;
+  /** 数值气泡：true 在拖拽 / 键盘聚焦时显示，'always' 常驻显示 */
+  showValue?: boolean | 'always';
+  /** 数值格式化：用于气泡文本与 aria-valuetext */
+  formatValue?: (value: number) => string;
+  /** 刻度点：true 按 step 逐档标注，number[] 仅标注指定值 */
+  marks?: boolean | number[];
 }
 
 /** 从受控 / 非受控值判定是否为区间模式 */
@@ -56,6 +62,9 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider(
     minLabel = 'Minimum',
     maxLabel = 'Maximum',
     name,
+    showValue = false,
+    formatValue,
+    marks,
     className,
     id,
     'aria-label': ariaLabel,
@@ -79,6 +88,8 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider(
   const trackRef = useRef<HTMLDivElement>(null);
   const thumbRefs = useRef<(HTMLDivElement | null)[]>([]);
   const dragIndex = useRef<number | null>(null);
+  // 仅用于驱动按压动效与气泡显示，逻辑判断仍以 dragIndex 为准
+  const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
 
   const values = useMemo(
     () => (Array.isArray(selected) ? [...selected].sort((a, b) => a - b) : [selected]),
@@ -86,6 +97,18 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider(
   );
   const span = max - min || 1;
   const toPercent = (value: number) => clamp(((value - min) / span) * 100, 0, 100);
+  // 单值从起点填充到滑块，区间填充两滑块之间
+  const fillStart = range ? values[0] : min;
+  const fillEnd = values[values.length - 1];
+
+  const markValues = useMemo(() => {
+    if (Array.isArray(marks)) return marks.filter((mark) => mark >= min && mark <= max);
+    if (!marks || step <= 0) return [];
+    const count = Math.floor((max - min) / step);
+    return Array.from({ length: count + 1 }, (_, i) => min + i * step);
+  }, [marks, min, max, step]);
+
+  const format = (value: number) => (formatValue ? formatValue(value) : String(value));
 
   const snap = useCallback(
     (raw: number) => clamp(min + Math.round((raw - min) / step) * step, min, max),
@@ -126,6 +149,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider(
     const next = valueFromClientX(event.clientX);
     const index = nearestIndex(next);
     dragIndex.current = index;
+    setDraggingIndex(index);
     commit(index, next);
     event.currentTarget.setPointerCapture(event.pointerId);
     thumbRefs.current[index]?.focus();
@@ -139,6 +163,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider(
   const endDrag = (event: PointerEvent<HTMLDivElement>) => {
     if (dragIndex.current === null) return;
     dragIndex.current = null;
+    setDraggingIndex(null);
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
@@ -147,6 +172,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider(
   const handleThumbPointerDown = (index: number, event: PointerEvent<HTMLDivElement>) => {
     if (isDisabled) return;
     dragIndex.current = index;
+    setDraggingIndex(index);
     event.currentTarget.setPointerCapture(event.pointerId);
   };
 
@@ -196,6 +222,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider(
       aria-valuemin={min}
       aria-valuemax={max}
       aria-valuenow={values[index]}
+      aria-valuetext={formatValue ? formatValue(values[index]) : undefined}
       aria-orientation="horizontal"
       aria-invalid={isInvalid || undefined}
       aria-describedby={describedBy}
@@ -203,13 +230,22 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider(
       // 单值且在 Field 内时，由 Field.Label 命名
       aria-labelledby={!range && !ariaLabel ? field?.labelId : undefined}
       data-disabled={isDisabled || undefined}
+      data-dragging={draggingIndex === index || undefined}
       className="elyri-ui-slider__thumb"
       style={{ left: `${toPercent(values[index])}%` }}
       onKeyDown={(event) => handleThumbKeyDown(index, event)}
       onPointerDown={(event) => handleThumbPointerDown(index, event)}
       onPointerMove={handlePointerMove}
       onPointerUp={endDrag}
-    />
+      onPointerCancel={endDrag}
+    >
+      <span className="elyri-ui-slider__knob" aria-hidden="true" />
+      {showValue && (
+        <span className="elyri-ui-slider__bubble" aria-hidden="true">
+          {format(values[index])}
+        </span>
+      )}
+    </div>
   );
 
   return (
@@ -218,6 +254,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider(
       id={id ?? field?.controlId}
       data-disabled={isDisabled || undefined}
       data-invalid={isInvalid || undefined}
+      data-show-value={showValue === 'always' ? 'always' : undefined}
       className={cn('elyri-ui-slider', `elyri-ui-slider--${size}`, isDisabled && 'is-disabled', className)}
       {...rest}
     >
@@ -232,10 +269,19 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider(
         <div
           className="elyri-ui-slider__fill"
           style={{
-            left: `${toPercent(values[0])}%`,
-            right: `${100 - toPercent(values[values.length - 1])}%`,
+            left: `${toPercent(fillStart)}%`,
+            right: `${100 - toPercent(fillEnd)}%`,
           }}
         />
+        {markValues.map((mark) => (
+          <span
+            key={mark}
+            aria-hidden="true"
+            data-active={(mark >= fillStart && mark <= fillEnd) || undefined}
+            className="elyri-ui-slider__mark"
+            style={{ left: `${toPercent(mark)}%` }}
+          />
+        ))}
         {range ? [renderThumb(0), renderThumb(1)] : renderThumb(0)}
       </div>
       {/* 自定义控件不参与原生提交，name 存在时用隐藏 input 承载值 */}

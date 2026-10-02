@@ -1,19 +1,41 @@
-/* 根容器：左右留出滑块半径，避免端点被裁切 */
+/*
+ * 极简 iOS 风：细轨道 + 无描边浮起圆钮。
+ * 尺寸统一由局部变量驱动；--elyri-ui-slider-knob 可被宿主覆盖以换钮色。
+ */
 .elyri-ui-slider {
+  --elyri-ui-slider-track: 6px;
+  --elyri-ui-slider-knob-size: 24px;
+  --elyri-ui-slider-knob: #ffffff;
+  --elyri-ui-slider-halo: var(--elyri-ui-accent-soft);
+
   position: relative;
   display: flex;
   align-items: center;
   box-sizing: border-box;
   width: 100%;
-  padding: 0 9px;
+  min-height: calc(var(--elyri-ui-slider-knob-size) + 12px);
+  /* 左右留出圆钮半径，端点不被裁切 */
+  padding: 0 calc(var(--elyri-ui-slider-knob-size) / 2);
+  -webkit-tap-highlight-color: transparent;
 }
 
+.elyri-ui-slider--sm {
+  --elyri-ui-slider-track: 4px;
+  --elyri-ui-slider-knob-size: 20px;
+}
+
+.elyri-ui-slider--lg {
+  --elyri-ui-slider-track: 8px;
+  --elyri-ui-slider-knob-size: 28px;
+}
+
+/* 轨道 */
 .elyri-ui-slider__track {
   position: relative;
   flex: 1;
-  height: 6px;
+  height: var(--elyri-ui-slider-track);
   border-radius: 999px;
-  background: var(--elyri-ui-surface-muted);
+  background: color-mix(in srgb, var(--elyri-ui-text) 10%, transparent);
   cursor: pointer;
   touch-action: none;
 }
@@ -26,77 +48,155 @@
   background: var(--elyri-ui-accent);
 }
 
+/* 刻度点 */
+.elyri-ui-slider__mark {
+  position: absolute;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--elyri-ui-text) 25%, transparent);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.elyri-ui-slider__mark[data-active] {
+  background: color-mix(in srgb, var(--elyri-ui-accent-text) 60%, transparent);
+}
+
+/* 滑块：外层为放大的透明热区，视觉圆钮在内层，缩放不影响气泡 */
 .elyri-ui-slider__thumb {
   position: absolute;
   top: 50%;
-  width: 18px;
-  height: 18px;
-  margin: 0;
-  transform: translate(-50%, -50%);
-  border: 2px solid var(--elyri-ui-accent);
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: calc(var(--elyri-ui-slider-knob-size) + 12px);
+  height: calc(var(--elyri-ui-slider-knob-size) + 12px);
   border-radius: 50%;
-  background: var(--elyri-ui-surface);
-  box-shadow: var(--elyri-ui-shadow);
+  transform: translate(-50%, -50%);
   cursor: grab;
-  transition: box-shadow var(--elyri-ui-duration) var(--elyri-ui-ease);
+  outline: none;
 }
 
-.elyri-ui-slider__thumb:active {
+.elyri-ui-slider__thumb[data-dragging] {
+  z-index: 2;
   cursor: grabbing;
 }
 
-.elyri-ui-slider__thumb:focus-visible {
-  outline: none;
-  box-shadow: var(--elyri-ui-ring);
+.elyri-ui-slider__knob {
+  width: var(--elyri-ui-slider-knob-size);
+  height: var(--elyri-ui-slider-knob-size);
+  border-radius: 50%;
+  background: var(--elyri-ui-slider-knob);
+  box-shadow:
+    0 0 0 0.5px rgb(0 0 0 / 8%),
+    0 1px 2px rgb(20 25 38 / 12%),
+    0 3px 8px rgb(20 25 38 / 16%),
+    0 0 0 0 var(--elyri-ui-slider-halo);
+  transition:
+    transform var(--elyri-ui-duration) var(--elyri-ui-ease),
+    box-shadow var(--elyri-ui-duration) var(--elyri-ui-ease);
 }
 
-/* 尺寸 */
-.elyri-ui-slider--sm .elyri-ui-slider__track {
-  height: 4px;
+.elyri-ui-slider:not([data-disabled]) .elyri-ui-slider__thumb:hover .elyri-ui-slider__knob {
+  box-shadow:
+    0 0 0 0.5px rgb(0 0 0 / 8%),
+    0 1px 2px rgb(20 25 38 / 12%),
+    0 3px 8px rgb(20 25 38 / 16%),
+    0 0 0 6px var(--elyri-ui-slider-halo);
 }
 
-.elyri-ui-slider--sm .elyri-ui-slider__thumb {
-  width: 14px;
-  height: 14px;
+.elyri-ui-slider__thumb[data-dragging] .elyri-ui-slider__knob {
+  transform: scale(1.12);
+  box-shadow:
+    0 0 0 0.5px rgb(0 0 0 / 8%),
+    0 2px 4px rgb(20 25 38 / 14%),
+    0 6px 14px rgb(20 25 38 / 18%),
+    0 0 0 8px var(--elyri-ui-slider-halo);
 }
 
-.elyri-ui-slider--lg .elyri-ui-slider__track {
-  height: 8px;
+.elyri-ui-slider__thumb:focus-visible .elyri-ui-slider__knob {
+  box-shadow:
+    0 0 0 0.5px rgb(0 0 0 / 8%),
+    0 3px 8px rgb(20 25 38 / 16%),
+    var(--elyri-ui-ring);
 }
 
-.elyri-ui-slider--lg .elyri-ui-slider__thumb {
-  width: 22px;
-  height: 22px;
+/* 数值气泡 */
+.elyri-ui-slider__bubble {
+  position: absolute;
+  bottom: calc(100% + 2px);
+  left: 50%;
+  padding: 4px 8px;
+  border-radius: var(--elyri-ui-radius-sm);
+  background: var(--elyri-ui-tooltip-bg);
+  color: var(--elyri-ui-tooltip-text);
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 4px) scale(0.9);
+  transform-origin: 50% 100%;
+  transition:
+    opacity var(--elyri-ui-duration) var(--elyri-ui-ease),
+    transform var(--elyri-ui-duration) var(--elyri-ui-ease);
 }
 
-.elyri-ui-slider--lg {
-  padding: 0 11px;
+.elyri-ui-slider__bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  border: 4px solid transparent;
+  border-top-color: var(--elyri-ui-tooltip-bg);
+  transform: translateX(-50%);
+}
+
+.elyri-ui-slider__thumb[data-dragging] .elyri-ui-slider__bubble,
+.elyri-ui-slider__thumb:focus-visible .elyri-ui-slider__bubble,
+.elyri-ui-slider[data-show-value='always'] .elyri-ui-slider__bubble {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+}
+
+/* 常驻气泡时为其预留上方空间，避免压到上方内容 */
+.elyri-ui-slider[data-show-value='always'] {
+  padding-top: 24px;
 }
 
 /* 禁用 */
 .elyri-ui-slider[data-disabled] {
-  opacity: 0.55;
+  opacity: 0.5;
 }
 
-.elyri-ui-slider[data-disabled] .elyri-ui-slider__track {
-  cursor: not-allowed;
-}
-
+.elyri-ui-slider[data-disabled] .elyri-ui-slider__track,
 .elyri-ui-slider[data-disabled] .elyri-ui-slider__thumb {
   cursor: not-allowed;
 }
 
 /* 校验失败 */
+.elyri-ui-slider[data-invalid] {
+  --elyri-ui-slider-halo: color-mix(in srgb, var(--elyri-ui-danger) 16%, transparent);
+}
+
 .elyri-ui-slider[data-invalid] .elyri-ui-slider__fill {
   background: var(--elyri-ui-danger);
 }
 
-.elyri-ui-slider[data-invalid] .elyri-ui-slider__thumb {
-  border-color: var(--elyri-ui-danger);
+.elyri-ui-slider[data-invalid] .elyri-ui-slider__thumb:focus-visible .elyri-ui-slider__knob {
+  box-shadow:
+    0 0 0 0.5px rgb(0 0 0 / 8%),
+    0 3px 8px rgb(20 25 38 / 16%),
+    0 0 0 3px color-mix(in srgb, var(--elyri-ui-danger) 35%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .elyri-ui-slider__thumb {
+  .elyri-ui-slider__knob,
+  .elyri-ui-slider__bubble {
     transition: none;
   }
 }
