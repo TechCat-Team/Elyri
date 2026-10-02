@@ -1,3 +1,16 @@
+.elyri-ui-checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+}
+
+.elyri-ui-checkbox-group[data-orientation='vertical'] {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
 .elyri-ui-checkbox {
   position: relative;
   display: inline-flex;

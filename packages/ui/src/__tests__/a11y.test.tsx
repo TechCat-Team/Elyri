@@ -6,7 +6,7 @@ import { Alert } from '../components/feedback/Alert';
 import { Progress } from '../components/feedback/Progress';
 import { ToastProvider, useToast } from '../components/feedback/Toast';
 import { Button } from '../components/forms/Button';
-import { Checkbox } from '../components/forms/Checkbox';
+import { Checkbox, CheckboxGroup } from '../components/forms/Checkbox';
 import { Field } from '../components/forms/Field';
 import { Input } from '../components/forms/Input';
 import { NumberInput } from '../components/forms/NumberInput';
@@ -98,6 +98,20 @@ describe('accessibility (axe)', () => {
           <Slider defaultValue={[20, 60]} />
         </Field>
       </div>,
+    );
+
+    await expectNoViolations(container);
+  });
+
+  it('passes for a checkbox group', async () => {
+    const { container } = render(
+      <Field>
+        <Field.Label>Notifications</Field.Label>
+        <CheckboxGroup defaultValue={['email']}>
+          <CheckboxGroup.Checkbox value="email">Email</CheckboxGroup.Checkbox>
+          <CheckboxGroup.Checkbox value="sms">SMS</CheckboxGroup.Checkbox>
+        </CheckboxGroup>
+      </Field>,
     );
 
     await expectNoViolations(container);

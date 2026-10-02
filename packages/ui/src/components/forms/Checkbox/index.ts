@@ -1,2 +1,2 @@
-export { Checkbox } from './Checkbox';
-export type { CheckboxProps, CheckboxSize } from './Checkbox';
+export { Checkbox, CheckboxGroup } from './Checkbox';
+export type { CheckboxGroupOrientation, CheckboxGroupProps, CheckboxProps, CheckboxSize } from './Checkbox';

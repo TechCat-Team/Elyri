@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { Checkbox } from '../components/forms/Checkbox';
+import { Checkbox, CheckboxGroup } from '../components/forms/Checkbox';
 import { Field } from '../components/forms/Field';
 
 describe('Checkbox', () => {
@@ -80,5 +80,64 @@ describe('Checkbox', () => {
     // 外部 Field.Label 命名，控件自身文案不再参与可访问名
     expect(screen.getByRole('checkbox', { name: '记住我' })).toBeTruthy();
     expect(screen.queryByRole('checkbox', { name: '记住我 保持登录状态' })).toBeNull();
+  });
+});
+
+describe('CheckboxGroup', () => {
+  function renderGroup(props: Record<string, unknown> = {}) {
+    return render(
+      <CheckboxGroup {...props}>
+        <CheckboxGroup.Checkbox value="apple">Apple</CheckboxGroup.Checkbox>
+        <CheckboxGroup.Checkbox value="banana">Banana</CheckboxGroup.Checkbox>
+        <CheckboxGroup.Checkbox value="cherry">Cherry</CheckboxGroup.Checkbox>
+      </CheckboxGroup>,
+    );
+  }
+
+  it('reflects the default selection across the group', () => {
+    renderGroup({ defaultValue: ['apple'] });
+
+    expect((screen.getByRole('checkbox', { name: 'Apple' }) as HTMLInputElement).checked).toBe(true);
+    expect((screen.getByRole('checkbox', { name: 'Banana' }) as HTMLInputElement).checked).toBe(false);
+  });
+
+  it('toggles members and reports the whole set when uncontrolled', () => {
+    const onValueChange = vi.fn();
+    renderGroup({ defaultValue: ['apple'], onValueChange });
+
+    const banana = screen.getByRole('checkbox', { name: 'Banana' }) as HTMLInputElement;
+    fireEvent.click(banana);
+
+    expect(onValueChange).toHaveBeenCalledWith(['apple', 'banana']);
+    expect(banana.checked).toBe(true);
+
+    fireEvent.click(banana);
+    expect(onValueChange).toHaveBeenLastCalledWith(['apple']);
+    expect(banana.checked).toBe(false);
+  });
+
+  it('reports changes without mutating a controlled set', () => {
+    const onValueChange = vi.fn();
+    renderGroup({ value: ['apple'], onValueChange });
+
+    const banana = screen.getByRole('checkbox', { name: 'Banana' }) as HTMLInputElement;
+    fireEvent.click(banana);
+
+    expect(onValueChange).toHaveBeenCalledWith(['apple', 'banana']);
+    expect(banana.checked).toBe(false);
+  });
+
+  it('disables every checkbox from the group', () => {
+    renderGroup({ disabled: true });
+
+    screen.getAllByRole('checkbox').forEach((checkbox) => {
+      expect((checkbox as HTMLInputElement).disabled).toBe(true);
+    });
+  });
+
+  it('exposes the orientation on the group element', () => {
+    renderGroup({ orientation: 'vertical' });
+
+    expect(screen.getByRole('group').getAttribute('data-orientation')).toBe('vertical');
   });
 });

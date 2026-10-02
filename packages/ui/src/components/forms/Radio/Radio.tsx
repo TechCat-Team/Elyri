@@ -26,6 +26,8 @@ const useRadioGroupContext = () => {
   return context;
 };
 
+export type RadioGroupOrientation = 'horizontal' | 'vertical';
+
 export interface RadioGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
   /** 受控选中值 */
   value?: string;
@@ -35,6 +37,8 @@ export interface RadioGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, 'o
   onValueChange?: (value: string) => void;
   /** 单选按钮的 name，未传时自动生成（原生箭头键导航依赖同名） */
   name?: string;
+  /** 排列方向，默认 horizontal */
+  orientation?: RadioGroupOrientation;
   /** 组级禁用 */
   disabled?: boolean;
   children?: ReactNode;
@@ -46,6 +50,7 @@ function RadioGroupRoot({
   defaultValue,
   onValueChange,
   name: nameProp,
+  orientation = 'horizontal',
   disabled,
   className,
   id,
@@ -69,10 +74,12 @@ function RadioGroupRoot({
     <div
       role="radiogroup"
       id={id ?? field?.controlId}
+      aria-orientation={orientation}
       aria-labelledby={ariaLabelledBy ?? field?.labelId}
       aria-describedby={describedBy}
       aria-required={field?.required || undefined}
       aria-invalid={field?.invalid || undefined}
+      data-orientation={orientation}
       className={cn('elyri-ui-radio-group', className)}
       {...rest}
     >
