@@ -37,7 +37,6 @@ export const components = {
   // @elyri/ui
   alert: { pkg: '@elyri/ui', folder: 'feedback/Alert', name: 'Alert' },
   avatar: { pkg: '@elyri/ui', folder: 'data-display/Avatar', name: 'Avatar' },
-  badge: { pkg: '@elyri/ui', folder: 'data-display/Badge', name: 'Badge' },
   button: { pkg: '@elyri/ui', folder: 'forms/Button', name: 'Button' },
   'button-group': { pkg: '@elyri/ui', folder: 'forms/ButtonGroup', name: 'ButtonGroup' },
   card: { pkg: '@elyri/ui', folder: 'data-display/Card', name: 'Card' },
@@ -54,6 +53,7 @@ export const components = {
   slider: { pkg: '@elyri/ui', folder: 'forms/Slider', name: 'Slider' },
   switch: { pkg: '@elyri/ui', folder: 'forms/Switch', name: 'Switch' },
   tabs: { pkg: '@elyri/ui', folder: 'navigation/Tabs', name: 'Tabs' },
+  tag: { pkg: '@elyri/ui', folder: 'data-display/Tag', name: 'Tag' },
   textarea: { pkg: '@elyri/ui', folder: 'forms/Textarea', name: 'Textarea' },
   toast: { pkg: '@elyri/ui', folder: 'feedback/Toast', name: 'Toast' },
   tooltip: { pkg: '@elyri/ui', folder: 'overlays/Tooltip', name: 'Tooltip' },

@@ -1,0 +1,1 @@
+export { tagDoc } from './doc';

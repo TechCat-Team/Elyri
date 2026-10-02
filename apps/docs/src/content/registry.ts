@@ -36,7 +36,6 @@ import { waveTextDoc } from './components/wave-text';
 // @elyri/ui 组件文档
 import { alertDoc } from './components/alert';
 import { avatarDoc } from './components/avatar';
-import { badgeDoc } from './components/badge';
 import { buttonDoc } from './components/button';
 import { buttonGroupDoc } from './components/button-group';
 import { cardDoc } from './components/card';
@@ -53,6 +52,7 @@ import { selectDoc } from './components/select';
 import { sliderDoc } from './components/slider';
 import { switchDoc } from './components/switch';
 import { tabsDoc } from './components/tabs';
+import { tagDoc } from './components/tag';
 import { textareaDoc } from './components/textarea';
 import { toastDoc } from './components/toast';
 import { tooltipDoc } from './components/tooltip';
@@ -107,7 +107,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => {
     textareaDoc(lang),
     fieldDoc(lang),
     avatarDoc(lang),
-    badgeDoc(lang),
+    tagDoc(lang),
     cardDoc(lang),
     tabsDoc(lang),
     alertDoc(lang),

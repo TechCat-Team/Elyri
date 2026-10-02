@@ -63,7 +63,7 @@ export function App() {
 | `Progress`     | feedback     | 确定 / 不确定两种形态，四档语义配色                             |
 | `Toast`        | feedback     | `ToastProvider` + `useToast`，支持 promise 与堆叠               |
 | `Avatar`       | data-display | 图片 + 首字母回退，可选形状 / 尺寸 / 在线状态，含 `AvatarGroup` |
-| `Badge`        | data-display | 状态、标签与计数                                                |
+| `Tag`          | data-display | 状态、分类与计数                                                |
 | `Card`         | data-display | 媒体 / 头部 / 内容 / 底栏插槽，四种样式与可交互态               |
 | `Tabs`         | navigation   | 方向键与 Home / End 导航，自动激活面板                          |
 | `Dialog`       | overlays     | 复合组件，含遮罩、焦点圈定与滚动锁定                            |

@@ -1,4 +1,4 @@
-.elyri-ui-badge {
+.elyri-ui-tag {
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -10,50 +10,50 @@
 }
 
 /* 尺寸 */
-.elyri-ui-badge--sm {
+.elyri-ui-tag--sm {
   height: 20px;
   padding: 0 8px;
   font-size: 11px;
 }
 
-.elyri-ui-badge--md {
+.elyri-ui-tag--md {
   height: 24px;
   padding: 0 10px;
   font-size: 12px;
 }
 
 /* 样式 */
-.elyri-ui-badge--neutral {
+.elyri-ui-tag--neutral {
   border-color: var(--elyri-ui-border);
   background: var(--elyri-ui-surface-muted);
   color: var(--elyri-ui-muted);
 }
 
-.elyri-ui-badge--accent {
+.elyri-ui-tag--accent {
   border-color: color-mix(in srgb, var(--elyri-ui-accent) 32%, transparent);
   background: var(--elyri-ui-accent-soft);
   color: var(--elyri-ui-accent);
 }
 
-.elyri-ui-badge--success {
+.elyri-ui-tag--success {
   border-color: color-mix(in srgb, var(--elyri-ui-success) 32%, transparent);
   background: color-mix(in srgb, var(--elyri-ui-success) 14%, transparent);
   color: var(--elyri-ui-success);
 }
 
-.elyri-ui-badge--warning {
+.elyri-ui-tag--warning {
   border-color: color-mix(in srgb, var(--elyri-ui-warning) 32%, transparent);
   background: color-mix(in srgb, var(--elyri-ui-warning) 14%, transparent);
   color: var(--elyri-ui-warning);
 }
 
-.elyri-ui-badge--danger {
+.elyri-ui-tag--danger {
   border-color: color-mix(in srgb, var(--elyri-ui-danger) 32%, transparent);
   background: color-mix(in srgb, var(--elyri-ui-danger) 14%, transparent);
   color: var(--elyri-ui-danger);
 }
 
 /* 隐藏边框 */
-.elyri-ui-badge[data-bordered='false'] {
+.elyri-ui-tag[data-bordered='false'] {
   border-color: transparent;
 }

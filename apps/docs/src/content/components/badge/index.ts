@@ -1,1 +1,0 @@
-export { badgeDoc } from './doc';

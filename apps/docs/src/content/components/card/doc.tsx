@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 
 import { MeshGradient } from '@elyri/motion';
-import { Avatar, AvatarGroup, Badge, Button, Card, Progress } from '@elyri/ui';
+import { Avatar, AvatarGroup, Button, Card, Progress, Tag } from '@elyri/ui';
 
 import type { ComponentDoc, Lang } from '../../../lib/types';
 
@@ -249,9 +249,9 @@ export function Example() {
               <Card.Description>A neutral card that inherits the host theme through CSS variables.</Card.Description>
               <Card.Content>
                 <div className="demo-ui-row demo-ui-row--start">
-                  <Badge variant="accent">v0.0.1</Badge>
-                  <Badge variant="success">Stable</Badge>
-                  <Badge>Zero deps</Badge>
+                  <Tag variant="accent">v0.0.1</Tag>
+                  <Tag variant="success">Stable</Tag>
+                  <Tag>Zero deps</Tag>
                 </div>
               </Card.Content>
               <Card.Footer>
@@ -263,7 +263,7 @@ export function Example() {
             </Card>
           </div>
         ),
-        code: `import { Badge } from './components/elyri/Badge';
+        code: `import { Tag } from './components/elyri/Tag';
 import { Button } from './components/elyri/Button';
 import { Card } from './components/elyri/Card';
 
@@ -274,9 +274,9 @@ export function Example() {
       <Card.Description>A neutral card that inherits the host theme through CSS variables.</Card.Description>
       <Card.Content>
         <div className="demo-ui-row demo-ui-row--start">
-          <Badge variant="accent">v0.0.1</Badge>
-          <Badge variant="success">Stable</Badge>
-          <Badge>Zero deps</Badge>
+          <Tag variant="accent">v0.0.1</Tag>
+          <Tag variant="success">Stable</Tag>
+          <Tag>Zero deps</Tag>
         </div>
       </Card.Content>
       <Card.Footer>
@@ -328,7 +328,7 @@ export function Example() {
               <Card.Header>
                 <Card.Title>Starter</Card.Title>
                 <Card.Action>
-                  <Badge size="sm">Free</Badge>
+                  <Tag size="sm">Free</Tag>
                 </Card.Action>
               </Card.Header>
               <Card.Description>Everything you need to prototype.</Card.Description>
@@ -337,16 +337,16 @@ export function Example() {
               <Card.Header>
                 <Card.Title>Pro</Card.Title>
                 <Card.Action>
-                  <Badge size="sm" variant="accent">
+                  <Tag size="sm" variant="accent">
                     Popular
-                  </Badge>
+                  </Tag>
                 </Card.Action>
               </Card.Header>
               <Card.Description>Advanced components and priority support.</Card.Description>
             </Card>
           </div>
         ),
-        code: `import { Badge } from './components/elyri/Badge';
+        code: `import { Tag } from './components/elyri/Tag';
 import { Card } from './components/elyri/Card';
 
 export function Example() {
@@ -356,7 +356,7 @@ export function Example() {
         <Card.Header>
           <Card.Title>Starter</Card.Title>
           <Card.Action>
-            <Badge size="sm">Free</Badge>
+            <Tag size="sm">Free</Tag>
           </Card.Action>
         </Card.Header>
         <Card.Description>Everything you need to prototype.</Card.Description>
@@ -365,9 +365,9 @@ export function Example() {
         <Card.Header>
           <Card.Title>Pro</Card.Title>
           <Card.Action>
-            <Badge size="sm" variant="accent">
+            <Tag size="sm" variant="accent">
               Popular
-            </Badge>
+            </Tag>
           </Card.Action>
         </Card.Header>
         <Card.Description>Advanced components and priority support.</Card.Description>
