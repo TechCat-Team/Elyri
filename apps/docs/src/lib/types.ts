@@ -61,6 +61,8 @@ export interface ComponentDoc {
   linkedValues?: (name: string, value: ControlValue) => ControlValues | undefined;
   /** 卡片缩略图覆盖的控件值（小尺寸下压掉星空等重效果） */
   showcaseValues?: ControlValues;
+  /** 缩略图专用演示：内容在缩略图里过大时提供更紧凑的一版，默认取 examples[0] */
+  showcase?: () => ReactNode;
   props: PropDoc[];
   dependencies?: string[];
   /** UI 基础组件的多示例画廊；设置后组件页改用画廊布局 */

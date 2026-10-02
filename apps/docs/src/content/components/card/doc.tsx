@@ -68,6 +68,14 @@ const mediaStyle: CSSProperties = {
   height: 148,
 };
 
+/** 缩略图里用更紧凑的一版：媒体更矮、去掉统计区，完整放进预览框 */
+const showcaseCardStyle: CSSProperties = { width: 'min(230px, 100%)' };
+
+const showcaseMediaStyle: CSSProperties = {
+  position: 'relative',
+  height: 64,
+};
+
 const identityStyle: CSSProperties = { display: 'flex', alignItems: 'center', gap: 12 };
 
 const titleStackStyle: CSSProperties = { minWidth: 0 };
@@ -108,6 +116,23 @@ export const cardDoc = (lang: Lang): ComponentDoc => {
       { name: 'Card.Footer', type: "{ align?: 'start' | 'end' | 'between' }", default: "'start'", description: t.descFooter },
       { name: '...rest', type: 'HTMLAttributes', description: t.descRest },
     ],
+    showcase: () => (
+      <Card variant="elevated" size="sm" style={showcaseCardStyle}>
+        <Card.Media style={showcaseMediaStyle}>
+          <MeshGradient colors={meshColors} speed={0.5} interactive={false} style={{ height: '100%' }} />
+        </Card.Media>
+        <Card.Title>Aurora Dashboard</Card.Title>
+        <Card.Description>Realtime analytics for the growth team.</Card.Description>
+        <Card.Footer align="between">
+          <AvatarGroup size="sm">
+            <Avatar name="Ada Lovelace" />
+            <Avatar name="Alan Turing" />
+            <Avatar name="Grace Hopper" />
+          </AvatarGroup>
+          <Button size="sm">Open</Button>
+        </Card.Footer>
+      </Card>
+    ),
     examples: [
       {
         title: t.exShowcase,

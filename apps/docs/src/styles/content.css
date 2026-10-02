@@ -151,6 +151,18 @@
   background-image: radial-gradient(var(--docs-dot) 0.7px, transparent 0.7px);
   background-size: 18px 18px;
 }
+/* UI 分区缩略图：四周留出边距，超高的演示整体等比缩放后居中（缩放比例在 ShowcaseCard 里算） */
+.showcase-fit {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center;
+}
+.showcase-preview--ui .showcase-fit {
+  padding: 20px;
+}
 /* 卡片只是缩略预览，交互统一交给覆盖链接 */
 .showcase-preview > * {
   pointer-events: none;

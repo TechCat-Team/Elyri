@@ -1,9 +1,10 @@
 import { Suspense, useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import type { CSSProperties } from 'react';
 import { ReducedMotionProvider, usePrefersReducedMotion } from '@elyri/motion';
 
 import { useI18n } from '../lib/i18n';
 import { Link } from '../lib/router';
-import { docPath } from '../lib/sections';
+import { docPath, docPkg } from '../lib/sections';
 import type { ComponentDoc, ControlValues } from '../lib/types';
 
 const defaultsOf = (doc: ComponentDoc): ControlValues =>
@@ -17,6 +18,11 @@ const defaultsOf = (doc: ComponentDoc): ControlValues =>
 export function ShowcaseCard({ doc }: { doc: ComponentDoc }) {
   const { t } = useI18n();
   const ref = useRef<HTMLDivElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
+  const fitRef = useRef<HTMLDivElement>(null);
+  // UI 组件的演示常常高于缩略图，等比缩放到完整可见；动效多为满幅背景，保持原样
+  const isUi = docPkg(doc) === 'ui';
+  const [fit, setFit] = useState({ scale: 1, ready: !isUi });
   const [hovered, setHovered] = useState(false);
   const [inView, setInView] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -47,7 +53,39 @@ export function ShowcaseCard({ doc }: { doc: ComponentDoc }) {
     return () => observer.disconnect();
   }, []);
 
+  // 量出演示的自然尺寸与缩略图可用区域，取比例缩到完整可见，避免贴边或被裁切
+  useEffect(() => {
+    if (!isUi || !mounted) return;
+    const box = previewRef.current;
+    const fitNode = fitRef.current;
+    const demo = fitNode?.firstElementChild;
+    if (!box || !fitNode || !(demo instanceof HTMLElement)) return;
+
+    const update = () => {
+      const style = getComputedStyle(fitNode);
+      const width = fitNode.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+      const height = fitNode.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+      const neededWidth = demo.offsetWidth;
+      const neededHeight = demo.offsetHeight;
+      if (!neededWidth || !neededHeight || width <= 0 || height <= 0) return;
+      setFit({ scale: Math.min(1, width / neededWidth, height / neededHeight), ready: true });
+    };
+
+    update();
+    // 缩略图随栅格列宽变化、演示内容换行都会改变尺寸，用 ResizeObserver 统一兜住
+    const observer = new ResizeObserver(update);
+    observer.observe(box);
+    observer.observe(demo);
+    return () => observer.disconnect();
+  }, [isUi, mounted]);
+
   const playing = canHover ? hovered : inView;
+  const fitStyle: CSSProperties | undefined = isUi
+    ? {
+        transform: fit.scale < 1 ? `scale(${fit.scale})` : undefined,
+        visibility: fit.ready ? undefined : 'hidden',
+      }
+    : undefined;
 
   return (
     <div
@@ -56,16 +94,23 @@ export function ShowcaseCard({ doc }: { doc: ComponentDoc }) {
       onPointerEnter={() => setHovered(true)}
       onPointerLeave={() => setHovered(false)}
     >
-      <div className={playing ? 'showcase-preview is-playing' : 'showcase-preview'}>
-        {mounted && (
-          <ReducedMotionProvider reduced={systemReducedMotion || !playing}>
-            <Suspense fallback={<div className="demo-fallback" />}>
-              {doc.examples?.length
-                ? doc.examples[0].render()
-                : doc.render?.({ ...defaultsOf(doc), ...doc.showcaseValues })}
-            </Suspense>
-          </ReducedMotionProvider>
-        )}
+      <div
+        className={`showcase-preview${isUi ? ' showcase-preview--ui' : ''}${playing ? ' is-playing' : ''}`}
+        ref={previewRef}
+      >
+        <div className="showcase-fit" ref={fitRef} style={fitStyle}>
+          {mounted && (
+            <ReducedMotionProvider reduced={systemReducedMotion || !playing}>
+              <Suspense fallback={<div className="demo-fallback" />}>
+                {doc.showcase
+                  ? doc.showcase()
+                  : doc.examples?.length
+                    ? doc.examples[0].render()
+                    : doc.render?.({ ...defaultsOf(doc), ...doc.showcaseValues })}
+              </Suspense>
+            </ReducedMotionProvider>
+          )}
+        </div>
       </div>
       <div className="showcase-card-body">
         <div className="showcase-card-head">
