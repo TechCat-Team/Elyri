@@ -1,13 +1,120 @@
 .elyri-ui-card {
+  --elyri-ui-card-pad: 18px;
+
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 18px;
-  border: 1px solid var(--elyri-ui-border);
+  padding: var(--elyri-ui-card-pad);
+  border: 1px solid transparent;
   border-radius: calc(var(--elyri-ui-radius) + 4px);
-  background: var(--elyri-ui-surface);
   color: var(--elyri-ui-text);
+  transition:
+    transform var(--elyri-ui-duration) var(--elyri-ui-ease),
+    box-shadow var(--elyri-ui-duration) var(--elyri-ui-ease),
+    border-color var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+/* 尺寸 */
+.elyri-ui-card--sm {
+  --elyri-ui-card-pad: 14px;
+}
+
+.elyri-ui-card--md {
+  --elyri-ui-card-pad: 18px;
+}
+
+.elyri-ui-card--lg {
+  --elyri-ui-card-pad: 24px;
+
+  gap: 8px;
+}
+
+/* 样式 */
+.elyri-ui-card--outlined {
+  border-color: var(--elyri-ui-border);
+  background: var(--elyri-ui-surface);
   box-shadow: var(--elyri-ui-shadow);
+}
+
+.elyri-ui-card--elevated {
+  background: var(--elyri-ui-surface);
+  box-shadow:
+    0 1px 2px rgb(20 25 38 / 6%),
+    var(--elyri-ui-shadow);
+}
+
+.elyri-ui-card--filled {
+  background: var(--elyri-ui-surface-muted);
+}
+
+.elyri-ui-card--ghost {
+  border-color: var(--elyri-ui-border);
+  border-style: dashed;
+  background: transparent;
+}
+
+/* 可交互 */
+.elyri-ui-card[data-interactive='true'] {
+  cursor: pointer;
+}
+
+.elyri-ui-card[data-interactive='true']:hover {
+  border-color: color-mix(in srgb, var(--elyri-ui-accent) 40%, var(--elyri-ui-border));
+  box-shadow: 0 14px 32px rgb(20 25 38 / 12%);
+  transform: translateY(-2px);
+}
+
+.elyri-ui-card[data-interactive='true']:focus-visible {
+  outline: none;
+  box-shadow: var(--elyri-ui-ring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-ui-card,
+  .elyri-ui-card[data-interactive='true']:hover {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* 媒体：贴边铺满，放在首位时与卡片圆角对齐 */
+.elyri-ui-card__media {
+  overflow: hidden;
+  margin: 0 calc(var(--elyri-ui-card-pad) * -1);
+}
+
+.elyri-ui-card__media:first-child {
+  margin-top: calc(var(--elyri-ui-card-pad) * -1 - 1px);
+  margin-bottom: 8px;
+  border-radius: calc(var(--elyri-ui-radius) + 3px) calc(var(--elyri-ui-radius) + 3px) 0 0;
+}
+
+.elyri-ui-card__media > img,
+.elyri-ui-card__media > video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 头部：左侧标题区 + 右侧操作区 */
+.elyri-ui-card__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.elyri-ui-card__header > :not(.elyri-ui-card__action) {
+  flex: 1;
+  min-width: 0;
+}
+
+.elyri-ui-card__action {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
 }
 
 .elyri-ui-card__title {
@@ -34,4 +141,12 @@
   align-items: center;
   gap: 10px;
   margin-top: 8px;
+}
+
+.elyri-ui-card__footer--end {
+  justify-content: flex-end;
+}
+
+.elyri-ui-card__footer--between {
+  justify-content: space-between;
 }
