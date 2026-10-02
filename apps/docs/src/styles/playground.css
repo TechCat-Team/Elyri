@@ -603,6 +603,14 @@
   width: min(540px, 100%);
   text-align: left;
 }
+/* 卡片网格演示 */
+.demo-ui-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  width: min(560px, 100%);
+  text-align: left;
+}
 /* 弹出层演示文字 */
 .demo-ui-popover-title {
   margin-bottom: 6px;

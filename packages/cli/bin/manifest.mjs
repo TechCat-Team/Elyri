@@ -36,6 +36,7 @@ export const components = {
 
   // @elyri/ui
   alert: { pkg: '@elyri/ui', folder: 'feedback/Alert', name: 'Alert' },
+  avatar: { pkg: '@elyri/ui', folder: 'data-display/Avatar', name: 'Avatar' },
   badge: { pkg: '@elyri/ui', folder: 'data-display/Badge', name: 'Badge' },
   button: { pkg: '@elyri/ui', folder: 'forms/Button', name: 'Button' },
   'button-group': { pkg: '@elyri/ui', folder: 'forms/ButtonGroup', name: 'ButtonGroup' },
