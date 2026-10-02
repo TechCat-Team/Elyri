@@ -18,6 +18,9 @@
   --elyri-ui-tooltip-bg: #1f2430;
   --elyri-ui-tooltip-text: #f4f5f7;
 
+  --elyri-ui-skeleton: color-mix(in srgb, var(--elyri-ui-text) 7%, transparent);
+  --elyri-ui-skeleton-highlight: rgb(255 255 255 / 70%);
+
   --elyri-ui-radius: 10px;
   --elyri-ui-radius-sm: 6px;
   --elyri-ui-shadow: 0 8px 24px rgb(20 25 38 / 8%);
@@ -52,6 +55,9 @@
   --elyri-ui-tooltip-bg: #eef0f4;
   --elyri-ui-tooltip-text: #14161c;
 
+  --elyri-ui-skeleton: color-mix(in srgb, var(--elyri-ui-text) 8%, transparent);
+  --elyri-ui-skeleton-highlight: rgb(255 255 255 / 7%);
+
   --elyri-ui-shadow: 0 12px 32px rgb(0 0 0 / 42%);
   --elyri-ui-ring: 0 0 0 3px rgb(180 155 255 / 35%);
 }
@@ -75,6 +81,9 @@
     --elyri-ui-overlay: rgb(0 0 0 / 62%);
     --elyri-ui-tooltip-bg: #eef0f4;
     --elyri-ui-tooltip-text: #14161c;
+
+    --elyri-ui-skeleton: color-mix(in srgb, var(--elyri-ui-text) 8%, transparent);
+    --elyri-ui-skeleton-highlight: rgb(255 255 255 / 7%);
 
     --elyri-ui-shadow: 0 12px 32px rgb(0 0 0 / 42%);
     --elyri-ui-ring: 0 0 0 3px rgb(180 155 255 / 35%);

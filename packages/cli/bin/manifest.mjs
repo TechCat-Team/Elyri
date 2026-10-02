@@ -50,6 +50,7 @@ export const components = {
   progress: { pkg: '@elyri/ui', folder: 'feedback/Progress', name: 'Progress' },
   radio: { pkg: '@elyri/ui', folder: 'forms/Radio', name: 'Radio' },
   select: { pkg: '@elyri/ui', folder: 'forms/Select', name: 'Select' },
+  skeleton: { pkg: '@elyri/ui', folder: 'feedback/Skeleton', name: 'Skeleton' },
   slider: { pkg: '@elyri/ui', folder: 'forms/Slider', name: 'Slider' },
   switch: { pkg: '@elyri/ui', folder: 'forms/Switch', name: 'Switch' },
   tabs: { pkg: '@elyri/ui', folder: 'navigation/Tabs', name: 'Tabs' },

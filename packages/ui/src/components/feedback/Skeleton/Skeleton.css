@@ -1,0 +1,98 @@
+.elyri-ui-skeleton {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: var(--elyri-ui-skeleton);
+  isolation: isolate;
+}
+
+/* 形状 */
+.elyri-ui-skeleton--text {
+  width: 100%;
+  height: 0.875em;
+  border-radius: 999px;
+}
+
+.elyri-ui-skeleton--rect {
+  width: 100%;
+  height: 96px;
+  border-radius: var(--elyri-ui-radius);
+}
+
+.elyri-ui-skeleton--circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+/* 包裹子元素：尺寸跟随内容，内容本身隐藏 */
+.elyri-ui-skeleton[data-has-children] {
+  width: fit-content;
+  height: auto;
+}
+
+.elyri-ui-skeleton[data-has-children] > * {
+  visibility: hidden;
+}
+
+/* 多行文本：末行收短，模拟自然段落 */
+.elyri-ui-skeleton-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625em;
+  width: 100%;
+}
+
+.elyri-ui-skeleton-lines > :last-child {
+  width: 62%;
+}
+
+/* 流光：一道柔和高光斜向扫过 */
+.elyri-ui-skeleton--shimmer::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 20%, var(--elyri-ui-skeleton-highlight) 50%, transparent 80%);
+  content: '';
+  transform: translateX(-100%);
+  animation: elyri-ui-skeleton-shimmer 1.6s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* 呼吸 */
+.elyri-ui-skeleton--pulse {
+  animation: elyri-ui-skeleton-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes elyri-ui-skeleton-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes elyri-ui-skeleton-pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* 减少动态：流光降级为缓慢呼吸 */
+@media (prefers-reduced-motion: reduce) {
+  .elyri-ui-skeleton--shimmer::after {
+    display: none;
+  }
+
+  .elyri-ui-skeleton--shimmer,
+  .elyri-ui-skeleton--pulse {
+    animation: elyri-ui-skeleton-pulse 2.4s ease-in-out infinite;
+  }
+}
+
+/* 高对比度模式：背景会被系统抹掉，改用系统灰保持可见 */
+@media (forced-colors: active) {
+  .elyri-ui-skeleton {
+    background: GrayText;
+    forced-color-adjust: none;
+  }
+}

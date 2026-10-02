@@ -49,6 +49,7 @@ import { popoverDoc } from './components/popover';
 import { progressDoc } from './components/progress';
 import { radioDoc } from './components/radio';
 import { selectDoc } from './components/select';
+import { skeletonDoc } from './components/skeleton';
 import { sliderDoc } from './components/slider';
 import { switchDoc } from './components/switch';
 import { tabsDoc } from './components/tabs';
@@ -112,6 +113,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => {
     tabsDoc(lang),
     alertDoc(lang),
     progressDoc(lang),
+    skeletonDoc(lang),
     toastDoc(lang),
     dialogDoc(lang),
     tooltipDoc(lang),

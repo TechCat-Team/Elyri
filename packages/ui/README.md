@@ -61,6 +61,7 @@ export function App() {
 | `Textarea`     | forms        | 多行输入，与 Input 同款尺寸，可选内容自适应高度                 |
 | `Alert`        | feedback     | 四种语义配色，可带标题、图标、操作与关闭按钮                    |
 | `Progress`     | feedback     | 确定 / 不确定两种形态，四档语义配色                             |
+| `Skeleton`     | feedback     | 骨架屏，文本 / 矩形 / 圆形，流光与呼吸动画，可包裹子元素定尺寸  |
 | `Toast`        | feedback     | `ToastProvider` + `useToast`，支持 promise 与堆叠               |
 | `Avatar`       | data-display | 图片 + 首字母回退，可选形状 / 尺寸 / 在线状态，含 `AvatarGroup` |
 | `Tag`          | data-display | 状态、分类与计数                                                |
