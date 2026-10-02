@@ -16,6 +16,7 @@ import { Select } from '../components/forms/Select';
 import { Slider } from '../components/forms/Slider';
 import { Switch } from '../components/forms/Switch';
 import { Textarea } from '../components/forms/Textarea';
+import { Accordion } from '../components/navigation/Accordion';
 import { Tabs } from '../components/navigation/Tabs';
 import { Pagination } from '../components/navigation/Pagination';
 import { Dialog } from '../components/overlays/Dialog';
@@ -175,6 +176,23 @@ describe('accessibility (axe)', () => {
     await waitFor(() => expect(screen.getByRole('listbox')).toBeTruthy());
 
     await expectNoViolations(document.body);
+  });
+
+  it('passes for an accordion', async () => {
+    const { container } = render(
+      <Accordion defaultValue="one">
+        <Accordion.Item value="one">
+          <Accordion.Trigger>One</Accordion.Trigger>
+          <Accordion.Content>Body one</Accordion.Content>
+        </Accordion.Item>
+        <Accordion.Item value="two">
+          <Accordion.Trigger>Two</Accordion.Trigger>
+          <Accordion.Content>Body two</Accordion.Content>
+        </Accordion.Item>
+      </Accordion>,
+    );
+
+    await expectNoViolations(container);
   });
 
   it('passes for tabs', async () => {

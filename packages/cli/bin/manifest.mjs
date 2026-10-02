@@ -35,6 +35,7 @@ export const components = {
   'wave-text': { pkg: '@elyri/motion', folder: 'text/WaveText', name: 'WaveText' },
 
   // @elyri/ui
+  accordion: { pkg: '@elyri/ui', folder: 'navigation/Accordion', name: 'Accordion' },
   alert: { pkg: '@elyri/ui', folder: 'feedback/Alert', name: 'Alert' },
   avatar: { pkg: '@elyri/ui', folder: 'data-display/Avatar', name: 'Avatar' },
   button: { pkg: '@elyri/ui', folder: 'forms/Button', name: 'Button' },

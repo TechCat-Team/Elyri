@@ -12,6 +12,7 @@ import { Field } from '../components/forms/Field';
 import { Input } from '../components/forms/Input';
 import { RadioGroup } from '../components/forms/Radio';
 import { Select } from '../components/forms/Select';
+import { Accordion } from '../components/navigation/Accordion';
 import { Tabs } from '../components/navigation/Tabs';
 import { Pagination } from '../components/navigation/Pagination';
 import { Dialog } from '../components/overlays/Dialog';
@@ -44,6 +45,12 @@ function App() {
         </Tabs.List>
         <Tabs.Panel value="one">Panel</Tabs.Panel>
       </Tabs>
+      <Accordion defaultValue="one">
+        <Accordion.Item value="one">
+          <Accordion.Trigger>One</Accordion.Trigger>
+          <Accordion.Content>Body</Accordion.Content>
+        </Accordion.Item>
+      </Accordion>
       <Pagination total={5} defaultPage={2} showEdges />
     </div>
   );

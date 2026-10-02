@@ -638,6 +638,10 @@
 .demo-ui-tabs {
   width: min(480px, 100%);
 }
+.demo-ui-accordion {
+  width: min(560px, 100%);
+  text-align: left;
+}
 /* 指针倾斜演示 */
 .demo-tilt {
   display: flex;

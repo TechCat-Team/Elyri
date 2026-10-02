@@ -1,0 +1,165 @@
+.elyri-ui-accordion {
+  width: 100%;
+  color: var(--elyri-ui-text);
+}
+
+/* 标题用 h3 包裹，这里清掉浏览器默认样式 */
+.elyri-ui-accordion__header {
+  margin: 0;
+  font: inherit;
+}
+
+.elyri-ui-accordion__trigger {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 4px;
+  border: 0;
+  border-radius: var(--elyri-ui-radius-sm);
+  background: transparent;
+  color: var(--elyri-ui-text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-accordion__trigger:hover {
+  color: var(--elyri-ui-accent);
+}
+
+.elyri-ui-accordion__trigger:disabled {
+  color: var(--elyri-ui-muted);
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.elyri-ui-accordion__trigger:focus-visible {
+  outline: none;
+  box-shadow: var(--elyri-ui-ring);
+}
+
+.elyri-ui-accordion__label {
+  flex: 1;
+  min-width: 0;
+}
+
+/* 标题前置图标：随宿主传入的元素自适应，统一按 18px 展示 */
+.elyri-ui-accordion__icon-leading {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  color: var(--elyri-ui-accent);
+}
+
+.elyri-ui-accordion__icon-leading > svg {
+  width: 100%;
+  height: 100%;
+}
+
+.elyri-ui-accordion__icon {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-left: auto;
+  color: var(--elyri-ui-muted);
+  transition:
+    transform 300ms var(--elyri-ui-ease),
+    color var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-accordion__trigger[aria-expanded='true'] .elyri-ui-accordion__icon {
+  transform: rotate(180deg);
+  color: var(--elyri-ui-accent);
+}
+
+/* ---------- 面板 ---------- */
+
+/* grid-template-rows 0fr → 1fr：无需 JS 测量的高度动画，SSR 首屏也不会闪内容 */
+.elyri-ui-accordion__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows 300ms var(--elyri-ui-ease),
+    visibility 0s linear 300ms;
+}
+
+.elyri-ui-accordion__panel[data-open] {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition: grid-template-rows 300ms var(--elyri-ui-ease);
+}
+
+.elyri-ui-accordion__panel-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* 内边距放在 body 上：0fr 时 inner 高度压到 0，padding 不会漏出来 */
+.elyri-ui-accordion__panel-body {
+  padding: 0 4px 16px;
+  color: var(--elyri-ui-muted);
+  font-size: 14px;
+  line-height: 1.65;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    opacity 240ms var(--elyri-ui-ease),
+    transform 300ms var(--elyri-ui-ease);
+}
+
+.elyri-ui-accordion__panel[data-open] .elyri-ui-accordion__panel-body {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- lined 变体：分隔线堆叠 ---------- */
+.elyri-ui-accordion[data-variant='lined'] .elyri-ui-accordion__item {
+  border-bottom: 1px solid var(--elyri-ui-border);
+}
+
+/* ---------- separated 变体：独立卡片 ---------- */
+.elyri-ui-accordion[data-variant='separated'] {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.elyri-ui-accordion[data-variant='separated'] .elyri-ui-accordion__item {
+  border: 1px solid var(--elyri-ui-border);
+  border-radius: var(--elyri-ui-radius);
+  background: var(--elyri-ui-surface);
+  transition:
+    border-color var(--elyri-ui-duration) var(--elyri-ui-ease),
+    box-shadow var(--elyri-ui-duration) var(--elyri-ui-ease);
+}
+
+.elyri-ui-accordion[data-variant='separated'] .elyri-ui-accordion__item[data-open] {
+  border-color: color-mix(in srgb, var(--elyri-ui-accent) 35%, var(--elyri-ui-border));
+  box-shadow: var(--elyri-ui-shadow);
+}
+
+.elyri-ui-accordion[data-variant='separated'] .elyri-ui-accordion__trigger {
+  padding: 15px 16px;
+}
+
+.elyri-ui-accordion[data-variant='separated'] .elyri-ui-accordion__panel-body {
+  padding: 0 16px 16px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elyri-ui-accordion__panel,
+  .elyri-ui-accordion__panel[data-open],
+  .elyri-ui-accordion__panel-body,
+  .elyri-ui-accordion__icon {
+    transition: none;
+  }
+}

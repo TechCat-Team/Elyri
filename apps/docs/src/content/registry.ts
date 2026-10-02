@@ -34,6 +34,7 @@ import { velvetDoc } from './components/velvet';
 import { waveTextDoc } from './components/wave-text';
 
 // @elyri/ui 组件文档
+import { accordionDoc } from './components/accordion';
 import { alertDoc } from './components/alert';
 import { avatarDoc } from './components/avatar';
 import { buttonDoc } from './components/button';
@@ -113,6 +114,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => {
     avatarDoc(lang),
     tagDoc(lang),
     cardDoc(lang),
+    accordionDoc(lang),
     paginationDoc(lang),
     tabsDoc(lang),
     alertDoc(lang),
