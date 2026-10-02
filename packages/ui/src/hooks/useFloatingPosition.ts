@@ -11,6 +11,8 @@ export interface FloatingPosition {
   placement: Placement;
   /** 沿交叉轴指向锚点中心的偏移（px），用于定位箭头 */
   arrow: number;
+  /** 浮层宽度（px），仅在 matchAnchorWidth 开启时返回 */
+  width?: number;
 }
 
 export interface UseFloatingPositionOptions {
@@ -22,6 +24,8 @@ export interface UseFloatingPositionOptions {
   align?: Alignment;
   /** 浮层与触发元素之间的间距，默认 8 */
   offset?: number;
+  /** 浮层宽度与锚点对齐（如 Select 下拉与触发器同宽），默认 false */
+  matchAnchorWidth?: boolean;
 }
 
 const OPPOSITE: Record<Placement, Placement> = { top: 'bottom', bottom: 'top', left: 'right', right: 'left' };
@@ -36,7 +40,7 @@ const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : us
 export function useFloatingPosition(
   anchorRef: RefObject<HTMLElement | null>,
   floatingRef: RefObject<HTMLElement | null>,
-  { open = true, placement = 'bottom', align = 'center', offset = 8 }: UseFloatingPositionOptions = {},
+  { open = true, placement = 'bottom', align = 'center', offset = 8, matchAnchorWidth = false }: UseFloatingPositionOptions = {},
 ): FloatingPosition {
   const [position, setPosition] = useState<FloatingPosition>({ top: 0, left: 0, placement, arrow: 0 });
   // 保存最新一次定位结果，避免相同坐标引发多余渲染
@@ -80,13 +84,21 @@ export function useFloatingPosition(
     const arrow =
       side === 'top' || side === 'bottom' ? a.left + a.width / 2 - left : a.top + a.height / 2 - top;
 
+    const width = matchAnchorWidth ? a.width : undefined;
+
     const current = latest.current;
-    if (current.top === top && current.left === left && current.placement === side && current.arrow === arrow) {
+    if (
+      current.top === top &&
+      current.left === left &&
+      current.placement === side &&
+      current.arrow === arrow &&
+      current.width === width
+    ) {
       return;
     }
-    latest.current = { top, left, placement: side, arrow };
+    latest.current = { top, left, placement: side, arrow, width };
     setPosition(latest.current);
-  }, [anchorRef, floatingRef, placement, align, offset]);
+  }, [anchorRef, floatingRef, placement, align, offset, matchAnchorWidth]);
 
   useIsomorphicLayoutEffect(() => {
     if (open) update();

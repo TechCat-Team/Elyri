@@ -225,3 +225,99 @@ describe('Select (multiple)', () => {
     expect(trigger.textContent).not.toContain('Banana');
   });
 });
+
+describe('Select (search)', () => {
+  function renderSearchSelect(props: Partial<ComponentProps<typeof Select>> = {}) {
+    return render(
+      <Select placeholder="Pick a fruit" {...props}>
+        <Select.Trigger>
+          <Select.Search placeholder="Search fruits" />
+        </Select.Trigger>
+        <Select.Content>
+          {FRUITS.map((fruit) => (
+            <Select.Item key={fruit} value={fruit.toLowerCase()}>
+              {fruit}
+            </Select.Item>
+          ))}
+        </Select.Content>
+      </Select>,
+    );
+  }
+
+  function visibleOptions() {
+    const listbox = screen.getByRole('listbox');
+    return Array.from(listbox.querySelectorAll('[role="option"]:not([hidden])')).map((node) => node.textContent);
+  }
+
+  it('moves the combobox role onto the search input', () => {
+    renderSearchSelect();
+    const combobox = screen.getByRole('combobox');
+    expect(combobox.tagName).toBe('INPUT');
+    expect(combobox.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('filters options as the user types', () => {
+    renderSearchSelect();
+    const input = screen.getByRole('combobox');
+    fireEvent.click(input);
+
+    fireEvent.change(input, { target: { value: 'an' } });
+    expect(visibleOptions()).toEqual(['Banana']);
+  });
+
+  it('selects the highlighted match with Enter and closes', () => {
+    const onValueChange = vi.fn();
+    renderSearchSelect({ onValueChange });
+    const input = screen.getByRole('combobox');
+    fireEvent.click(input);
+
+    fireEvent.change(input, { target: { value: 'ban' } });
+    fireEvent.keyDown(input, { key: 'Enter' });
+
+    expect(onValueChange).toHaveBeenCalledWith('banana');
+    expect((input as HTMLInputElement).value).toBe('Banana');
+  });
+
+  it('reports the query through onSearchChange', () => {
+    const onSearchChange = vi.fn();
+    renderSearchSelect({ onSearchChange });
+
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'ch' } });
+
+    expect(onSearchChange).toHaveBeenCalledWith('ch');
+  });
+
+  it('supports a custom filter function', () => {
+    renderSearchSelect({ filter: (label, query) => label.toLowerCase().startsWith(query.toLowerCase()) });
+    const input = screen.getByRole('combobox');
+    fireEvent.click(input);
+
+    fireEvent.change(input, { target: { value: 'B' } });
+    expect(visibleOptions()).toEqual(['Banana']);
+
+    fireEvent.change(input, { target: { value: 'a' } });
+    expect(visibleOptions()).toEqual(['Apple']);
+  });
+
+  it('clears the query when closed', () => {
+    renderSearchSelect();
+    const input = screen.getByRole('combobox');
+    fireEvent.click(input);
+
+    fireEvent.change(input, { target: { value: 'ba' } });
+    fireEvent.keyDown(input, { key: 'Escape' });
+
+    expect((input as HTMLInputElement).value).toBe('');
+  });
+
+  it('stays empty after the query is deleted instead of restoring the selection', () => {
+    renderSearchSelect({ defaultValue: 'banana' });
+    const input = screen.getByRole('combobox');
+    fireEvent.click(input);
+    expect((input as HTMLInputElement).value).toBe('Banana');
+
+    fireEvent.change(input, { target: { value: '' } });
+
+    expect((input as HTMLInputElement).value).toBe('');
+  });
+});

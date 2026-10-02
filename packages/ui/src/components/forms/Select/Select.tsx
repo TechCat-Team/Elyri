@@ -10,7 +10,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import type { HTMLAttributes, KeyboardEvent, ReactNode, RefObject } from 'react';
+import type { HTMLAttributes, InputHTMLAttributes, KeyboardEvent, MouseEvent, ReactNode, RefObject } from 'react';
 
 import {
   Portal,
@@ -30,6 +30,9 @@ import './Select.css';
 const EXIT_DURATION = 120;
 /** typeahead 缓冲区在最后一次输入后保留多久 */
 const TYPEAHEAD_TIMEOUT = 500;
+
+/** 默认搜索匹配：忽略首尾空白、大小写不敏感的包含匹配 */
+const defaultFilter = (label: string, query: string) => label.toLowerCase().includes(query.trim().toLowerCase());
 
 export type SelectSize = 'sm' | 'md' | 'lg';
 
@@ -58,6 +61,14 @@ interface SelectContextValue {
   registerOption: (value: string, id: string) => () => void;
   /** Trigger 上的键盘交互统一入口（焦点不进入浮层） */
   onTriggerKeyDown: (event: KeyboardEvent<HTMLDivElement>) => void;
+  /** 搜索模式：当前关键词；null 表示未在输入（回显选中项文案） */
+  query: string | null;
+  /** 搜索模式：更新关键词 */
+  setQuery: (query: string) => void;
+  /** 搜索输入框的键盘入口；可打印字符交由输入框自身处理 */
+  onSearchKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
+  /** 选项文案是否匹配当前关键词，供 Select.Item 判断显隐 */
+  matchesQuery: (label: string) => boolean;
   placeholder?: string;
   size: SelectSize;
   disabled?: boolean;
@@ -108,6 +119,10 @@ export interface SelectProps {
   onOpenChange?: (open: boolean) => void;
   /** 多选时清空按钮的无障碍名称，默认 "Clear" */
   clearLabel?: string;
+  /** 自定义搜索匹配：默认按选项文案做大小写不敏感的包含匹配 */
+  filter?: (label: string, query: string) => boolean;
+  /** 搜索关键词变化回调，可配合自定义 / 异步过滤 */
+  onSearchChange?: (query: string) => void;
   /** 表单字段名：设置后在 Select 内渲染隐藏 input，使选中值可随原生表单提交 */
   name?: string;
   children?: ReactNode;
@@ -151,6 +166,8 @@ function SelectRoot({
   defaultOpen = false,
   onOpenChange,
   clearLabel = 'Clear',
+  filter,
+  onSearchChange,
   name,
   children,
 }: SelectProps) {
@@ -164,6 +181,7 @@ function SelectRoot({
   const [registeredLabels, setRegisteredLabels] = useState<Record<string, string>>({});
   const [optionIds, setOptionIds] = useState<Record<string, string>>({});
   const [activeValue, setActiveValue] = useState<string | undefined>(undefined);
+  const [query, setQueryState] = useState<string | null>(null);
   const baseId = useId();
   const triggerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -177,6 +195,15 @@ function SelectRoot({
     collectOptions(children, out);
     return out;
   }, [children]);
+
+  /** 选项文案是否匹配当前关键词；Select.Item 据此显隐，Trigger 据此推断高亮项 */
+  const matchesQuery = useCallback(
+    (label: string) => {
+      const keyword = query ?? '';
+      return keyword === '' || (filter ?? defaultFilter)(label, keyword);
+    },
+    [query, filter],
+  );
 
   // 挂载后的注册值优先，兼容动态渲染 / 自定义包装的选项
   const labels = useMemo(() => {
@@ -192,10 +219,13 @@ function SelectRoot({
     return typeof selected === 'string' && selected !== '' ? [selected] : [];
   }, [multiple, selected]);
 
-  // 初始高亮：选中项优先，其次第一个可用项；关闭时不显示高亮
-  const firstEnabledValue = optionMetas.find((meta) => !meta.disabled)?.value;
+  // 当前可见选项：过滤后据此推断高亮，避免高亮停留在被隐藏的选项上
+  const visibleMetas = optionMetas.filter((meta) => matchesQuery(meta.label ?? meta.value));
+
+  // 高亮：输入时 setQuery 会清空 activeValue，这里回退到选中项或第一个可见项；关闭时不显示
+  const firstEnabledValue = visibleMetas.find((meta) => !meta.disabled)?.value;
   const fallbackActive = values.find((itemValue) =>
-    optionMetas.some((meta) => meta.value === itemValue && !meta.disabled),
+    visibleMetas.some((meta) => meta.value === itemValue && !meta.disabled),
   );
   const effectiveActive = activeValue ?? (isOpen ? (fallbackActive ?? firstEnabledValue) : undefined);
 
@@ -219,6 +249,16 @@ function SelectRoot({
   );
 
   const clear = useCallback(() => setSelected(multiple ? [] : ''), [multiple, setSelected]);
+
+  const setQuery = useCallback(
+    (next: string) => {
+      setQueryState(next);
+      onSearchChange?.(next);
+      // 过滤后原高亮项可能被隐藏，清空后由下方 effect 重置到第一个可见项
+      setActiveValue(undefined);
+    },
+    [onSearchChange],
+  );
 
   const registerItem = useCallback((itemValue: string, label: string) => {
     setRegisteredLabels((prev) => (prev[itemValue] === label ? prev : { ...prev, [itemValue]: label }));
@@ -244,11 +284,13 @@ function SelectRoot({
     };
   }, []);
 
-  // 按 DOM 顺序取可用选项；禁用项以 data-disabled 标记
+  // 按 DOM 顺序取可用选项；禁用项以 data-disabled 标记，被搜索过滤的项带 hidden
   const enabledOptions = useCallback(
     () =>
       contentRef.current
-        ? Array.from(contentRef.current.querySelectorAll<HTMLElement>('[role="option"]:not([data-disabled])'))
+        ? Array.from(
+            contentRef.current.querySelectorAll<HTMLElement>('[role="option"]:not([data-disabled]):not([hidden])'),
+          )
         : [],
     [],
   );
@@ -353,11 +395,59 @@ function SelectRoot({
     [isOpen, setOpen, moveActive, activateEdge, effectiveActive, select, matchTypeahead],
   );
 
-  // 关闭时清空高亮；渲染期同步，避免多余帧。typeahead 缓冲由超时自行失效
+  // 搜索输入框：可打印字符交给输入框本身过滤，这里只处理导航与提交
+  const onSearchKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLInputElement>) => {
+      const { key } = event;
+      if (key === 'ArrowDown') {
+        event.preventDefault();
+        if (isOpen) moveActive(1);
+        else setOpen(true);
+        return;
+      }
+      if (key === 'ArrowUp') {
+        event.preventDefault();
+        if (isOpen) moveActive(-1);
+        else setOpen(true);
+        return;
+      }
+      if (!isOpen) return;
+      switch (key) {
+        case 'Home':
+          event.preventDefault();
+          activateEdge('first');
+          break;
+        case 'End':
+          event.preventDefault();
+          activateEdge('last');
+          break;
+        case 'Escape':
+          event.preventDefault();
+          setOpen(false);
+          break;
+        case 'Tab':
+          // 关闭浮层但不拦截默认行为，让焦点照常移走
+          setOpen(false);
+          break;
+        case 'Enter':
+          event.preventDefault();
+          if (effectiveActive !== undefined) select(effectiveActive);
+          break;
+        default:
+          break;
+      }
+    },
+    [isOpen, setOpen, moveActive, activateEdge, effectiveActive, select],
+  );
+
+  // 关闭时清空高亮与关键词；渲染期同步，避免多余帧。typeahead 缓冲由超时自行失效
   const [trackedOpen, setTrackedOpen] = useState(isOpen);
   if (trackedOpen !== isOpen) {
     setTrackedOpen(isOpen);
-    if (!isOpen && activeValue !== undefined) setActiveValue(undefined);
+    if (!isOpen) {
+      if (activeValue !== undefined) setActiveValue(undefined);
+      if (query !== null) setQueryState(null);
+    }
   }
 
   useEffect(() => () => clearTimeout(typeahead.current.timer), []);
@@ -380,6 +470,10 @@ function SelectRoot({
       registerItem,
       registerOption,
       onTriggerKeyDown,
+      query,
+      setQuery,
+      onSearchKeyDown,
+      matchesQuery,
       placeholder,
       size,
       disabled,
@@ -406,6 +500,10 @@ function SelectRoot({
       registerItem,
       registerOption,
       onTriggerKeyDown,
+      query,
+      setQuery,
+      onSearchKeyDown,
+      matchesQuery,
       placeholder,
       size,
       disabled,
@@ -491,89 +589,47 @@ function SelectTrigger({
     if (!isDisabled) setOpen(!open);
   };
 
-  return (
-    // div + combobox：多选 Tag 内含移除按钮，不能嵌套在 button 里
-    <div
-      ref={triggerRef}
-      id={resolvedId}
-      role="combobox"
-      aria-haspopup="listbox"
-      aria-expanded={open}
-      aria-controls={`${triggerId}--content`}
-      // combobox 的 div 不是 labelable 元素，label 的 htmlFor 无法命名，改由 labelledby 关联
-      aria-labelledby={ariaLabelledBy ?? field?.labelId}
-      aria-activedescendant={open ? activeDescendant : undefined}
-      aria-disabled={isDisabled || undefined}
-      aria-required={field?.required || undefined}
-      aria-invalid={isInvalid || undefined}
-      aria-describedby={describedBy}
-      tabIndex={isDisabled ? -1 : 0}
-      data-disabled={isDisabled || undefined}
-      className={cn(
-        'elyri-ui-select__trigger',
-        `elyri-ui-select__trigger--${size}`,
-        multiple && 'elyri-ui-select__trigger--multi',
-        isInvalid && 'is-invalid',
-        className,
-      )}
-      {...rest}
-      onClick={(event) => {
-        onClick?.(event);
-        if (!event.defaultPrevented) toggle();
-      }}
-      onKeyDown={(event) => {
-        onKeyDown?.(event);
-        if (event.defaultPrevented || isDisabled) return;
-        // 焦点在 Tag 移除 / 清空按钮上时，交由其原生按键激活
-        if (event.target !== event.currentTarget) return;
-        onTriggerKeyDown(event);
-      }}
-    >
-      {multiple ? (
-        <>
-          {values.length === 0 && (
-            <span className="elyri-ui-select__value" data-empty="true">
-              {placeholder}
-            </span>
-          )}
-          {values.map((itemValue) => {
-            const label = labels[itemValue] ?? itemValue;
-            return (
-              <span key={itemValue} className="elyri-ui-select__tag">
-                {label}
-                <button
-                  type="button"
-                  className="elyri-ui-select__tag-remove"
-                  aria-label={`Remove ${label}`}
-                  disabled={isDisabled}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    removeValue(itemValue);
-                  }}
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2.5}
-                    strokeLinecap="round"
-                    aria-hidden="true"
-                  >
-                    <path d="M6 6l12 12M18 6L6 18" />
-                  </svg>
-                </button>
-              </span>
-            );
-          })}
-          {values.length > 0 && (
+  // 触发器内放了 Select.Search 即进入可输入模式：combobox 语义移到输入框上
+  const hasSearch = Children.toArray(children).some(
+    (child) => isValidElement(child) && child.type === SelectSearch,
+  );
+
+  const handleTriggerClick = (event: MouseEvent<HTMLDivElement>) => {
+    onClick?.(event);
+    if (event.defaultPrevented) return;
+    // 搜索模式下触发器只是外壳：点击聚焦输入框并展开，交互由输入框承担
+    if (hasSearch) {
+      if (isDisabled) return;
+      triggerRef.current?.querySelector('input')?.focus();
+      setOpen(true);
+      return;
+    }
+    toggle();
+  };
+
+  const handleTriggerKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    onKeyDown?.(event);
+    if (hasSearch || event.defaultPrevented || isDisabled) return;
+    // 焦点在 Tag 移除 / 清空按钮上时，交由其原生按键激活
+    if (event.target !== event.currentTarget) return;
+    onTriggerKeyDown(event);
+  };
+
+  const tags = multiple ? (
+    <>
+      {values.map((itemValue) => {
+        const label = labels[itemValue] ?? itemValue;
+        return (
+          <span key={itemValue} className="elyri-ui-select__tag">
+            {label}
             <button
               type="button"
-              className="elyri-ui-select__clear"
-              aria-label={clearLabel}
+              className="elyri-ui-select__tag-remove"
+              aria-label={`Remove ${label}`}
               disabled={isDisabled}
               onClick={(event) => {
                 event.stopPropagation();
-                clear();
+                removeValue(itemValue);
               }}
             >
               <svg
@@ -587,14 +643,95 @@ function SelectTrigger({
                 <path d="M6 6l12 12M18 6L6 18" />
               </svg>
             </button>
-          )}
+          </span>
+        );
+      })}
+      {values.length > 0 && (
+        <button
+          type="button"
+          className="elyri-ui-select__clear"
+          aria-label={clearLabel}
+          disabled={isDisabled}
+          onClick={(event) => {
+            event.stopPropagation();
+            clear();
+          }}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.5}
+            strokeLinecap="round"
+            aria-hidden="true"
+          >
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
+      )}
+    </>
+  ) : null;
+
+  return (
+    // div + combobox：多选 Tag 内含移除按钮，不能嵌套在 button 里
+    // 可输入模式下 combobox 角色交给内部的 Select.Search 输入框
+    <div
+      ref={triggerRef}
+      id={resolvedId}
+      data-disabled={isDisabled || undefined}
+      className={cn(
+        'elyri-ui-select__trigger',
+        `elyri-ui-select__trigger--${size}`,
+        multiple && 'elyri-ui-select__trigger--multi',
+        hasSearch && 'elyri-ui-select__trigger--searchable',
+        isInvalid && 'is-invalid',
+        className,
+      )}
+      {...rest}
+      // 非搜索模式：div 自身承载 combobox 语义与键盘交互；搜索模式交给内部的 Select.Search 输入框
+      {...(hasSearch
+        ? { onClick: handleTriggerClick, onKeyDown: handleTriggerKeyDown }
+        : {
+            role: 'combobox',
+            'aria-haspopup': 'listbox',
+            'aria-expanded': open,
+            // combobox 的 div 不是 labelable 元素，label 的 htmlFor 无法命名，改由 labelledby 关联
+            'aria-controls': `${triggerId}--content`,
+            'aria-labelledby': ariaLabelledBy ?? field?.labelId,
+            'aria-activedescendant': open ? activeDescendant : undefined,
+            'aria-disabled': isDisabled || undefined,
+            'aria-required': field?.required || undefined,
+            'aria-invalid': isInvalid || undefined,
+            'aria-describedby': describedBy,
+            tabIndex: isDisabled ? -1 : 0,
+            onClick: handleTriggerClick,
+            onKeyDown: handleTriggerKeyDown,
+          })}
+    >
+      {hasSearch ? (
+        <>
+          {tags}
+          {children}
         </>
       ) : (
-        <span className="elyri-ui-select__value" data-empty={values.length === 0 || undefined}>
-          {values.length > 0 ? (labels[values[0]] ?? values[0]) : placeholder}
-        </span>
+        <>
+          {multiple ? (
+            <>
+              {values.length === 0 && (
+                <span className="elyri-ui-select__value" data-empty="true">
+                  {placeholder}
+                </span>
+              )}
+              {tags}
+            </>
+          ) : (
+            <span className="elyri-ui-select__value" data-empty={values.length === 0 || undefined}>
+              {values.length > 0 ? (labels[values[0]] ?? values[0]) : placeholder}
+            </span>
+          )}
+          {children}
+        </>
       )}
-      {children}
       <svg
         className="elyri-ui-select__chevron"
         viewBox="0 0 24 24"
@@ -617,7 +754,13 @@ function SelectContent({ className, children, ...rest }: SelectContentProps) {
   const { open, setOpen, triggerRef, contentRef, triggerId, multiple, placement, align, offset } = useSelectContext();
   const refs = useMemo<RefObject<HTMLElement | null>[]>(() => [triggerRef, contentRef], [triggerRef, contentRef]);
   const present = usePresence(open, EXIT_DURATION);
-  const position = useFloatingPosition(triggerRef, contentRef, { open: present, placement, align, offset });
+  const position = useFloatingPosition(triggerRef, contentRef, {
+    open: present,
+    placement,
+    align,
+    offset,
+    matchAnchorWidth: true,
+  });
   const dismiss = useMemo(() => () => setOpen(false), [setOpen]);
 
   useDismiss({ open, onDismiss: dismiss, refs });
@@ -636,7 +779,7 @@ function SelectContent({ className, children, ...rest }: SelectContentProps) {
         data-state={open ? 'open' : 'closed'}
         data-placement={position.placement}
         className={cn('elyri-ui-select__content', className)}
-        style={{ top: position.top, left: position.left }}
+        style={{ top: position.top, left: position.left, width: position.width }}
         {...rest}
       >
         {children}
@@ -662,11 +805,18 @@ function SelectItem({
   onClick,
   ...rest
 }: SelectItemProps) {
-  const { isSelected, select, registerItem, registerOption, activeValue, setActiveValue } = useSelectContext();
+  const { isSelected, select, registerItem, registerOption, activeValue, setActiveValue, matchesQuery, labels } =
+    useSelectContext();
   const ref = useRef<HTMLButtonElement>(null);
   const generatedId = useId();
   const selected = isSelected(value);
   const active = activeValue === value;
+  // 搜索过滤：优先用文案，取不到时退回已注册 / value 兜底；命中则保留在 DOM，仅置 hidden
+  const filterText =
+    typeof children === 'string' || typeof children === 'number'
+      ? String(children)
+      : (labels[value] ?? value);
+  const filtered = !matchesQuery(filterText);
 
   useEffect(() => {
     // 注册文案供 Trigger 展示；children 变化时重新注册，卸载时注销
@@ -693,6 +843,8 @@ function SelectItem({
       data-state={selected ? 'checked' : 'unchecked'}
       className={cn('elyri-ui-select__item', className)}
       {...rest}
+      hidden={filtered || undefined}
+      data-filtered={filtered || undefined}
       onMouseDown={(event) => {
         onMouseDown?.(event);
         // 阻止鼠标按下把焦点从 combobox 移走，保持 aria-activedescendant 模型
@@ -728,9 +880,93 @@ function SelectItem({
   );
 }
 
+export type SelectSearchProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'size' | 'type'>;
+
+/** 触发器内的搜索输入框：承载 combobox 语义，输入即过滤选项 */
+function SelectSearch({
+  className,
+  placeholder,
+  onKeyDown,
+  onClick,
+  onFocus,
+  'aria-describedby': ariaDescribedBy,
+  'aria-labelledby': ariaLabelledBy,
+  ...rest
+}: SelectSearchProps) {
+  const {
+    open,
+    setOpen,
+    query,
+    setQuery,
+    onSearchKeyDown,
+    triggerId,
+    activeDescendant,
+    multiple,
+    values,
+    labels,
+    placeholder: triggerPlaceholder,
+    disabled,
+  } = useSelectContext();
+  const field = useField();
+  const ref = useRef<HTMLInputElement>(null);
+  const describedBy = [ariaDescribedBy, ...(field?.describedIds ?? [])].filter(Boolean).join(' ') || undefined;
+
+  // 未在输入时单选回显选中项文案（query 为 null）；输入过程中即便清空也保持为空
+  const selectedLabel = !multiple && values.length > 0 ? (labels[values[0]] ?? values[0]) : '';
+  const displayValue = query !== null ? query : selectedLabel;
+
+  useEffect(() => {
+    if (open) ref.current?.select();
+  }, [open]);
+
+  return (
+    <input
+      ref={ref}
+      {...rest}
+      type="text"
+      role="combobox"
+      autoComplete="off"
+      aria-autocomplete="list"
+      aria-expanded={open}
+      aria-controls={`${triggerId}--content`}
+      aria-activedescendant={open ? activeDescendant : undefined}
+      aria-labelledby={ariaLabelledBy ?? field?.labelId}
+      aria-describedby={describedBy}
+      aria-required={field?.required || undefined}
+      aria-invalid={field?.invalid || undefined}
+      aria-disabled={disabled || undefined}
+      disabled={disabled}
+      value={displayValue}
+      placeholder={placeholder ?? triggerPlaceholder}
+      className={cn('elyri-ui-select__search', className)}
+      onKeyDown={(event) => {
+        onKeyDown?.(event);
+        if (event.defaultPrevented) return;
+        onSearchKeyDown(event);
+      }}
+      onClick={(event) => {
+        onClick?.(event);
+        if (event.defaultPrevented) return;
+        // 阻止冒泡，避免触发器外壳把它当成展开 / 收起
+        event.stopPropagation();
+        if (!disabled) setOpen(true);
+      }}
+      onChange={(event) => {
+        setQuery(event.target.value);
+        if (!open) setOpen(true);
+      }}
+      onFocus={(event) => {
+        onFocus?.(event);
+        if (!disabled && !open) setOpen(true);
+      }}
+    />
+  );
+}
+
 /** 下拉选择：combobox + listbox 语义，方向键 / Home / End / typeahead 导航，支持单选与多选 */
 export const Select = Object.assign(SelectRoot, {
   Trigger: SelectTrigger,
   Content: SelectContent,
   Item: SelectItem,
+  Search: SelectSearch,
 });

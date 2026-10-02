@@ -18,6 +18,8 @@ const copy = {
     exSizesDesc: '三档尺寸与 Input 对齐：sm / md / lg。',
     exDisabled: '禁用',
     exDisabledDesc: '整个下拉不可交互。',
+    exSearch: '可搜索',
+    exSearchDesc: '在 Trigger 内放 Select.Search，触发器变为可输入，输入即按文案过滤选项。',
     descValue: '受控选中值：单选 string，多选 string[]',
     descDefaultValue: '非受控初始值',
     descOnValueChange: '选中值变化回调：单选回传 string，多选回传 string[]',
@@ -27,6 +29,8 @@ const copy = {
     descPlacement: '期望方向：top / bottom / left / right，默认 bottom',
     descOpen: '受控开关；配合 onOpenChange 使用',
     descClearLabel: '多选清空按钮的无障碍名称，默认 "Clear"',
+    descFilter: '自定义搜索匹配；默认按文案做大小写不敏感的包含匹配',
+    descOnSearchChange: '搜索关键词变化回调，可配合自定义 / 异步过滤',
   },
   en: {
     description:
@@ -41,6 +45,8 @@ const copy = {
     exSizesDesc: 'Three sizes matching Input: sm / md / lg.',
     exDisabled: 'Disabled',
     exDisabledDesc: 'The whole select stops responding.',
+    exSearch: 'Searchable',
+    exSearchDesc: 'Put Select.Search inside the trigger to type and filter options by their label.',
     descValue: 'Controlled value: string for single, string[] with multiple',
     descDefaultValue: 'Initial value when uncontrolled',
     descOnValueChange: 'Called with a string, or string[] in multiple mode',
@@ -50,6 +56,8 @@ const copy = {
     descPlacement: 'Preferred side: top / bottom / left / right, default bottom',
     descOpen: 'Controlled open state; pair with onOpenChange',
     descClearLabel: 'Accessible name of the clear button, default "Clear"',
+    descFilter: 'Custom match; defaults to a case-insensitive contains on the label',
+    descOnSearchChange: 'Called with the search query; pair with custom or async filtering',
   },
 };
 
@@ -112,6 +120,8 @@ export const selectDoc = (lang: Lang): ComponentDoc => {
       },
       { name: 'open', type: 'boolean', description: t.descOpen },
       { name: 'clearLabel', type: 'string', default: "'Clear'", description: t.descClearLabel },
+      { name: 'filter', type: '(label: string, query: string) => boolean', description: t.descFilter },
+      { name: 'onSearchChange', type: '(query: string) => void', description: t.descOnSearchChange },
     ],
     examples: [
       {
@@ -125,6 +135,41 @@ export function Example() {
   return (
     <Select placeholder="Pick a fruit">
       <Select.Trigger />
+      <Select.Content>
+        <Select.Item value="apple">Apple</Select.Item>
+        <Select.Item value="banana">Banana</Select.Item>
+        <Select.Item value="cherry">Cherry</Select.Item>
+      </Select.Content>
+    </Select>
+  );
+}`,
+      },
+      {
+        title: t.exSearch,
+        description: t.exSearchDesc,
+        wide: true,
+        render: () => (
+          <Select placeholder="Pick a fruit">
+            <Select.Trigger>
+              <Select.Search placeholder="搜索水果" />
+            </Select.Trigger>
+            <Select.Content>
+              {FRUITS.map((fruit) => (
+                <Select.Item key={fruit} value={fruit.toLowerCase()}>
+                  {fruit}
+                </Select.Item>
+              ))}
+            </Select.Content>
+          </Select>
+        ),
+        code: `import { Select } from './components/elyri/Select';
+
+export function Example() {
+  return (
+    <Select placeholder="Pick a fruit">
+      <Select.Trigger>
+        <Select.Search placeholder="搜索水果" />
+      </Select.Trigger>
       <Select.Content>
         <Select.Item value="apple">Apple</Select.Item>
         <Select.Item value="banana">Banana</Select.Item>

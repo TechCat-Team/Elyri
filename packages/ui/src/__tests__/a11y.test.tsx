@@ -117,6 +117,28 @@ describe('accessibility (axe)', () => {
     await expectNoViolations(container);
   });
 
+  it('passes for a searchable select', async () => {
+    render(
+      <Field>
+        <Field.Label>Fruit</Field.Label>
+        <Select placeholder="Pick a fruit">
+          <Select.Trigger>
+            <Select.Search placeholder="Search" />
+          </Select.Trigger>
+          <Select.Content>
+            <Select.Item value="apple">Apple</Select.Item>
+            <Select.Item value="banana">Banana</Select.Item>
+          </Select.Content>
+        </Select>
+      </Field>,
+    );
+
+    fireEvent.click(screen.getByRole('combobox'));
+    await waitFor(() => expect(screen.getByRole('listbox')).toBeTruthy());
+
+    await expectNoViolations(document.body);
+  });
+
   it('passes when a select listbox is open', async () => {
     render(
       <Field>
