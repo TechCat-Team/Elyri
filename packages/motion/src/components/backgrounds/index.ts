@@ -16,8 +16,6 @@ export { Halo } from './Halo';
 export type { HaloProps } from './Halo';
 export { MeshGradient } from './MeshGradient';
 export type { MeshGradientProps } from './MeshGradient';
-export { MorphGrid } from './MorphGrid';
-export type { MorphGridProps } from './MorphGrid';
 export { PixelVortex } from './PixelVortex';
 export type { PixelVortexProps } from './PixelVortex';
 export { Planet } from './Planet';

@@ -17,7 +17,6 @@ export const components = {
   magnetic: { pkg: '@elyri/motion', folder: 'animations/Magnetic', name: 'Magnetic' },
   marquee: { pkg: '@elyri/motion', folder: 'text/Marquee', name: 'Marquee' },
   'mesh-gradient': { pkg: '@elyri/motion', folder: 'backgrounds/MeshGradient', name: 'MeshGradient' },
-  'morph-grid': { pkg: '@elyri/motion', folder: 'backgrounds/MorphGrid', name: 'MorphGrid' },
   'particle-text': { pkg: '@elyri/motion', folder: 'text/ParticleText', name: 'ParticleText' },
   'pixel-vortex': { pkg: '@elyri/motion', folder: 'backgrounds/PixelVortex', name: 'PixelVortex' },
   planet: { pkg: '@elyri/motion', folder: 'backgrounds/Planet', name: 'Planet' },

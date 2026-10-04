@@ -16,7 +16,6 @@ import { haloDoc } from './components/halo';
 import { magneticDoc } from './components/magnetic';
 import { marqueeDoc } from './components/marquee';
 import { meshGradientDoc } from './components/mesh-gradient';
-import { morphGridDoc } from './components/morph-grid';
 import { particleTextDoc } from './components/particle-text';
 import { pixelVortexDoc } from './components/pixel-vortex';
 import { planetDoc } from './components/planet';
@@ -96,7 +95,6 @@ export const getDocs = (lang: Lang): ComponentDoc[] => {
     velvetDoc(lang),
     planetDoc(lang),
     pixelVortexDoc(lang),
-    morphGridDoc(lang),
     meshGradientDoc(lang),
     dotFieldDoc(lang),
     contoursDoc(lang),

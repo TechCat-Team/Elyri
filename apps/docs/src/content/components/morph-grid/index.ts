@@ -1,1 +1,0 @@
-export { morphGridDoc } from './doc';
