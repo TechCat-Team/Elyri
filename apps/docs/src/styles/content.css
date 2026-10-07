@@ -163,6 +163,12 @@
 .showcase-preview--ui .showcase-fit {
   padding: 20px;
 }
+/* 页面区块缩略图：按整页宽度渲染，再由 ShowcaseCard 整体缩放，缩略图里也是桌面版式 */
+.showcase-fit--blocks > * {
+  width: var(--elyri-block-container, 1120px);
+  /* 作为 flex 子项不要被压缩，否则容器变窄会触发区块自身的容器查询而变成手机版式 */
+  flex: none;
+}
 /* 卡片只是缩略预览，交互统一交给覆盖链接 */
 .showcase-preview > * {
   pointer-events: none;

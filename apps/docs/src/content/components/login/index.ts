@@ -1,0 +1,1 @@
+export { loginDoc } from './doc';

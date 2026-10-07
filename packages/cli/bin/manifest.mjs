@@ -61,6 +61,7 @@ export const components = {
   progress: { pkg: '@elyri/ui', folder: 'feedback/Progress', name: 'Progress' },
   radio: { pkg: '@elyri/ui', folder: 'forms/Radio', name: 'Radio' },
   select: { pkg: '@elyri/ui', folder: 'forms/Select', name: 'Select' },
+  sidebar: { pkg: '@elyri/ui', folder: 'navigation/Sidebar', name: 'Sidebar' },
   skeleton: { pkg: '@elyri/ui', folder: 'feedback/Skeleton', name: 'Skeleton' },
   slider: { pkg: '@elyri/ui', folder: 'forms/Slider', name: 'Slider' },
   switch: { pkg: '@elyri/ui', folder: 'forms/Switch', name: 'Switch' },
@@ -69,4 +70,7 @@ export const components = {
   textarea: { pkg: '@elyri/ui', folder: 'forms/Textarea', name: 'Textarea' },
   toast: { pkg: '@elyri/ui', folder: 'feedback/Toast', name: 'Toast' },
   tooltip: { pkg: '@elyri/ui', folder: 'overlays/Tooltip', name: 'Tooltip' },
+
+  // @elyri/blocks（页面区块，依赖 @elyri/ui 与 @elyri/motion）
+  login: { pkg: '@elyri/blocks', folder: 'auth/Login', name: 'Login' },
 };

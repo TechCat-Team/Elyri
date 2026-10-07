@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 import { LiveContext, LiveEditor, LiveError, LivePreview, LiveProvider } from 'react-live';
+import * as blocks from '@elyri/blocks';
 import * as elyri from '@elyri/motion';
 import * as ui from '@elyri/ui';
 
@@ -9,7 +10,7 @@ import { toPlaygroundCode } from '../lib/code';
 import { useI18n } from '../lib/i18n';
 
 /** 编辑器作用域：整个组件库，用户代码里可直接使用组件与工具函数 */
-const scope = { ...elyri, ...ui };
+const scope = { ...elyri, ...ui, ...blocks };
 
 /**
  * 编辑器配色复用文档站的高亮变量，与只读代码块保持一致，并跟随明暗主题。

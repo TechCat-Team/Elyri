@@ -5,6 +5,7 @@ import { defineConfig } from 'vite';
 
 const libraryRoot = fileURLToPath(new URL('../../packages/motion/src', import.meta.url));
 const uiLibraryRoot = fileURLToPath(new URL('../../packages/ui/src', import.meta.url));
+const blocksLibraryRoot = fileURLToPath(new URL('../../packages/blocks/src', import.meta.url));
 const workspaceRoot = fileURLToPath(new URL('../../', import.meta.url));
 
 export default defineConfig({
@@ -15,6 +16,8 @@ export default defineConfig({
       { find: /^@elyri\/motion$/, replacement: `${libraryRoot}/index.ts` },
       { find: /^@elyri\/ui\/styles\.css$/, replacement: `${uiLibraryRoot}/styles/index.css` },
       { find: /^@elyri\/ui$/, replacement: `${uiLibraryRoot}/index.ts` },
+      { find: /^@elyri\/blocks\/styles\.css$/, replacement: `${blocksLibraryRoot}/styles/index.css` },
+      { find: /^@elyri\/blocks$/, replacement: `${blocksLibraryRoot}/index.ts` },
     ],
   },
   server: {

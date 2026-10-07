@@ -65,6 +65,9 @@ import { textareaDoc } from './components/textarea';
 import { toastDoc } from './components/toast';
 import { tooltipDoc } from './components/tooltip';
 
+// @elyri/blocks 页面区块文档
+import { loginDoc } from './components/login';
+
 /**
  * 全部组件文档。新增组件只需在 components 下建一个文件夹，
  * 然后把它的 doc 加到这里，侧边栏、搜索、翻页会自动带上。
@@ -133,6 +136,7 @@ export const getDocs = (lang: Lang): ComponentDoc[] => {
     tooltipDoc(lang),
     popoverDoc(lang),
     dropdownMenuDoc(lang),
+    loginDoc(lang),
   ];
 
   const categoryOrder = [...new Set(docs.map((doc) => doc.category))];

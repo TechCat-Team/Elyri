@@ -20,9 +20,10 @@ export function ShowcaseCard({ doc }: { doc: ComponentDoc }) {
   const ref = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
   const fitRef = useRef<HTMLDivElement>(null);
-  // UI 组件的演示常常高于缩略图，等比缩放到完整可见；动效多为满幅背景，保持原样
-  const isUi = docPkg(doc) === 'ui';
-  const [fit, setFit] = useState({ scale: 1, ready: !isUi });
+  // UI 组件与页面区块的演示常常高于缩略图，等比缩放到完整可见；动效多为满幅背景，保持原样
+  const isBlocks = docPkg(doc) === 'blocks';
+  const isScaled = docPkg(doc) === 'ui' || isBlocks;
+  const [fit, setFit] = useState({ scale: 1, ready: !isScaled });
   const [hovered, setHovered] = useState(false);
   const [inView, setInView] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -55,7 +56,7 @@ export function ShowcaseCard({ doc }: { doc: ComponentDoc }) {
 
   // 量出演示的自然尺寸与缩略图可用区域，取比例缩到完整可见，避免贴边或被裁切
   useEffect(() => {
-    if (!isUi || !mounted) return;
+    if (!isScaled || !mounted) return;
     const box = previewRef.current;
     const fitNode = fitRef.current;
     const demo = fitNode?.firstElementChild;
@@ -77,10 +78,10 @@ export function ShowcaseCard({ doc }: { doc: ComponentDoc }) {
     observer.observe(box);
     observer.observe(demo);
     return () => observer.disconnect();
-  }, [isUi, mounted]);
+  }, [isScaled, mounted]);
 
   const playing = canHover ? hovered : inView;
-  const fitStyle: CSSProperties | undefined = isUi
+  const fitStyle: CSSProperties | undefined = isScaled
     ? {
         transform: fit.scale < 1 ? `scale(${fit.scale})` : undefined,
         visibility: fit.ready ? undefined : 'hidden',
@@ -95,10 +96,10 @@ export function ShowcaseCard({ doc }: { doc: ComponentDoc }) {
       onPointerLeave={() => setHovered(false)}
     >
       <div
-        className={`showcase-preview${isUi ? ' showcase-preview--ui' : ''}${playing ? ' is-playing' : ''}`}
+        className={`showcase-preview${isScaled ? ' showcase-preview--ui' : ''}${playing ? ' is-playing' : ''}`}
         ref={previewRef}
       >
-        <div className="showcase-fit" ref={fitRef} style={fitStyle}>
+        <div className={`showcase-fit${isBlocks ? ' showcase-fit--blocks' : ''}`} ref={fitRef} style={fitStyle}>
           {mounted && (
             <ReducedMotionProvider reduced={systemReducedMotion || !playing}>
               <Suspense fallback={<div className="demo-fallback" />}>

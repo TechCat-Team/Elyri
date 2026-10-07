@@ -1,8 +1,10 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "dist"
+    "paths": {
+      "@elyri/motion": ["../motion/src/index.ts"],
+      "@elyri/ui": ["../ui/src/index.ts"]
+    }
   },
   "include": ["src"]
 }

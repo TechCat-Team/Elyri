@@ -15,7 +15,7 @@ This repository is a pnpm workspace. Every package can be consumed by importing 
 | ------------------------------------ | --------------------------------------------------------------------- |
 | [`@elyri/motion`](./packages/motion) | Animation, background and text effects                                |
 | [`@elyri/ui`](./packages/ui)         | Dependency-free UI primitives (scaffolded, components not built yet)  |
-| [`@elyri/blocks`](./packages/blocks) | Copy-and-own page sections such as hero, pricing and CTA (scaffolded) |
+| [`@elyri/blocks`](./packages/blocks) | Copy-and-own page sections such as login                              |
 | [`elyri`](./packages/cli)            | CLI that copies component source into your project                    |
 
 ## Features

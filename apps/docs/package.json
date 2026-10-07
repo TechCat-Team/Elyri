@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@elyri/blocks": "workspace:*",
     "@elyri/motion": "workspace:*",
     "@elyri/ui": "workspace:*",
     "react": "^19.3.0",

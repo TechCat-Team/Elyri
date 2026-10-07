@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react';
 
+import type { ColorScheme } from '../../../core';
 import { cn, hexToLinearRgb, useColorScheme, useShaderCanvas } from '../../../core';
 
 import './DragonScales.css';
@@ -19,6 +20,8 @@ export interface DragonScalesProps {
   flare?: number;
   /** 光源是否跟随指针 */
   interactive?: boolean;
+  /** 强制明暗方案，默认跟随页面主题 */
+  scheme?: ColorScheme;
 }
 
 // 鳞片为尖头鱼鳞形（vesica），侧向排列：鳞尖朝右，左侧鳞片压住右侧。
@@ -217,8 +220,10 @@ export function DragonScales({
   speed = 1,
   flare = 0,
   interactive = true,
+  scheme: forcedScheme,
 }: DragonScalesProps) {
-  const scheme = useColorScheme();
+  const detectedScheme = useColorScheme();
+  const scheme = forcedScheme ?? detectedScheme;
   const canvasRef = useShaderCanvas({
     fragmentShader: FRAGMENT_SHADER,
     speed,

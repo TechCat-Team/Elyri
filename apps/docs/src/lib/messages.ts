@@ -26,7 +26,7 @@ export const messages = {
     'section.soon': '即将推出',
     'section.motion.desc': '实时动效、背景与文字效果，零运行时依赖。',
     'section.ui.desc': 'Button、Alert、Dialog 等基础组件，持续补充中。',
-    'section.blocks.desc': 'Hero、Pricing、CTA 等可拷走自有的页面区块，正在开发中。',
+    'section.blocks.desc': 'Login 等可拷走自有的页面区块，持续补充中。',
     'category.text': '文字',
     'category.animations': '动画',
     'category.backgrounds': '背景',
@@ -36,6 +36,7 @@ export const messages = {
     'category.navigation': '导航',
     'category.feedback': '反馈',
     'category.overlays': '浮层',
+    'category.auth': '认证',
     'category.count': '个组件',
     'code.copy': '复制',
     'code.copied': '已复制',
@@ -99,7 +100,7 @@ export const messages = {
     'section.soon': 'Coming soon',
     'section.motion.desc': 'Animation, background and text effects, with zero runtime dependencies.',
     'section.ui.desc': 'Button, Alert, Dialog and other primitives — more on the way.',
-    'section.blocks.desc': 'Copy-and-own page sections such as hero, pricing and CTA — in progress.',
+    'section.blocks.desc': 'Copy-and-own page sections such as login — more on the way.',
     'category.text': 'Text',
     'category.animations': 'Animations',
     'category.backgrounds': 'Backgrounds',
@@ -109,6 +110,7 @@ export const messages = {
     'category.navigation': 'Navigation',
     'category.feedback': 'Feedback',
     'category.overlays': 'Overlays',
+    'category.auth': 'Auth',
     'category.count': 'components',
     'code.copy': 'Copy',
     'code.copied': 'Copied',
@@ -162,6 +164,7 @@ const categoryMessageKeys: Record<string, MessageKey> = {
   Navigation: 'category.navigation',
   Feedback: 'category.feedback',
   Overlays: 'category.overlays',
+  Auth: 'category.auth',
 };
 
 /** 把组件文档里的分类标识（如 "Text"）翻译成当前语言的展示名 */

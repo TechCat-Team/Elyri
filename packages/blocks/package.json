@@ -1,7 +1,7 @@
 {
   "name": "@elyri/blocks",
   "version": "0.0.1",
-  "description": "Copy-and-own page sections (hero, pricing, CTA…) built on @elyri/motion and @elyri/ui.",
+  "description": "Copy-and-own page sections (login…) built on @elyri/motion and @elyri/ui.",
   "license": "MIT",
   "repository": {
     "type": "git",

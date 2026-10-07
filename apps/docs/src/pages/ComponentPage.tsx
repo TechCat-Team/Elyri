@@ -104,6 +104,8 @@ export function ComponentPage({ doc, prev, next }: ComponentPageProps) {
   const hasControls = Boolean(doc.controls?.length);
   const examples = doc.examples?.length ? doc.examples : null;
   const hasDeps = Boolean(doc.dependencies?.length);
+  // 页面区块是整页版式，预览画布按设备宽度收窄，并让区块内部随容器响应
+  const isBlocks = docPkg(doc) === 'blocks';
 
   // UI 组件页右侧锚点目录：安装 / 示例（逐条）/ 属性 / 依赖
   const tocItems = useMemo<TocItem[]>(() => {
@@ -252,7 +254,7 @@ export function ComponentPage({ doc, prev, next }: ComponentPageProps) {
                   <div className="preview-box">
                     <div
                       key={replayKey}
-                      className={`preview-stage is-${deviceView}${doc.hero && !heroVisible ? ' is-hero-hidden' : ''}`}
+                      className={`preview-stage is-${deviceView}${isBlocks ? ' is-blocks' : ''}${doc.hero && !heroVisible ? ' is-hero-hidden' : ''}`}
                     >
                       <Suspense fallback={<div className="demo-fallback" />}>{doc.render?.(values)}</Suspense>
                     </div>

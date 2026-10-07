@@ -1,0 +1,183 @@
+.elyri-block-login {
+  /* 作为查询容器：窄容器（含文档的设备预览）下切换为单栏并隐藏左侧面板 */
+  container-type: inline-size;
+  padding: clamp(24px, 5vw, 64px) clamp(16px, 4vw, 32px);
+  background: var(--elyri-ui-surface, #ffffff);
+}
+
+.elyri-block-login__shell {
+  display: grid;
+  max-width: var(--elyri-block-container, 1120px);
+  margin: 0 auto;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+  border: 1px solid var(--elyri-ui-border, rgb(0 0 0 / 10%));
+  border-radius: calc(var(--elyri-block-radius, 16px) + 8px);
+  background: var(--elyri-ui-surface, #ffffff);
+  box-shadow: 0 24px 60px rgb(15 23 42 / 10%);
+}
+
+.elyri-block-login__aside {
+  position: relative;
+  min-height: 560px;
+}
+
+/* 龙鳞默认 position: relative，提高优先级压成铺满侧栏的背景 */
+.elyri-block-login .elyri-block-login__aside-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 0;
+}
+
+/* 龙鳞深浅主题下明暗相反，压一层同向薄纱保证文案对比度 */
+.elyri-block-login__aside-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to top, rgb(3 2 6 / 82%), rgb(3 2 6 / 28%) 55%, rgb(3 2 6 / 6%));
+}
+
+.elyri-block-login__aside-bg[data-scheme='light'] ~ .elyri-block-login__aside-scrim {
+  background: linear-gradient(to top, rgb(255 255 255 / 88%), rgb(255 255 255 / 42%) 55%, rgb(255 255 255 / 8%));
+}
+
+.elyri-block-login__aside-inner {
+  --login-aside-fg: #ffffff;
+  --login-aside-muted: rgb(255 255 255 / 78%);
+
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: clamp(32px, 4vw, 48px);
+  color: var(--login-aside-fg);
+}
+
+.elyri-block-login__aside-bg[data-scheme='light'] ~ .elyri-block-login__aside-inner {
+  --login-aside-fg: #17122b;
+  --login-aside-muted: rgb(23 18 43 / 72%);
+}
+
+.elyri-block-login__brand {
+  position: absolute;
+  top: clamp(32px, 4vw, 48px);
+  left: clamp(32px, 4vw, 48px);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.elyri-block-login__aside-title {
+  margin: 0;
+  color: var(--login-aside-fg);
+  font-size: clamp(24px, 2.8vw, 34px);
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.elyri-block-login__aside-lead {
+  max-width: 320px;
+  margin: 0;
+  color: var(--login-aside-muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.elyri-block-login__panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(32px, 4vw, 56px);
+}
+
+.elyri-block-login__card {
+  width: 100%;
+  max-width: 400px;
+  border: none;
+  box-shadow: none;
+}
+
+.elyri-block-login__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* 登录标题在表单卡片里适当放大，作为视觉焦点 */
+.elyri-block-login__heading .elyri-ui-card__title {
+  font-size: 26px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.elyri-block-login__socials {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* 第三方登录按钮图标随字号缩放 */
+.elyri-block-login__socials svg {
+  width: 1.15em;
+  height: 1.15em;
+}
+
+.elyri-block-login__divider {
+  color: var(--elyri-ui-text-muted, rgb(0 0 0 / 56%));
+  font-size: 13px;
+}
+
+.elyri-block-login__submit {
+  width: 100%;
+}
+
+.elyri-block-login__form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.elyri-block-login__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.elyri-block-login__link {
+  color: var(--elyri-ui-accent, #6d5bd0);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.elyri-block-login__link:hover {
+  text-decoration: underline;
+}
+
+.elyri-block-login__signup {
+  margin: 4px 0 0;
+  color: var(--elyri-ui-text-muted, rgb(0 0 0 / 56%));
+  font-size: 14px;
+  text-align: center;
+}
+
+.elyri-block-login__signup .elyri-block-login__link {
+  margin-left: 4px;
+}
+
+@container (max-width: 880px) {
+  .elyri-block-login__shell {
+    grid-template-columns: 1fr;
+  }
+
+  /* 手机端隐藏左侧动态面板，只保留登录表单 */
+  .elyri-block-login__aside {
+    display: none;
+  }
+}

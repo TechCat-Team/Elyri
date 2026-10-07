@@ -17,7 +17,7 @@
 | ------------------------------------ | -------------------------------------------------- |
 | [`@elyri/motion`](./packages/motion) | 动效、背景与文字效果                               |
 | [`@elyri/ui`](./packages/ui)         | 零依赖 UI 基础组件（已搭好骨架，组件待实现）       |
-| [`@elyri/blocks`](./packages/blocks) | 可拷走自有的页面区块，如 hero、定价、CTA（待实现） |
+| [`@elyri/blocks`](./packages/blocks) | 可拷走自有的页面区块，如登录页                     |
 | [`elyri`](./packages/cli)            | 把组件源码拷贝进项目的 CLI                         |
 
 ## 特性

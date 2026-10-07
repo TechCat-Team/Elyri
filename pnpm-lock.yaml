@@ -35,6 +35,9 @@ importers:
 
   apps/docs:
     dependencies:
+      '@elyri/blocks':
+        specifier: workspace:*
+        version: link:../../packages/blocks
       '@elyri/motion':
         specifier: workspace:*
         version: link:../../packages/motion

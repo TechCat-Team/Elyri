@@ -9,6 +9,7 @@ import { ToastPositionProvider } from './lib/toastPosition';
 
 import '@elyri/motion/styles.css';
 import '@elyri/ui/styles.css';
+import '@elyri/blocks/styles.css';
 import './styles/tokens.css';
 import './styles/base.css';
 import './styles/shell.css';

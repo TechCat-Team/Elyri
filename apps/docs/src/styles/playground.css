@@ -130,6 +130,31 @@
 .preview-stage.is-mobile .demo-background {
   height: min(660px, 72vh);
 }
+/* 页面区块：区块本身是整页版式，去掉预览留白让区块铺满整个预览框 */
+.preview-stage.is-blocks {
+  padding: 0;
+}
+.preview-stage.is-blocks > * {
+  width: 100%;
+  /* 覆盖区块自身的 section 内边距，避免四周留白 */
+  padding: 0;
+}
+/* 抹掉区块外层容器的圆角 / 描边 / 阴影，让区块与预览框无缝相接 */
+.preview-stage.is-blocks > * > * {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.preview-stage.is-blocks.is-tablet > * {
+  width: min(720px, 100%);
+}
+.preview-stage.is-blocks.is-mobile > * {
+  width: min(390px, 100%);
+}
+/* 预览里的导航不吸顶，避免跟随文档页滚动 */
+.preview-stage.is-blocks .elyri-block-navbar {
+  position: static;
+}
 
 /* 参数控件：每项一张圆角卡片 */
 .controls {
