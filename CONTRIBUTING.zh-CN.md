@@ -11,7 +11,7 @@ Elyri 是一个 pnpm workspace，`packages/` 下包含四个包，另有文档�
 ├── apps/
 │   └── docs/                     # 文档站（Vite + React）
 ├── packages/
-│   ├── cli/                      # `elyri` —— 把组件源码拷进项目
+│   ├── cli/                      # `@elyri/cli` —— 把组件源码拷进项目
 │   ├── motion/                   # `@elyri/motion` —— 动效、背景与文字效果
 │   ├── ui/                       # `@elyri/ui` —— UI 基础组件（骨架）
 │   └── blocks/                   # `@elyri/blocks` —— 可拷走自有的页面区块（骨架）

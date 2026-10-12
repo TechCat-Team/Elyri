@@ -40,10 +40,10 @@ const DEPENDENCY_COMMANDS: Record<PackageManager, (pkg: Pkg) => string> = {
 };
 
 const ADD_COMMANDS: Record<PackageManager, (component: string) => string> = {
-  pnpm: (component) => `pnpm dlx elyri@latest add ${component}`,
-  npm: (component) => `npx elyri@latest add ${component}`,
-  yarn: (component) => `yarn dlx elyri@latest add ${component}`,
-  bun: (component) => `bunx elyri@latest add ${component}`,
+  pnpm: (component) => `pnpm dlx @elyri/cli@latest add ${component}`,
+  npm: (component) => `npx @elyri/cli@latest add ${component}`,
+  yarn: (component) => `yarn dlx @elyri/cli@latest add ${component}`,
+  bun: (component) => `bunx @elyri/cli@latest add ${component}`,
 };
 
 /** 安装组件所属分区的包 */

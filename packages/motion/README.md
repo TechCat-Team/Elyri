@@ -26,7 +26,7 @@ export function Hero() {
 也可以用 CLI 把组件源码拷进项目自行修改：
 
 ```bash
-pnpm dlx elyri@latest add fade-in gradient-text
+pnpm dlx @elyri/cli@latest add fade-in gradient-text
 ```
 
 ## 主题

@@ -11,7 +11,7 @@ Elyri is a pnpm workspace containing four packages under `packages/`, plus the d
 ├── apps/
 │   └── docs/                     # documentation site (Vite + React)
 ├── packages/
-│   ├── cli/                      # `elyri` — copies component source into a project
+│   ├── cli/                      # `@elyri/cli` — copies component source into a project
 │   ├── motion/                   # `@elyri/motion` — animation, background and text effects
 │   ├── ui/                       # `@elyri/ui` — UI primitives (scaffolded)
 │   └── blocks/                   # `@elyri/blocks` — copy-and-own page sections (scaffolded)

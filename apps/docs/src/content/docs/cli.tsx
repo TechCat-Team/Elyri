@@ -6,10 +6,10 @@ import type { DocPage, PackageManager } from '../../lib/types';
 import { Callout, CommandBlock, DocSection, DocTable } from './prose';
 
 const LIST_COMMANDS: Record<PackageManager, string> = {
-  pnpm: 'pnpm dlx elyri@latest list',
-  npm: 'npx elyri@latest list',
-  yarn: 'yarn dlx elyri@latest list',
-  bun: 'bunx elyri@latest list',
+  pnpm: 'pnpm dlx @elyri/cli@latest list',
+  npm: 'npx @elyri/cli@latest list',
+  yarn: 'yarn dlx @elyri/cli@latest list',
+  bun: 'bunx @elyri/cli@latest list',
 };
 
 const TREE = `src/components/elyri/

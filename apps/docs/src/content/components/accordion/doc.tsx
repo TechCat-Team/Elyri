@@ -244,7 +244,7 @@ export function Example() {
             <Accordion.Item value="install">
               <Accordion.Trigger>How do I install Elyri?</Accordion.Trigger>
               <Accordion.Content>
-                Run npx elyri add accordion and the component source is copied straight into your project.
+                Run npx @elyri/cli add accordion and the component source is copied straight into your project.
               </Accordion.Content>
             </Accordion.Item>
             <Accordion.Item value="theme">
@@ -264,7 +264,7 @@ export function Example() {
       <Accordion.Item value="install">
         <Accordion.Trigger>How do I install Elyri?</Accordion.Trigger>
         <Accordion.Content>
-          Run npx elyri add accordion and the component source is copied straight into your project.
+          Run npx @elyri/cli add accordion and the component source is copied straight into your project.
         </Accordion.Content>
       </Accordion.Item>
       <Accordion.Item value="theme">

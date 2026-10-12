@@ -1,5 +1,5 @@
 {
-  "name": "elyri",
+  "name": "@elyri/cli",
   "version": "0.0.1",
   "description": "CLI that copies Elyri component source into your project.",
   "license": "MIT",

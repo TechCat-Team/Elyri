@@ -1,7 +1,7 @@
 # Elyri
 
 [![npm version](https://img.shields.io/npm/v/@elyri/motion.svg)](https://www.npmjs.com/package/@elyri/motion)
-[![license](https://img.shields.io/npm/l/elyri.svg)](./LICENSE)
+[![license](https://img.shields.io/npm/l/@elyri/motion.svg)](./LICENSE)
 
 Components for React: motion effects, UI primitives and copy-and-own page blocks. Each component is lightweight, fully typed, and themed through CSS variables, so it integrates into an existing design system without introducing a runtime style engine.
 
@@ -9,14 +9,14 @@ Components for React: motion effects, UI primitives and copy-and-own page blocks
 
 ## Packages
 
-This repository is a pnpm workspace. Every package can be consumed by importing its build output, and motion/UI/blocks source can also be copied into your project with `pnpm dlx elyri@latest add <component>`.
+This repository is a pnpm workspace. Every package can be consumed by importing its build output, and motion/UI/blocks source can also be copied into your project with `pnpm dlx @elyri/cli@latest add <component>`.
 
 | Package                              | Description                                                           |
 | ------------------------------------ | --------------------------------------------------------------------- |
 | [`@elyri/motion`](./packages/motion) | Animation, background and text effects                                |
 | [`@elyri/ui`](./packages/ui)         | Dependency-free UI primitives (scaffolded, components not built yet)  |
 | [`@elyri/blocks`](./packages/blocks) | Copy-and-own page sections such as login                              |
-| [`elyri`](./packages/cli)            | CLI that copies component source into your project                    |
+| [`@elyri/cli`](./packages/cli)       | CLI that copies component source into your project                    |
 
 ## Features
 

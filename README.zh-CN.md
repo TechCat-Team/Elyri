@@ -1,7 +1,7 @@
 # Elyri
 
 [![npm version](https://img.shields.io/npm/v/@elyri/motion.svg)](https://www.npmjs.com/package/@elyri/motion)
-[![license](https://img.shields.io/npm/l/elyri.svg)](./LICENSE)
+[![license](https://img.shields.io/npm/l/@elyri/motion.svg)](./LICENSE)
 
 [English](./README.md) · 简体中文
 
@@ -11,14 +11,14 @@
 
 ## 包结构
 
-本仓库是一个 pnpm workspace。每个包都可以导入编译产物使用，动效 / UI / 区块的源码也可以用 `pnpm dlx elyri@latest add <component>` 拷进项目自行修改。
+本仓库是一个 pnpm workspace。每个包都可以导入编译产物使用，动效 / UI / 区块的源码也可以用 `pnpm dlx @elyri/cli@latest add <component>` 拷进项目自行修改。
 
 | 包                                   | 说明                                               |
 | ------------------------------------ | -------------------------------------------------- |
 | [`@elyri/motion`](./packages/motion) | 动效、背景与文字效果                               |
 | [`@elyri/ui`](./packages/ui)         | 零依赖 UI 基础组件（已搭好骨架，组件待实现）       |
 | [`@elyri/blocks`](./packages/blocks) | 可拷走自有的页面区块，如登录页                     |
-| [`elyri`](./packages/cli)            | 把组件源码拷贝进项目的 CLI                         |
+| [`@elyri/cli`](./packages/cli)       | 把组件源码拷贝进项目的 CLI                         |
 
 ## 特性
 
